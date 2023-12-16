@@ -8,7 +8,7 @@ namespace PlexServiceCommon
     /// <summary>
     /// Class that runs up and monitors the life of auxiliary applications
     /// </summary>
-    public class AuxiliaryApplicationMonitor
+    public class AuxiliaryApplicationMonitor(AuxiliaryApplication aux)
     {
         public string Name => _aux.Name;
 
@@ -27,12 +27,7 @@ namespace PlexServiceCommon
         /// <summary>
         /// Auxiliary Application to monitor
         /// </summary>
-        private readonly AuxiliaryApplication _aux;
-
-        public AuxiliaryApplicationMonitor(AuxiliaryApplication aux)
-        {
-            _aux = aux;
-        }
+        private readonly AuxiliaryApplication _aux = aux;
 
         #region Start
 
@@ -120,7 +115,7 @@ namespace PlexServiceCommon
                 return;
             }
             //we dont care if this is already running, depending on the application, this could cause lots of issues but hey... 
-                
+
             //Auxiliary process
             _auxProcess = new Process();
             _auxProcess.StartInfo.FileName = _aux.FilePath;

@@ -28,7 +28,7 @@ namespace PlexServiceWCF
         private static readonly string _plexUpdaterName = "Plex Update Service Launcher";
         //List of processes spawned by plex that we need to get rid of
         private static readonly string[] SupportingProcesses =
-        {
+        [
             "Plex DLNA Server",
             "PlexScriptHost",
             "PlexTranscoder",
@@ -40,7 +40,7 @@ namespace PlexServiceWCF
             "EasyAudioEncoder",
             "Plex Tuner Service",
             "Plex Media Fingerprinter"
-        };
+        ];
 
         #endregion
 
@@ -111,7 +111,7 @@ namespace PlexServiceWCF
         internal PmsMonitor()
         {
             State = PlexState.Stopped;
-            _auxAppMonitors = new List<AuxiliaryApplicationMonitor>();
+            _auxAppMonitors = [];
             _settings = SettingsHandler.Load();
             _settings.AuxiliaryApplications.ForEach(x => _auxAppMonitors.Add(new AuxiliaryApplicationMonitor(x)));
         }

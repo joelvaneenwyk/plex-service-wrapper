@@ -331,8 +331,7 @@ namespace PlexServiceTray
                         _traySettingsWindow.Context.Theme = GetTheme().Replace(".", " ");
                         _traySettingsWindow.ChangeTheme(theme);
                     }
-                    if (_aboutWindow != null)
-                        _aboutWindow.ChangeTheme(theme);
+                    _aboutWindow?.ChangeTheme(theme);
                 }
 
                 try
@@ -408,8 +407,7 @@ namespace PlexServiceTray
                     _settingsWindow.Context.Theme = GetTheme().Replace(".", " ");
                     _settingsWindow.ChangeTheme(GetTheme());
                 }
-                if (_aboutWindow != null)
-                    _aboutWindow.ChangeTheme(GetTheme());
+                _aboutWindow?.ChangeTheme(GetTheme());
             }
             _traySettingsWindow = null;
         }
@@ -517,7 +515,7 @@ namespace PlexServiceTray
             //The web manager should be located at the server address in the connection settings
             var address = _plexService?.GetWebLink();
             Logger("Weblink received from server: " + address, LogEventLevel.Information);
-            address = string.IsNullOrEmpty(address) ? "http://" + _traySettings.ServerAddress + ":32400/web" : address.Replace("localhost", _traySettings.ServerAddress);
+            address = string.IsNullOrEmpty(address) ? "http://" + _traySettings.ServerAddress + ":32400/web" : (address ?? "").Replace("localhost", _traySettings.ServerAddress);
             Logger("Address to open: " + address, LogEventLevel.Information);
             if (_traySettings.ServerAddress != "localhost" && address.EndsWith("Setup Plex.html"))
             {
@@ -564,12 +562,14 @@ namespace PlexServiceTray
                 }
 
                 if (string.IsNullOrEmpty(fileToOpen)) return;
-                
-                var process = new Process();
-                process.StartInfo = new ProcessStartInfo 
+
+                var process = new Process
                 {
-                    UseShellExecute = true,
-                    FileName = fileToOpen
+                    StartInfo = new ProcessStartInfo
+                    {
+                        UseShellExecute = true,
+                        FileName = fileToOpen
+                    }
                 };
                 process.Start();
             }

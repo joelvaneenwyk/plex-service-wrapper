@@ -21,7 +21,7 @@ namespace PlexServiceWCF
 
         private readonly PmsMonitor _pms;
 
-        private static readonly List<ITrayCallback> CallbackChannels = new();
+        private static readonly List<ITrayCallback> CallbackChannels = [];
         private readonly ITrayInteraction _trayInteractionImplementation;
 
         public TrayInteraction() {
