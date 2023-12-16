@@ -47,8 +47,9 @@ on:
 jobs:
   build:
     strategy:
+      fail-fast: false
       matrix:
-        platform: [Any CPU, x86, x64]
+        platform: [Any CPU, x86]
         configuration: [Debug, Release]
 
     runs-on:
