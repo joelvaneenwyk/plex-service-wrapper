@@ -145,6 +145,8 @@ namespace PlexServiceCommon
                 }
                 Log.Information("Done starting app.");
             }
+
+            return _auxProcess;
         }
 
         /// <summary>
@@ -152,49 +154,8 @@ namespace PlexServiceCommon
         /// </summary>
         private async Task ProcStart()
         {
-            await Task.Run(() => {
-                _auxProcess = CreateProcess();
-            }
-            Log.Information("Attempting to start " + _aux.Name);
-            if (_auxProcess != null)
-            {
-                //we dont care if this is already running, depending on the application, this could cause lots of issues but hey... 
-                //Auxiliary process
-                _auxProcess = new Process();
-                _auxProcess.StartInfo.FileName = _aux.FilePath;
-                _auxProcess.StartInfo.WorkingDirectory = _aux.WorkingFolder;
-                _auxProcess.StartInfo.UseShellExecute = false;
-                _auxProcess.StartInfo.Arguments = _aux.Argument;
-                _auxProcess.EnableRaisingEvents = true;
-                _auxProcess.StartInfo.RedirectStandardError = true;
-                _auxProcess.StartInfo.RedirectStandardOutput = true;
-                _auxProcess.Exited += AuxProcess_Exited;
-
-                if (_aux.LogOutput)
-                {
-                    Log.Information("Enabling logging for " + _aux.Name);
-                    _auxProcess.OutputDataReceived += (_, e) =>
-                    {
-                        if (string.IsNullOrEmpty(e.Data)) return;
-                        Log.Debug($"{_aux.Name}:{e.Data}");
-                    };
-                }
-
-                try
-                {
-                    _auxProcess.Start();
-                    _auxProcess.BeginOutputReadLine();
-                    Log.Information(_aux.Name + " Started.");
-                    Running = true;
-                }
-                catch (Exception ex)
-                {
-                    Log.Information(_aux.Name + " failed to start. " + ex.Message);
-                }
-                Log.Information("Done starting app.");
-            }
+            await Task.Run(CreateProcess);
         }
-
 
         #endregion
 
