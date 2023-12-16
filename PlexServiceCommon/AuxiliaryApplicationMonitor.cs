@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using System.Threading.Tasks;
 using Serilog;
 
 namespace PlexServiceCommon
@@ -34,13 +35,13 @@ namespace PlexServiceCommon
         /// <summary>
         /// Start monitoring plex
         /// </summary>
-        public void Start()
+        public async Task Start()
         {
             _stopping = false;
 
             if(!string.IsNullOrEmpty(_aux.FilePath) && File.Exists(_aux.FilePath))
             {
-                ProcStart();
+                await ProcStart();
             }
         }
 
@@ -68,7 +69,7 @@ namespace PlexServiceCommon
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        void AuxProcess_Exited(object sender, EventArgs e)
+        async void AuxProcess_Exited(object sender, EventArgs e)
         {
             if (_aux.KeepAlive) {
                 Log.Information(_aux.Name + " has stopped!");
@@ -80,10 +81,7 @@ namespace PlexServiceCommon
                 {
                     Log.Information("Re-starting " + _aux.Name);
                     //wait some seconds first
-                    var autoEvent = new System.Threading.AutoResetEvent(false);
-                    var t = new System.Threading.Timer(_ => { ProcStart(); autoEvent.Set(); }, null, 5000, System.Threading.Timeout.Infinite);
-                    autoEvent.WaitOne();
-                    t.Dispose();
+                    await ProcStart();
                 }
                 else
                 {
@@ -105,46 +103,96 @@ namespace PlexServiceCommon
 
         #region Start methods
 
+        private static Process CreateProcess(Process input, AuxiliaryApplication _aux)
+        {
+            Process _auxProcess = input;
+            
+            Log.Information("Attempting to start " + _aux.Name);
+            if (_auxProcess != null)
+            {
+                //we dont care if this is already running, depending on the application, this could cause lots of issues but hey... 
+                //Auxiliary process
+                _auxProcess = new Process();
+                _auxProcess.StartInfo.FileName = _aux.FilePath;
+                _auxProcess.StartInfo.WorkingDirectory = _aux.WorkingFolder;
+                _auxProcess.StartInfo.UseShellExecute = false;
+                _auxProcess.StartInfo.Arguments = _aux.Argument;
+                _auxProcess.EnableRaisingEvents = true;
+                _auxProcess.StartInfo.RedirectStandardError = true;
+                _auxProcess.StartInfo.RedirectStandardOutput = true;
+                _auxProcess.Exited += AuxProcess_Exited;
+
+                if (_aux.LogOutput)
+                {
+                    Log.Information("Enabling logging for " + _aux.Name);
+                    _auxProcess.OutputDataReceived += (_, e) =>
+                    {
+                        if (string.IsNullOrEmpty(e.Data)) return;
+                        Log.Debug($"{_aux.Name}:{e.Data}");
+                    };
+                }
+
+                try
+                {
+                    _auxProcess.Start();
+                    _auxProcess.BeginOutputReadLine();
+                    Log.Information(_aux.Name + " Started.");
+                    Running = true;
+                }
+                catch (Exception ex)
+                {
+                    Log.Information(_aux.Name + " failed to start. " + ex.Message);
+                }
+                Log.Information("Done starting app.");
+            }
+        }
+
         /// <summary>
         /// Start a new/get a handle on existing process
         /// </summary>
-        private void ProcStart()
+        private async Task ProcStart()
         {
+            await Task.Run(() => {
+                _auxProcess = CreateProcess();
+            }
             Log.Information("Attempting to start " + _aux.Name);
-            if (_auxProcess != null) {
-                return;
-            }
-            //we dont care if this is already running, depending on the application, this could cause lots of issues but hey... 
+            if (_auxProcess != null)
+            {
+                //we dont care if this is already running, depending on the application, this could cause lots of issues but hey... 
+                //Auxiliary process
+                _auxProcess = new Process();
+                _auxProcess.StartInfo.FileName = _aux.FilePath;
+                _auxProcess.StartInfo.WorkingDirectory = _aux.WorkingFolder;
+                _auxProcess.StartInfo.UseShellExecute = false;
+                _auxProcess.StartInfo.Arguments = _aux.Argument;
+                _auxProcess.EnableRaisingEvents = true;
+                _auxProcess.StartInfo.RedirectStandardError = true;
+                _auxProcess.StartInfo.RedirectStandardOutput = true;
+                _auxProcess.Exited += AuxProcess_Exited;
 
-            //Auxiliary process
-            _auxProcess = new Process();
-            _auxProcess.StartInfo.FileName = _aux.FilePath;
-            _auxProcess.StartInfo.WorkingDirectory = _aux.WorkingFolder;
-            _auxProcess.StartInfo.UseShellExecute = false;
-            _auxProcess.StartInfo.Arguments = _aux.Argument;
-            _auxProcess.EnableRaisingEvents = true;
-            _auxProcess.StartInfo.RedirectStandardError = true;
-            _auxProcess.StartInfo.RedirectStandardOutput = true;
-            _auxProcess.Exited += AuxProcess_Exited;
-            if (_aux.LogOutput) {
-                Log.Information("Enabling logging for " + _aux.Name);
-                _auxProcess.OutputDataReceived += (_, e) => {
-                    if (string.IsNullOrEmpty(e.Data)) return;
-                    Log.Debug($"{_aux.Name}:{e.Data}");
-                };
+                if (_aux.LogOutput)
+                {
+                    Log.Information("Enabling logging for " + _aux.Name);
+                    _auxProcess.OutputDataReceived += (_, e) =>
+                    {
+                        if (string.IsNullOrEmpty(e.Data)) return;
+                        Log.Debug($"{_aux.Name}:{e.Data}");
+                    };
+                }
+
+                try
+                {
+                    _auxProcess.Start();
+                    _auxProcess.BeginOutputReadLine();
+                    Log.Information(_aux.Name + " Started.");
+                    Running = true;
+                }
+                catch (Exception ex)
+                {
+                    Log.Information(_aux.Name + " failed to start. " + ex.Message);
+                }
+                Log.Information("Done starting app.");
             }
-            try
-            {
-                _auxProcess.Start();
-                _auxProcess.BeginOutputReadLine();
-                Log.Information(_aux.Name + " Started.");
-                Running = true;
-            }
-            catch (Exception ex)
-            {
-                Log.Information(_aux.Name + " failed to start. " + ex.Message);
-            }
-            Log.Information("Done starting app.");
         }
 
 

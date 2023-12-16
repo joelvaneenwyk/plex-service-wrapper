@@ -441,14 +441,14 @@ namespace PlexServiceTray
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void StartPlex_Click(object sender, EventArgs e) 
+        private async void StartPlex_Click(object sender, EventArgs e) 
         {
             //start it
             if (_plexService is null) return;
 
             try
             {
-                _plexService.Start();
+                await _plexService.Start();
             }
             catch (Exception ex) 
             {

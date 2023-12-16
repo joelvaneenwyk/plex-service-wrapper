@@ -29,8 +29,6 @@ namespace PlexServiceWCF
             _pms = new PmsMonitor();
             _pms.StateChange += PlexStateChange;
             _pms.PlexStop += PlexStopped;
-            //Start plex
-            Start();
         }
 
         private void PlexStopped(object sender, EventArgs e)
@@ -74,10 +72,10 @@ namespace PlexServiceWCF
         /// <summary>
         /// Start Plex
         /// </summary>
-        public void Start()
+        public async Task Start()
         {
             //do this in another thread to return immediately so we don't hold up the service starting
-            Task.Factory.StartNew(() => _pms.Start());
+            await _pms.Start();
         }
 
         /// <summary>
@@ -163,9 +161,9 @@ namespace PlexServiceWCF
             return _pms.IsAuxAppRunning(name);
         }
 
-        public void StartAuxApp(string name)
+        public async void StartAuxApp(string name)
         {
-            _pms.StartAuxApp(name);
+            await _pms.StartAuxApp(name);
         }
 
         public void StopAuxApp(string name)

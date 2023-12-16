@@ -66,7 +66,7 @@ namespace PlexServiceWCF
         /// </summary>
         private bool _updating;
 
-        private readonly List<AuxiliaryApplicationMonitor> _auxAppMonitors;
+        private readonly List<AuxiliaryApplicationMonitor> _auxAppMonitors = [];
 
         private Settings _settings;
 
@@ -81,8 +81,10 @@ namespace PlexServiceWCF
         public PlexState State
         {
             get => _state;
-            private set {
-                if (_state == value) {
+            private set
+            {
+                if (_state == value)
+                {
                     return;
                 }
 
@@ -127,7 +129,8 @@ namespace PlexServiceWCF
         {
             const string keyName = @"Software\Microsoft\Windows\CurrentVersion\Run";
             using var key = Registry.CurrentUser.OpenSubKey(keyName, true);
-            if (key?.GetValue("Plex Media Server") == null) {
+            if (key?.GetValue("Plex Media Server") == null)
+            {
                 return;
             }
 
@@ -136,7 +139,7 @@ namespace PlexServiceWCF
                 key.DeleteValue("Plex Media Server");
                 Log.Information("Successfully removed auto start entry from registry");
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Log.Warning($"Unable to remove auto start registry value. Error: {ex.Message}");
             }
@@ -150,41 +153,48 @@ namespace PlexServiceWCF
         /// This method will set the "FirstRun" registry key to 0 to prevent PMS from spawning the default browser.
         /// </summary>
         /// <returns></returns>
-        private void DisableFirstRun() {
+        private void DisableFirstRun()
+        {
             RegistryKey? pmsDataKey = null;
             const string keyName = @"Software\Plex, Inc.\Plex Media Server";
             var is64Bit = !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("PROCESSOR_ARCHITEW6432"));
 
             var architecture = is64Bit ? RegistryView.Registry64 : RegistryView.Registry32;
 
-            try {
+            try
+            {
                 pmsDataKey = RegistryKey.OpenBaseKey(RegistryHive.CurrentUser, architecture).OpenSubKey(keyName, true);
-                if (pmsDataKey != null) {
-                    var firstRun = (int) pmsDataKey.GetValue("FirstRun");
+                if (pmsDataKey != null)
+                {
+                    var firstRun = (int)pmsDataKey.GetValue("FirstRun");
                     Log.Debug("First run is: " + firstRun);
                     if (firstRun == 0) return;
                 }
-            } catch (Exception e) {
+            }
+            catch (Exception e)
+            {
                 Log.Warning("Exception getting pms key: " + e.Message);
             }
 
             // CreateSubKey just in case it isn't already there for some reason.
             // The installer adds values under here during install, but this can't hurt.
-            if (pmsDataKey == null) {
+            if (pmsDataKey == null)
+            {
                 using var key = Registry.CurrentUser.CreateSubKey(keyName, RegistryKeyPermissionCheck.ReadWriteSubTree);
-                if (key == null) {
+                if (key == null)
+                {
                     return;
                 }
                 key.CreateSubKey("FirstRun");
                 pmsDataKey = key;
             }
-            
+
             try
             {
                 pmsDataKey.SetValue("FirstRun", 0, RegistryValueKind.DWord);
                 Log.Information("Successfully set the 'FirstRun' registry key to 0");
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Log.Information($"Unable to set the 'FirstRun' registry key to 0. Error: {ex.Message}");
             }
@@ -197,7 +207,7 @@ namespace PlexServiceWCF
         /// <summary>
         /// Start monitoring plex
         /// </summary>
-        internal void Start()
+        internal async Task Start()
         {
             //clear any restart request flag
             _restartRequested = false;
@@ -216,30 +226,32 @@ namespace PlexServiceWCF
                 //make sure this doesn't get stuck for any reason.
                 _updating = false;
                 Log.Information("Plex executable found at " + _executableFileName);
-                
+
                 //map network drives
                 var drivesMapped = true;
-                if (_settings.DriveMaps.Count > 0) {
+                if (_settings.DriveMaps.Count > 0)
+                {
                     Log.Information("Mapping Network Drives");
 
                     drivesMapped = _settings.DriveMaps.All(toMap => TryMap(toMap, _settings));
                 }
 
-                if (!drivesMapped && !_settings.StartPlexOnMountFail) 
+                if (!drivesMapped && !_settings.StartPlexOnMountFail)
                 {
                     Log.Warning("One or more drive mappings failed and settings are configured to *not* start Plex on mount failure. Please check your drives and try again.");
-                } 
-                else 
+                }
+                else
                 {
                     StartPlex();
                 }
-                
+
                 //stop any running aux apps
                 _auxAppMonitors.ForEach(a => a.Stop());
                 _auxAppMonitors.Clear();
                 _settings.AuxiliaryApplications.ForEach(x => _auxAppMonitors.Add(new AuxiliaryApplicationMonitor(x)));
                 //hook up the state change event for all the applications
-                _auxAppMonitors.AsParallel().ForAll(x => x.Start());
+                var tasks = _auxAppMonitors.Select(async x => await x.Start()).ToArray();
+                await Task.WhenAll(tasks);
             }
         }
 
@@ -288,15 +300,12 @@ namespace PlexServiceWCF
         /// Restart plex, wait for the specified delay between stop and start
         /// </summary>
         /// <param name="delay">The amount of time in ms to wait before starting after stop</param>
-        internal void Restart(int delay)
+        internal async void Restart(int delay)
         {
             Log.Information("Restarting Plex...");
+            await Task.Delay(delay);
             _restartRequested = true;
             Stop();
-            //var autoEvent = new AutoResetEvent(false);
-            //var t = new Timer(_ => { Start(); autoEvent.Set(); }, null, delay, Timeout.Infinite);
-            //autoEvent.WaitOne();
-            //t.Dispose();
         }
 
         #endregion
@@ -316,7 +325,7 @@ namespace PlexServiceWCF
 
             _updating = false;
             Log.Information("PMS update is complete, killing and restarting process.");
-            Start();
+            await Start();
         }
 
         /// <summary>
@@ -362,13 +371,10 @@ namespace PlexServiceWCF
             _settings = SettingsHandler.Load();
             if ((State != PlexState.Stopping && _settings.AutoRestart) || _restartRequested)
             {
-                
+
                 Log.Information($"Waiting {_settings.RestartDelay} seconds before re-starting the Plex process.");
                 State = PlexState.Pending;
-                var autoEvent = new AutoResetEvent(false);
-                var t = new Timer(_ => { Start(); autoEvent.Set(); }, null, _settings.RestartDelay * 1000, Timeout.Infinite);
-                autoEvent.WaitOne();
-                t.Dispose();
+                await Start();
             }
             else
             {
@@ -391,25 +397,27 @@ namespace PlexServiceWCF
             PurgeAutoStartRegistryEntry();
             // make sure we don't spawn a browser
             Log.Debug("Disabling first run.");
-            DisableFirstRun(); 
+            DisableFirstRun();
             if (_plex == null)
             {
                 Log.Debug("No plex defined, checking for running process.");
                 //see if its running already
                 _plex = Process.GetProcessesByName(_plexName).FirstOrDefault();
-                if (_plex != null) {
+                if (_plex != null)
+                {
                     Log.Information("Killing existing Plex service.");
                     _plex.Kill();
                     KillSupportingProcesses();
                     _plex = null;
                 }
-                
+
                 if (_plex == null)
                 {
                     Log.Information("Attempting to start Plex.");
                     //plex process
                     _plex = new Process();
-                    var plexStartInfo = new ProcessStartInfo(_executableFileName) {
+                    var plexStartInfo = new ProcessStartInfo(_executableFileName)
+                    {
                         WorkingDirectory = Path.GetDirectoryName(_executableFileName) ?? string.Empty,
                         UseShellExecute = false
                     };
@@ -432,12 +440,13 @@ namespace PlexServiceWCF
                     _plex.Exited += Plex_Exited;
                     try
                     {
-                        if (_plex.Start()) {
+                        if (_plex.Start())
+                        {
                             State = PlexState.Running;
-                            Log.Information("Plex Media Server Started.");    
+                            Log.Information("Plex Media Server Started.");
                         }
                     }
-                    catch(Exception ex)
+                    catch (Exception ex)
                     {
                         Log.Warning("Plex Media Server failed to start. " + ex.Message);
                     }
@@ -463,7 +472,9 @@ namespace PlexServiceWCF
                 try
                 {
                     _plex.Kill();
-                } catch (Exception e) {
+                }
+                catch (Exception e)
+                {
                     Log.Warning("Exception killing Plex: " + e.Message);
                 }
             }
@@ -498,7 +509,8 @@ namespace PlexServiceWCF
             Log.Information("Looking for process: " + name);
             var supportProcesses = Process.GetProcessesByName(name);
             Log.Information(supportProcesses.Length + " instances of " + name + " found.");
-            if (supportProcesses.Length <= 0) {
+            if (supportProcesses.Length <= 0)
+            {
                 return;
             }
 
@@ -533,10 +545,10 @@ namespace PlexServiceWCF
             return auxApp is { Running: true };
         }
 
-        public void StartAuxApp(string name)
+        public async Task StartAuxApp(string name)
         {
             var auxApp = _auxAppMonitors.FirstOrDefault(a => a.Name == name);
-            if (auxApp is { Running: false }) auxApp.Start();
+            if (auxApp is { Running: false }) await auxApp.Start();
         }
 
         public void StopAuxApp(string name)
@@ -558,7 +570,7 @@ namespace PlexServiceWCF
             var result = string.Empty;
             //first see if its defined in the settings
 
-            if(!string.IsNullOrEmpty(_settings.UserDefinedInstallLocation) && File.Exists(_settings.UserDefinedInstallLocation))
+            if (!string.IsNullOrEmpty(_settings.UserDefinedInstallLocation) && File.Exists(_settings.UserDefinedInstallLocation))
             {
                 result = _settings.UserDefinedInstallLocation;
                 Log.Information($"Plex executable using user specified value in settings");
@@ -566,7 +578,7 @@ namespace PlexServiceWCF
 
             //next we will do a dirty check for a text file with the executable path in our log folder.
             //this is here to help anyone having issues and let them specify it manually themselves.
-            if(string.IsNullOrEmpty(result) && !string.IsNullOrEmpty(TrayInteraction.AppDataPath))
+            if (string.IsNullOrEmpty(result) && !string.IsNullOrEmpty(TrayInteraction.AppDataPath))
             {
                 var location = Path.Combine(TrayInteraction.AppDataPath, "location.txt");
                 if (File.Exists(location))
@@ -585,7 +597,8 @@ namespace PlexServiceWCF
             }
 
             //if theres nothing there go for the easy defaults
-            if (string.IsNullOrEmpty(result)) {
+            if (string.IsNullOrEmpty(result))
+            {
                 //plex doesn't put this nice stuff in the registry so we need to go hunting for it ourselves
                 //this method is crap. I dont like having to iterate through directories looking to see if a file exists or not.
                 //start by looking in the program files directory, even if we are on 64bit windows, plex may be 64bit one day... maybe
@@ -599,7 +612,7 @@ namespace PlexServiceWCF
                 };
 
 
-                foreach (var location in possibleLocations.Where(File.Exists)) 
+                foreach (var location in possibleLocations.Where(File.Exists))
                 {
                     result = location;
                     Log.Information($"Plex executable found using hard coded lookup");
@@ -640,21 +653,26 @@ namespace PlexServiceWCF
                 var resultFound = false;
 
                 using var userDataKey = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, is64Bit ? RegistryView.Registry64 : RegistryView.Registry32).OpenSubKey(@"Software\Microsoft\Windows\CurrentVersion\Installer\UserData");
-                if(userDataKey != null)
+                if (userDataKey != null)
                 {
                     foreach (var userKeyName in userDataKey.GetSubKeyNames())
                     {
-                        using (var userKey = userDataKey.OpenSubKey(userKeyName)) 
+                        using (var userKey = userDataKey.OpenSubKey(userKeyName))
                         {
                             using var componentsKey = userKey?.OpenSubKey("Components");
                             if (componentsKey != null) // Make sure there are Assemblies
                             {
-                                foreach (var guidKeyName in componentsKey.GetSubKeyNames()) {
-                                    using (var guidKey = componentsKey.OpenSubKey(guidKeyName)) {
-                                        if (guidKey != null) {
-                                            foreach (var valueName in guidKey.GetValueNames()) {
+                                foreach (var guidKeyName in componentsKey.GetSubKeyNames())
+                                {
+                                    using (var guidKey = componentsKey.OpenSubKey(guidKeyName))
+                                    {
+                                        if (guidKey != null)
+                                        {
+                                            foreach (var valueName in guidKey.GetValueNames())
+                                            {
                                                 var value = guidKey.GetValue(valueName).ToString();
-                                                if (!value.ToLower().Contains("plex media server.exe")) {
+                                                if (!value.ToLower().Contains("plex media server.exe"))
+                                                {
                                                     continue;
                                                 }
 
@@ -683,7 +701,7 @@ namespace PlexServiceWCF
             }
             return result;
         }
-        
+
         #endregion
 
         #region Events
@@ -702,7 +720,7 @@ namespace PlexServiceWCF
             PlexStop?.Invoke(this, data);
         }
 
-        
+
         #region StateChange
 
         public event EventHandler? StateChange;
