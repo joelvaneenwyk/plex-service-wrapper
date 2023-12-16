@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi" xmlns:util="http://schemas.microsoft.com/wix/UtilExtension"
-     xmlns:netfx="http://schemas.microsoft.com/wix/NetFxExtension">	
+     xmlns:netfx="http://schemas.microsoft.com/wix/NetFxExtension">
     <Product Id="*" Name="Plex Service" Language="1033" Version="1.2.2" Manufacturer="cjmurph"
              UpgradeCode="daa483bb-c7e1-4c79-a4d6-3c2c4c3d9daf">
         <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" SummaryCodepage="1252"/>
@@ -42,15 +42,15 @@
             <ComponentRef Id="PlexServiceCommonComponent"/>
             <ComponentRef Id="PlexServiceTrayComponent"/>
 			<ComponentRef Id="ControlzEzComponent"/>
-            <ComponentRef Id="FontAwesomeWpfDll"/>            
+            <ComponentRef Id="FontAwesomeWpfDll"/>
             <ComponentRef Id="MahAppsComponent"/>
-            <ComponentRef Id="MahAppsResComponent"/>            
+            <ComponentRef Id="MahAppsResComponent"/>
             <ComponentRef Id="XamlBehaviorsComponent"/>
 			<ComponentRef Id="NewtonsoftJsonComponent"/>
-			<ComponentRef Id="OokiiComponent"/>			
+			<ComponentRef Id="OokiiComponent"/>
             <ComponentRef Id="SerilogCoreComponent"/>
 			<ComponentRef Id="SerilogAsyncComponent"/>
-            <ComponentRef Id="SerilogFileComponent"/>            
+            <ComponentRef Id="SerilogFileComponent"/>
             <ComponentRef Id="BarIconComponent"/>
             <ComponentRef Id="LicensesComponent"/>
             <ComponentRef Id="PlexServiceTrayAutostart"/>
@@ -201,7 +201,7 @@
                         <File Id="OokiiLic" Source="$(var.SolutionDir)\ThirdPartyLibraries\ookiidialogs-license.txt"/>
                         <File Id="FontAwesomeWPFLic"
                               Source="$(var.SolutionDir)\ThirdPartyLibraries\FontAwesome-WPF.txt"/>
-                        <File Id="PlexServiceLic" Source="$(var.PlexServiceTray.TargetDir)LICENCE.rtf"/>
+                        <File Id="PlexServiceLic" Source="$(var.PlexServiceTray.TargetDir)LICENSE"/>
                     </Component>
                     <Component Id="PlexServiceTrayStartMenu" Guid="*">
                         <RegistryKey Id='StartMenuPlexServiceTrayHKCU' Root='HKCU' Key='Software\[ProductName]'
