@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using Newtonsoft.Json;
+using PlexServiceCommon;
 
 namespace PlexServiceTray
 {
@@ -12,7 +13,7 @@ namespace PlexServiceTray
     [JsonObject(MemberSerialization.OptIn)]
     internal class TrayApplicationSettings
     {
-        public static readonly IList<string> Themes = new ReadOnlyCollection<string> 
+        public static readonly IList<string> Themes = new ReadOnlyCollection<string>
             (new List<string>
             {
                 "Dark Amber",
@@ -69,16 +70,19 @@ namespace PlexServiceTray
         /// Address of the server running the wcf service
         /// </summary>
         [JsonProperty]
-        public string ServerAddress { get; set; } = "localhost";
+        public string ServerAddress { get; set; } = Settings.LocalHost;
 
         /// <summary>
         /// port of the WCF service endpoint
         /// </summary>
         [JsonProperty]
         public int ServerPort { get; set; } = 8787;
-        
+
         [JsonProperty]
-        public bool IsLocal => ServerAddress is "127.0.0.1" or "localhost" or "0.0.0.0";
+        public bool IsLocalHost => ServerAddress is Settings.LocalHost;
+
+        [JsonProperty]
+        public bool IsLocal => IsLocalHost || ServerAddress is "127.0.0.1" or "0.0.0.0";
 
         [JsonProperty]
         public string Theme { get; set; } = "Dark.Amber";
@@ -111,7 +115,7 @@ namespace PlexServiceTray
             return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), @"Plex Service\LocalSettings.json");
         }
 
-       
+
 
         /// <summary>
         /// Save the settings file
@@ -123,7 +127,7 @@ namespace PlexServiceTray
             if (!Directory.Exists(Path.GetDirectoryName(filePath))) {
                 var dir = Path.GetDirectoryName(filePath);
                 if (!string.IsNullOrEmpty(dir)) {
-                    Directory.CreateDirectory(dir);    
+                    Directory.CreateDirectory(dir);
                 } else {
                     throw new DirectoryNotFoundException(dir);
                 }

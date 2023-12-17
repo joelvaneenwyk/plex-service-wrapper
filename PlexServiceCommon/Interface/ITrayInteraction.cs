@@ -1,4 +1,5 @@
 ﻿using System.ServiceModel;
+using System.Threading.Tasks;
 using Serilog.Events;
 
 namespace PlexServiceCommon.Interface
@@ -10,7 +11,7 @@ namespace PlexServiceCommon.Interface
     public interface ITrayInteraction : ICommunicationObject
     {
         [OperationContract]
-        void Start();
+        Task Start();
 
         [OperationContract]
         void Stop();

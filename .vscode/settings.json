@@ -3,7 +3,8 @@
         "LICENSE": "plaintext"
     },
     "cSpell.words": [
-        "codeql",
+        "CodeQL",
+        "Serilog",
         "devskim"
     ]
 }
