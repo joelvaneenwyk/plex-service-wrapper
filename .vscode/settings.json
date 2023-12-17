@@ -1,4 +1,7 @@
 {
+    "files.associations": {
+        "LICENSE": "plaintext"
+    },
     "cSpell.words": [
         "codeql",
         "devskim"
