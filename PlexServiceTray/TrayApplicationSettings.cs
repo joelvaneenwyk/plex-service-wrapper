@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using Newtonsoft.Json;
+using PlexServiceCommon;
 
 namespace PlexServiceTray
 {
@@ -63,15 +64,13 @@ namespace PlexServiceTray
                 "Light Yellow"
             });
 
-        public const string LocalHost = "localhost";
-
         #region Properties
 
         /// <summary>
         /// Address of the server running the wcf service
         /// </summary>
         [JsonProperty]
-        public string ServerAddress { get; set; } = LocalHost;
+        public string ServerAddress { get; set; } = Settings.LocalHost;
 
         /// <summary>
         /// port of the WCF service endpoint
@@ -80,7 +79,7 @@ namespace PlexServiceTray
         public int ServerPort { get; set; } = 8787;
 
         [JsonProperty]
-        public bool IsLocalHost => ServerAddress is LocalHost;
+        public bool IsLocalHost => ServerAddress is Settings.LocalHost;
 
         [JsonProperty]
         public bool IsLocal => IsLocalHost || ServerAddress is "127.0.0.1" or "0.0.0.0";

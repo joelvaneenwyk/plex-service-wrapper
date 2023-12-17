@@ -517,7 +517,7 @@ namespace PlexServiceTray
             Logger($"Web link received from server: {address}", LogEventLevel.Information);
             address = string.IsNullOrEmpty(address)
                 ? $"http://{_traySettings.ServerAddress}:32400/web"
-                : address?.Replace(TrayApplicationSettings.LocalHost, _traySettings.ServerAddress) ?? "";
+                : address?.Replace(Settings.LocalHost, _traySettings.ServerAddress) ?? "";
             Logger($"Address to open: {address}", LogEventLevel.Information);
             if (!_traySettings.IsLocalHost && address.EndsWith("Setup Plex.html"))
             {
@@ -536,13 +536,12 @@ namespace PlexServiceTray
         /// <param name="e"></param>
         private void ViewLogs_Click(object sender, EventArgs e)
         {
-            var sa = _traySettings.ServerAddress;
             // Use windows shell to open log file in whatever app the user uses...
             var fileToOpen = string.Empty;
             try
             {
                 // If we're local to the service, just open the file.
-                if (sa is "127.0.0.1" or "0.0.0.0" or "localhost")
+                if (_traySettings.IsLocal)
                 {
                     fileToOpen = _plexService?.GetLogPath();
                 }
@@ -555,11 +554,14 @@ namespace PlexServiceTray
                         Logger("No log data received.", LogEventLevel.Warning);
                         return;
                     }
+
                     Logger("Data received: " + logData);
+
                     var tmpPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
                     var tmpFile = Path.Combine(tmpPath, "pmss.log");
                     Logger("Writing to " + tmpFile);
                     File.WriteAllText(tmpFile, logData);
+
                     if (File.Exists(tmpFile)) fileToOpen = tmpFile;
                 }
 
