@@ -81,7 +81,7 @@ namespace PlexServiceTray.Windows
         {
             InitializeComponent();
             ChangeTheme(theme);
-            File = "LICENCE.rtf";
+            File = "LICENSE";
             Version = $"PMS Service {System.Reflection.Assembly.GetExecutingAssembly().GetName().Version}";
             Help = "Please report any bugs or issues to:";
             DataContext = this;

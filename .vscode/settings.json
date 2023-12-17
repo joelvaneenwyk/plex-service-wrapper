@@ -1,6 +1,10 @@
 {
-    "dotnet.preferCSharpExtension": true,
+    "files.associations": {
+        "LICENSE": "plaintext"
+    },
     "cSpell.words": [
-        "Serilog"
+        "CodeQL",
+        "Serilog",
+        "devskim"
     ]
 }
