@@ -14,13 +14,13 @@ namespace PlexServiceCommon
         /// User defined auxiliary applications
         /// </summary>
         [JsonProperty]
-        public List<AuxiliaryApplication> AuxiliaryApplications { get; set; }
+        public List<AuxiliaryApplication> AuxiliaryApplications { get; set; } = new();
 
         /// <summary>
         /// Drive mappings to create before starting plex
         /// </summary>
         [JsonProperty]
-        public List<DriveMap> DriveMaps { get; set; }
+        public List<DriveMap> DriveMaps { get; set; } = new();
 
         /// <summary>
         /// port the WCF service should listen on (endpoint port)
@@ -41,7 +41,7 @@ namespace PlexServiceCommon
         /// </summary>
         [DefaultValue(false)]
         [JsonProperty(DefaultValueHandling = DefaultValueHandling.Populate)]
-        public bool AutoRestart { get; set; } = false;
+        public bool AutoRestart { get; set; }
 
         /// <summary>
         /// Choose whether to try auto-remounting shares if failed
@@ -77,12 +77,7 @@ namespace PlexServiceCommon
         [JsonProperty]
         public string UserDefinedInstallLocation { get; set; }
 
-        public Settings()
-        {
-            AuxiliaryApplications = new List<AuxiliaryApplication>();
-            DriveMaps = new List<DriveMap>();
-        }
-
+        public const string LocalHost = "localhost";
     }
 }
 

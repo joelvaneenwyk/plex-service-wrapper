@@ -63,7 +63,7 @@ namespace PlexServiceTray
                 "Light Yellow"
             });
 
-        public static readonly string LocalHost = "localhost";
+        public const string LocalHost = "localhost";
 
         #region Properties
 
@@ -71,7 +71,7 @@ namespace PlexServiceTray
         /// Address of the server running the wcf service
         /// </summary>
         [JsonProperty]
-        public string ServerAddress { get; set; } = TrayApplicationSettings.LocalHost;
+        public string ServerAddress { get; set; } = LocalHost;
 
         /// <summary>
         /// port of the WCF service endpoint
@@ -80,9 +80,10 @@ namespace PlexServiceTray
         public int ServerPort { get; set; } = 8787;
 
         [JsonProperty]
-        public bool IsLocal => ServerAddress is "127.0.0.1" or TrayApplicationSettings.LocalHost or "0.0.0.0";
+        public bool IsLocalHost => ServerAddress is LocalHost;
 
-        public bool IsLocalHost => ServerAddress is TrayApplicationSettings.LocalHost;
+        [JsonProperty]
+        public bool IsLocal => IsLocalHost || ServerAddress is "127.0.0.1" or "0.0.0.0";
 
         [JsonProperty]
         public string Theme { get; set; } = "Dark.Amber";

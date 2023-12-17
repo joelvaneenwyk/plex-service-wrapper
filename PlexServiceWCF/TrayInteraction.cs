@@ -8,6 +8,7 @@ using PlexServiceCommon.Interface;
 using Serilog;
 using Serilog.Events;
 using static System.Net.WebRequestMethods;
+using File = System.IO.File;
 
 namespace PlexServiceWCF
 {
@@ -173,8 +174,8 @@ namespace PlexServiceWCF
 
         public string GetWebLink()
         {
-            Log.Write(LogEventLevel.Information, "WebLink requested, plex version is: " + _pms.PlexVersion.ToString());
-            var address = $"http://{TrayApplicationSettings.LocalHost}:32400/web";
+            Log.Write(LogEventLevel.Information, "WebLink requested, plex version is: " + _pms.PlexVersion);
+            var address = $"http://{PlexServiceCommon.Settings.LocalHost}:32400/web";
 
             if (_pms.PlexVersion > new Version("1.32.0.0"))
             {
@@ -188,9 +189,9 @@ namespace PlexServiceWCF
                     var dataDir = PlexDirHelper.GetPlexDataDir();
                     var claimUrlFile = Path.Combine(dataDir, ".claimURL");
                     var setupPlex = Path.Combine(dataDir, "Setup Plex.html");
-                    if (System.IO.File.Exists(claimUrlFile))
+                    if (File.Exists(claimUrlFile))
                     {
-                        var claimUrl = System.IO.File.ReadAllText(claimUrlFile);
+                        var claimUrl = File.ReadAllText(claimUrlFile);
                         //return the claim url or if for some reason its empty, return the setup plex html
                         if (string.IsNullOrEmpty(claimUrl))
                         {
