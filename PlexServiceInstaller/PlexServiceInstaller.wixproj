@@ -20,6 +20,11 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' ">
     <OutputPath>bin\$(Configuration)\</OutputPath>
     <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
+    <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
+    <SuppressAllWarnings>False</SuppressAllWarnings>
+    <Pedantic>True</Pedantic>
+    <SuppressValidation>True</SuppressValidation>
+    <VerboseOutput>True</VerboseOutput>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Product.wxs" />
