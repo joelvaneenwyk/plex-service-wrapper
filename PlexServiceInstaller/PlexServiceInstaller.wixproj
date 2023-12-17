@@ -1,25 +1,15 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project>
+  <Import Project="Sdk.props" Sdk="WixToolset.Sdk" Version="4.0.3" />
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">x64</Platform>
     <ProductVersion>3.9</ProductVersion>
-    <ProjectGuid>5caceafa-5c9f-4a66-8fb9-dd35fb95b5cd</ProjectGuid>
-    <SchemaVersion>2.0</SchemaVersion>
     <OutputName>PlexService</OutputName>
-    <OutputType>Package</OutputType>
-    <WixTargetsPath Condition=" '$(WixTargetsPath)' == '' AND '$(MSBuildExtensionsPath32)' != '' ">$(MSBuildExtensionsPath32)\Microsoft\WiX\v3.x\Wix.targets</WixTargetsPath>
-    <WixTargetsPath Condition=" '$(WixTargetsPath)' == '' ">$(MSBuildExtensionsPath)\Microsoft\WiX\v3.x\Wix.targets</WixTargetsPath>
     <Name>PlexServiceInstaller</Name>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' ">
-    <OutputPath>bin\$(Configuration)\</OutputPath>
-    <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
     <DefineConstants>Debug</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' ">
-    <OutputPath>bin\$(Configuration)\</OutputPath>
-    <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
     <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
     <SuppressAllWarnings>False</SuppressAllWarnings>
     <Pedantic>True</Pedantic>
@@ -27,25 +17,9 @@
     <VerboseOutput>True</VerboseOutput>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Product.wxs" />
-  </ItemGroup>
-  <ItemGroup>
-    <WixExtension Include="WixCommonUiExtension">
-      <HintPath>WixCommonUiExtension.dll</HintPath>
-      <Name>WixCommonUiExtension</Name>
-    </WixExtension>
-    <WixExtension Include="WixNetFxExtension">
-      <HintPath>$(WixExtDir)\WixNetFxExtension.dll</HintPath>
-      <Name>WixNetFxExtension</Name>
-    </WixExtension>
-    <WixExtension Include="WixUIExtension">
-      <HintPath>$(WixExtDir)\WixUIExtension.dll</HintPath>
-      <Name>WixUIExtension</Name>
-    </WixExtension>
-    <WixExtension Include="WixUtilExtension">
-      <HintPath>$(WixExtDir)\WixUtilExtension.dll</HintPath>
-      <Name>WixUtilExtension</Name>
-    </WixExtension>
+    <PackageReference Include="WixToolset.NetFx.wixext" Version="4.0.3" />
+    <PackageReference Include="WixToolset.UI.wixext" Version="4.0.3" />
+    <PackageReference Include="WixToolset.Util.wixext" Version="4.0.3" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PlexServiceCommon\PlexServiceCommon.csproj">
@@ -82,16 +56,19 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="ActiveDirectory.dll" />
-    <Content Include="error.bmp" />
-    <Content Include="PlexService.bmp" />
-    <Content Include="PlexServiceBack.bmp" />
+    <Content Include="Binaries\ActiveDirectory.dll" />
+    <Content Include="Images\error.bmp" />
+    <Content Include="Images\PlexService.bmp" />
+    <Content Include="Images\PlexServiceBack.bmp" />
     <Content Include="ServiceCredentialsUI.wxi" />
-    <Content Include="success.bmp" />
-    <Content Include="UserPrivileges.dll" />
-    <Content Include="WixCommonUiExtension.dll" />
+    <Content Include="Images\success.bmp" />
+    <Content Include="Binaries\UserPrivileges.dll" />
   </ItemGroup>
-  <Import Project="$(WixTargetsPath)" />
+  <Import Project="Sdk.targets" Sdk="WixToolset.Sdk" Version="4.0.3" />
+  <PropertyGroup>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
   <Target Name="BeforeBuild">
     <GetAssemblyIdentity AssemblyFiles="$(SolutionDir)PlexService\bin\$(Configuration)\PlexService.exe">
       <Output TaskParameter="Assemblies" ItemName="AssemblyVersions" />
@@ -106,16 +83,4 @@
       <Output TaskParameter="Value" PropertyName="TargetPath" />
     </CreateProperty>
   </Target>
-  <PropertyGroup>
-    <PostBuildEvent>if not exist "$(ProjectDir)msi" mkdir  "$(ProjectDir)msi"
-      copy "!(TargetPath)" "$(ProjectDir)msi" /Y /V</PostBuildEvent>
-  </PropertyGroup>
-  <!--
-	To modify your build process, add your task inside one of the targets below and uncomment it.
-	Other similar extension points exist, see Wix.targets.
-	<Target Name="BeforeBuild">
-	</Target>
-	<Target Name="AfterBuild">
-	</Target>
-	-->
 </Project>
