@@ -22,6 +22,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Global", "Global", "{6D25DB
 		.gitignore = .gitignore
 		LICENSE = LICENSE
 		README.md = README.md
+		.editorconfig = .editorconfig
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ThirdPartyLicenses", "ThirdPartyLicenses", "{FCE89B4A-E9FF-4A57-B5B3-BD0747EB9757}"
