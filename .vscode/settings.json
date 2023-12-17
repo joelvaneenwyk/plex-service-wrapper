@@ -5,7 +5,10 @@
     "cSpell.words": [
         "CodeQL",
         "devskim",
+        "endlocal",
+        "ERRORLEVEL",
         "msbuild",
-        "Serilog"
+        "Serilog",
+        "setlocal"
     ]
 }
