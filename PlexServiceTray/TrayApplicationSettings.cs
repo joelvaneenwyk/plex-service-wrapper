@@ -12,7 +12,7 @@ namespace PlexServiceTray
     [JsonObject(MemberSerialization.OptIn)]
     internal class TrayApplicationSettings
     {
-        public static readonly IList<string> Themes = new ReadOnlyCollection<string> 
+        public static readonly IList<string> Themes = new ReadOnlyCollection<string>
             (new List<string>
             {
                 "Dark Amber",
@@ -63,22 +63,26 @@ namespace PlexServiceTray
                 "Light Yellow"
             });
 
+        public static readonly string LocalHost = "localhost";
+
         #region Properties
 
         /// <summary>
         /// Address of the server running the wcf service
         /// </summary>
         [JsonProperty]
-        public string ServerAddress { get; set; } = "localhost";
+        public string ServerAddress { get; set; } = TrayApplicationSettings.LocalHost;
 
         /// <summary>
         /// port of the WCF service endpoint
         /// </summary>
         [JsonProperty]
         public int ServerPort { get; set; } = 8787;
-        
+
         [JsonProperty]
-        public bool IsLocal => ServerAddress is "127.0.0.1" or "localhost" or "0.0.0.0";
+        public bool IsLocal => ServerAddress is "127.0.0.1" or TrayApplicationSettings.LocalHost or "0.0.0.0";
+
+        public bool IsLocalHost => ServerAddress is TrayApplicationSettings.LocalHost;
 
         [JsonProperty]
         public string Theme { get; set; } = "Dark.Amber";
@@ -111,7 +115,7 @@ namespace PlexServiceTray
             return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), @"Plex Service\LocalSettings.json");
         }
 
-       
+
 
         /// <summary>
         /// Save the settings file
@@ -123,7 +127,7 @@ namespace PlexServiceTray
             if (!Directory.Exists(Path.GetDirectoryName(filePath))) {
                 var dir = Path.GetDirectoryName(filePath);
                 if (!string.IsNullOrEmpty(dir)) {
-                    Directory.CreateDirectory(dir);    
+                    Directory.CreateDirectory(dir);
                 } else {
                     throw new DirectoryNotFoundException(dir);
                 }

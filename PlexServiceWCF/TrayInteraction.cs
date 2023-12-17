@@ -150,7 +150,7 @@ namespace PlexServiceWCF
             return PlexState.Stopped;
         }
 
-        
+
         /// <summary>
         /// A request from the client for the running status of a specific auxiliary application
         /// </summary>
@@ -174,7 +174,7 @@ namespace PlexServiceWCF
         public string GetWebLink()
         {
             Log.Write(LogEventLevel.Information, "WebLink requested, plex version is: " + _pms.PlexVersion.ToString());
-            var address = "http://localhost:32400/web";
+            var address = $"http://{TrayApplicationSettings.LocalHost}:32400/web";
 
             if (_pms.PlexVersion > new Version("1.32.0.0"))
             {
