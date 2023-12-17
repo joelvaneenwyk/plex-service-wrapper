@@ -11,6 +11,8 @@
     </TargetFrameworkProfile>
     <LangVersion>latestmajor</LangVersion>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <Platforms>x64</Platforms>
+    <Configurations>Debug;Release</Configurations>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
     <LangVersion>latestmajor</LangVersion>
