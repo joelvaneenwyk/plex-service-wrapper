@@ -193,7 +193,7 @@
                     <Component Id="OokiiComponent" Guid="*">
                         <File Id="OokiiDll" Source="$(var.PlexServiceTray.TargetDir)Ookii.Dialogs.Wpf.dll"/>
                     </Component>
-                    <Component Id="LicensesComponent" Guid="9C268F52-1375-490C-8126-BB0B39DADBD5">
+                    <Component Id="LicensesComponent" Guid="9C268F52-1375-490C-8126-BB0B39DADBD5" KeyPath="yes">
                         <File Id="NewtonsoftJsonLic"
                               Source="$(var.SolutionDir)\ThirdPartyLibraries\Newtonsoft.Json-license.txt"/>
                         <File Id="MsiExtLic" Source="$(var.SolutionDir)\ThirdPartyLibraries\msiext-license.txt"/>
