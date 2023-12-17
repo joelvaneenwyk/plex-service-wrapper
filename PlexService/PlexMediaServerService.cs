@@ -53,7 +53,7 @@ namespace PlexService
         {
             try
             {
-                if (_host != null) _host.Close();
+                _host?.Close();
 
                 var port = SettingsHandler.Load().ServerPort;
                 //sanity check the port setting
@@ -62,7 +62,7 @@ namespace PlexService
 
                 _address = string.Format(_baseAddress, port);
 
-                Uri[] addressBase = { new(_address) };
+                Uri[] addressBase = [new(_address)];
                 _host = new ServiceHost(typeof(TrayInteraction), addressBase);
 
                 var behave = new ServiceMetadataBehavior();
@@ -82,9 +82,17 @@ namespace PlexService
                 _host.AddServiceEndpoint(typeof(PlexServiceCommon.Interface.ITrayInteraction), netTcpB, _address);
                 _host.AddServiceEndpoint(typeof(IMetadataExchange),
                 MetadataExchangeBindings.CreateMexTcpBinding(), "mex");
-                
+
                 //once the host is opened, start plex
-                //_host.Opened += (s, e) => System.Threading.Tasks.Task.Factory.StartNew(() => startPlex());
+                _host.Opened += (s, e) =>
+                {
+                    if (_plexService == null)
+                    {
+                        Log.Information("Connecting to plex service.");
+                        Connect();
+                    }
+                };
+
                 // Open the ServiceHostBase to create listeners and start 
                 // listening for messages.
                 _host.Open();

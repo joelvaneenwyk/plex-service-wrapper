@@ -50,7 +50,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        platform: [Any CPU]
+        platform: [Any CPU, x86, x64]
         configuration: [Debug, Release]
 
     runs-on:

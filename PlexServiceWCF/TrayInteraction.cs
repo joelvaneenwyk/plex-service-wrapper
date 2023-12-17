@@ -8,6 +8,7 @@ using PlexServiceCommon.Interface;
 using Serilog;
 using Serilog.Events;
 using static System.Net.WebRequestMethods;
+using File = System.IO.File;
 
 namespace PlexServiceWCF
 {
@@ -21,7 +22,7 @@ namespace PlexServiceWCF
 
         private readonly PmsMonitor _pms;
 
-        private static readonly List<ITrayCallback> CallbackChannels = new();
+        private static readonly List<ITrayCallback> CallbackChannels = [];
         private readonly ITrayInteraction _trayInteractionImplementation;
 
         public TrayInteraction() {
@@ -29,8 +30,6 @@ namespace PlexServiceWCF
             _pms = new PmsMonitor();
             _pms.StateChange += PlexStateChange;
             _pms.PlexStop += PlexStopped;
-            //Start plex
-            Start();
         }
 
         private void PlexStopped(object sender, EventArgs e)
@@ -74,10 +73,10 @@ namespace PlexServiceWCF
         /// <summary>
         /// Start Plex
         /// </summary>
-        public void Start()
+        public async Task Start()
         {
             //do this in another thread to return immediately so we don't hold up the service starting
-            Task.Factory.StartNew(() => _pms.Start());
+            await _pms.Start();
         }
 
         /// <summary>
@@ -152,7 +151,7 @@ namespace PlexServiceWCF
             return PlexState.Stopped;
         }
 
-        
+
         /// <summary>
         /// A request from the client for the running status of a specific auxiliary application
         /// </summary>
@@ -163,9 +162,9 @@ namespace PlexServiceWCF
             return _pms.IsAuxAppRunning(name);
         }
 
-        public void StartAuxApp(string name)
+        public async void StartAuxApp(string name)
         {
-            _pms.StartAuxApp(name);
+            await _pms.StartAuxApp(name);
         }
 
         public void StopAuxApp(string name)
@@ -175,8 +174,8 @@ namespace PlexServiceWCF
 
         public string GetWebLink()
         {
-            Log.Write(LogEventLevel.Information, "WebLink requested, plex version is: " + _pms.PlexVersion.ToString());
-            var address = "http://localhost:32400/web";
+            Log.Write(LogEventLevel.Information, "WebLink requested, plex version is: " + _pms.PlexVersion);
+            var address = $"http://{PlexServiceCommon.Settings.LocalHost}:32400/web";
 
             if (_pms.PlexVersion > new Version("1.32.0.0"))
             {
@@ -190,9 +189,9 @@ namespace PlexServiceWCF
                     var dataDir = PlexDirHelper.GetPlexDataDir();
                     var claimUrlFile = Path.Combine(dataDir, ".claimURL");
                     var setupPlex = Path.Combine(dataDir, "Setup Plex.html");
-                    if (System.IO.File.Exists(claimUrlFile))
+                    if (File.Exists(claimUrlFile))
                     {
-                        var claimUrl = System.IO.File.ReadAllText(claimUrlFile);
+                        var claimUrl = File.ReadAllText(claimUrlFile);
                         //return the claim url or if for some reason its empty, return the setup plex html
                         if (string.IsNullOrEmpty(claimUrl))
                         {
