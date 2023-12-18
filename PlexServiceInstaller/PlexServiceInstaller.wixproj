@@ -13,7 +13,8 @@
     <BindFiles>true</BindFiles>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <VerboseOutput>true</VerboseOutput>
-    <SuppressSpecificWarnings>1105</SuppressSpecificWarnings>
+    <SuppressSpecificWarnings>1105;1076;0204</SuppressSpecificWarnings>
+    <SuppressIces>ICE57;ICE40;ICE03</SuppressIces>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' ">
     <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
@@ -22,7 +23,8 @@
     <SuppressValidation>false</SuppressValidation>
     <VerboseOutput>True</VerboseOutput>
     <BindFiles>true</BindFiles>
-    <SuppressSpecificWarnings>1105</SuppressSpecificWarnings>
+    <SuppressSpecificWarnings>1105;1076;0204</SuppressSpecificWarnings>
+    <SuppressIces>ICE57;ICE40;ICE03</SuppressIces>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="WixToolset.NetFx.wixext" Version="4.0.3" />
