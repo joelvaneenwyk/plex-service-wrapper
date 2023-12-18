@@ -1,7 +1,6 @@
 @echo off
-setlocal
-
-cd /D "%~dp0"
-dotnet tool store
-dotnet build
+setlocal EnableExtensions
+    cd /D "%~dp0"
+    dotnet tool restore
+    dotnet build
 endlocal & exit /b %ERRORLEVEL%
