@@ -106,14 +106,11 @@ jobs:
       - name: Restore tool dependencies
         run: dotnet tool restore
 
-      - name: Restore dependencies
-        run: dotnet restore
+      - name: Build Service
+        run: dotnet build --configuration ${{ matrix.configuration }} PlexService/
 
-      - name: Build
-        run: dotnet build --no-restore --configuration ${{ matrix.configuration }} PlexService/
-
-      - name: Build
-        run: dotnet build --no-restore --configuration ${{ matrix.configuration }} PlexServiceInstaller/
+      - name: Build Installer
+        run: dotnet build --configuration ${{ matrix.configuration }} PlexServiceInstaller/
 
       - name: Test
         run: dotnet test --no-build --verbosity normal
