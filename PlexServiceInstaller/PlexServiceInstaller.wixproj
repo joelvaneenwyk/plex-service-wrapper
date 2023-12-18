@@ -70,7 +70,7 @@
     </PostBuildEvent>
   </PropertyGroup>
   <Target Name="BeforeBuild">
-    <GetAssemblyIdentity AssemblyFiles="$(SolutionDir)PlexService\bin\$(Configuration)\PlexService.exe">
+    <GetAssemblyIdentity AssemblyFiles="$(SolutionDir)\PlexService\bin\$(Platform)\$(Configuration)\net481\PlexService.exe">
       <Output TaskParameter="Assemblies" ItemName="AssemblyVersions" />
     </GetAssemblyIdentity>
     <CreateProperty Value="$(OutputName)_%(AssemblyVersions.Version)">
