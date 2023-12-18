@@ -22,6 +22,7 @@
     <SuppressValidation>false</SuppressValidation>
     <VerboseOutput>True</VerboseOutput>
     <BindFiles>true</BindFiles>
+    <SuppressSpecificWarnings>1105</SuppressSpecificWarnings>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="WixToolset.NetFx.wixext" Version="4.0.3" />

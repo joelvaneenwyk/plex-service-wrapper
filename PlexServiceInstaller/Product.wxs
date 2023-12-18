@@ -3,25 +3,25 @@
   <Package Name="Plex Service" Language="1033" Version="1.2.2" Manufacturer="cjmurph" UpgradeCode="DAA483BB-C7E1-4C79-A4D6-3C2C4C3D9DAF" InstallerVersion="200">
     <Binary Id="success_bmp" SourceFile="$(sys.SOURCEFILEDIR)\Images\success.bmp" />
     <Binary Id="error_bmp" SourceFile="$(sys.SOURCEFILEDIR)\Images\error.bmp" />
-    
+
     <Binary Id="ActiveDirectory" SourceFile="$(sys.SOURCEFILEDIR)\Binaries\ActiveDirectory.dll" />
     <CustomAction Id="DirectoryObjectPicker" DllEntry="DirectoryObjectPicker" Execute="immediate" Return="check" BinaryRef="ActiveDirectory" />
-    
+
     <Binary Id="UserPrivileges" SourceFile="$(sys.SOURCEFILEDIR)\Binaries\UserPrivileges.dll" />
     <CustomAction Id="CheckCredentials" DllEntry="CheckCredentials" Execute="immediate" Return="check" BinaryRef="UserPrivileges" />
     <CustomAction Id="CheckPrivilege" DllEntry="CheckPrivilege" Execute="immediate" Return="check" BinaryRef="UserPrivileges" />
     <CustomAction Id="GetUserInfo" DllEntry="GetUserInfo" Execute="immediate" Return="check" BinaryRef="UserPrivileges" />
     <CustomAction Id="GetUserNameFormatted" DllEntry="GetUserNameFormat" Execute="immediate" Return="ignore" BinaryRef="UserPrivileges" />
-    
+
     <Property Id="ARPPRODUCTICON" Value="PlexServiceTray.exe" />
     <Property Id="REINSTALLMODE" Value="amus" />
     <Property Id="ARPURLINFOABOUT" Value="https://github.com/cjmurph/PmsService" />
     <Property Id="ARPHELPLINK" Value="https://forums.plex.tv/index.php/topic/93994-pms-as-a-service/" />
     <Property Id="ASSISTANCE_START_VIA_REGISTRY" Value="1" />
     <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
-    
+
     <Media Id="1" Cabinet="PlexService.cab" EmbedCab="yes" />
-    
+
     <Property Id="SERVICE_USER" Admin="yes" />
     <Property Id="SERVICE_PASSWORD" Admin="yes" />
 
@@ -83,7 +83,7 @@
   </Package>
 
   <Fragment>
-    <StandardDirectory Id="ProgramFilesFolder">
+    <StandardDirectory Id="ProgramFiles64Folder">
       <Directory Id="INSTALLDIR" Name="Plex Service">
         <Component Id="PlexServiceComponent">
           <File Id="PlexServiceExe" Source="$(var.PlexService.TargetPath)" />
