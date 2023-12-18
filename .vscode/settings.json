@@ -1,10 +1,20 @@
 {
     "files.associations": {
-        "LICENSE": "plaintext"
+        "LICENSE": "plaintext",
+        "*.wixproj": "xml",
+        "*.wxi": "xml",
+        "*.wxs": "xml"
     },
     "cSpell.words": [
-        "CodeQL",
-        "Serilog",
-        "devskim"
+      "CodeQL",
+      "devskim",
+      "endlocal",
+      "ERRORLEVEL",
+      "msbuild",
+      "msiexec",
+      "Progra",
+      "Serilog",
+      "setlocal",
+      "taskkill"
     ]
 }

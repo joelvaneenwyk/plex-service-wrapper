@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.ServiceModel;
 using System.ServiceModel.Description;
 using System.ServiceProcess;
@@ -14,14 +15,14 @@ namespace PlexService
     /// </summary>
     public partial class PlexMediaServerService : ServiceBase
     {
-        private const string _baseAddress = "net.tcp://localhost:{0}/PlexService";
+        private const string BaseAddress = "net.tcp://localhost:{0}/PlexService";
 
         /// <summary>
         /// Default the address with port 8787
         /// </summary>
-        private string _address = string.Format(_baseAddress, 8787);
+        private string _address = string.Format(CultureInfo.InvariantCulture, BaseAddress, 8787);
 
-        private static readonly TimeSpan _timeOut = TimeSpan.FromSeconds(2);
+        private static readonly TimeSpan TimeOut = TimeSpan.FromSeconds(2);
 
         private ServiceHost _host;
 
@@ -60,7 +61,7 @@ namespace PlexService
                 if (port == 0)
                     port = 8787;
 
-                _address = string.Format(_baseAddress, port);
+                _address = string.Format(CultureInfo.InvariantCulture, BaseAddress, port);
 
                 Uri[] addressBase = [new(_address)];
                 _host = new ServiceHost(typeof(TrayInteraction), addressBase);
@@ -71,8 +72,8 @@ namespace PlexService
                 //Setup a TCP binding with appropriate timeouts.
                 //use a reliable connection so the clients can be notified when the receive timeout has elapsed and the connection is torn down.
                 var netTcpB = new NetTcpBinding {
-                    OpenTimeout = _timeOut,
-                    CloseTimeout = _timeOut,
+                    OpenTimeout = TimeOut,
+                    CloseTimeout = TimeOut,
                     ReceiveTimeout = TimeSpan.FromMinutes(10),
                     ReliableSession = {
                         Enabled = true,
@@ -157,9 +158,9 @@ namespace PlexService
             //Create a NetTcp binding to the service and set some appropriate timeouts.
             //Use reliable connection so we know when we have been disconnected
             var plexServiceBinding = new NetTcpBinding {
-                OpenTimeout = _timeOut,
-                CloseTimeout = _timeOut,
-                SendTimeout = _timeOut,
+                OpenTimeout = TimeOut,
+                CloseTimeout = TimeOut,
+                SendTimeout = TimeOut,
                 ReliableSession = {
                     Enabled = true,
                     InactivityTimeout = TimeSpan.FromMinutes(1)
