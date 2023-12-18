@@ -53,7 +53,7 @@ If that happens, see below for steps to manually remove it for a clean installat
 
 To completely remove the PlexService application, do the following:
 
-1. Open an *elevated* command prompt. (Start menu, type 'cmd', right-click, run as administrator)
+1. Open an *elevated* command prompt. Start menu, type `cmd`, right-click, and press *run as administrator*
 2. Enter the following commands:
 
     ```batch
@@ -63,7 +63,7 @@ To completely remove the PlexService application, do the following:
     del /S "C:\Progra~2\PlexService"
     ```
 
-3. Optionally, ff you wish to delete your PlexService settings, execute the following command:
+3. Optionally, if you wish to delete your PlexService settings, execute the following command:
 
     ```batch
     del /S "C:\users\<PMS-SERVICE-USERNAME>\AppData\Local\Plex Service\"
