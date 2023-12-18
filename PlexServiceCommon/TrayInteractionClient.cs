@@ -5,7 +5,7 @@ using System.ServiceModel.Channels;
 namespace PlexServiceCommon
 {
     public class TrayInteractionClient(object callbackInstance, Binding binding, EndpointAddress remoteAddress) 
-        : DuplexClientBase<ITrayInteraction>(callbackInstance, binding, remoteAddress)
+        : DuplexClientBase<ITrayInteraction>((InstanceContext)callbackInstance, binding, remoteAddress)
     {
     }
 }
