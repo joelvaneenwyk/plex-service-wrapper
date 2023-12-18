@@ -15,6 +15,7 @@
     <Pedantic>True</Pedantic>
     <SuppressValidation>True</SuppressValidation>
     <VerboseOutput>True</VerboseOutput>
+    <BindFiles>true</BindFiles>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="WixToolset.NetFx.wixext" Version="4.0.3" />
