@@ -6,12 +6,15 @@
         "*.wxs": "xml"
     },
     "cSpell.words": [
-        "CodeQL",
-        "devskim",
-        "endlocal",
-        "ERRORLEVEL",
-        "msbuild",
-        "Serilog",
-        "setlocal"
+      "CodeQL",
+      "devskim",
+      "endlocal",
+      "ERRORLEVEL",
+      "msbuild",
+      "msiexec",
+      "Progra",
+      "Serilog",
+      "setlocal",
+      "taskkill"
     ]
 }
