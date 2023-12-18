@@ -16,13 +16,14 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PlexServiceWCF", "PlexServi
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PlexServiceCommon", "PlexServiceCommon\PlexServiceCommon.csproj", "{C5E8CEE5-EAE6-4337-9CDF-55C907FF93C7}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Global", "Global", "{6D25DB02-3AB2-475C-A4AD-0935CE7B0908}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution", "Solution", "{6D25DB02-3AB2-475C-A4AD-0935CE7B0908}"
 	ProjectSection(SolutionItems) = preProject
 		.gitattributes = .gitattributes
 		.gitignore = .gitignore
 		LICENSE = LICENSE
 		README.md = README.md
 		.editorconfig = .editorconfig
+		setup.bat = setup.bat
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ThirdPartyLicenses", "ThirdPartyLicenses", "{FCE89B4A-E9FF-4A57-B5B3-BD0747EB9757}"
@@ -32,6 +33,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ThirdPartyLicenses", "Third
 		ThirdPartyLibraries\msiext-license.txt = ThirdPartyLibraries\msiext-license.txt
 		ThirdPartyLibraries\Newtonsoft.Json-license.txt = ThirdPartyLibraries\Newtonsoft.Json-license.txt
 		ThirdPartyLibraries\ookiidialogs-license.txt = ThirdPartyLibraries\ookiidialogs-license.txt
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".config", ".config", "{2725FAEE-7398-4634-9A44-1CD976CA2BFE}"
+	ProjectSection(SolutionItems) = preProject
+		.config\dotnet-tools.json = .config\dotnet-tools.json
 	EndProjectSection
 EndProject
 Global
@@ -66,5 +72,8 @@ Global
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {8A0C2762-4709-4A04-9B5A-95768222949E}
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{2725FAEE-7398-4634-9A44-1CD976CA2BFE} = {6D25DB02-3AB2-475C-A4AD-0935CE7B0908}
 	EndGlobalSection
 EndGlobal
