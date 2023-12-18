@@ -136,11 +136,11 @@
           <File Id="OokiiDll" Source="$(var.PlexServiceTray.TargetDir)Ookii.Dialogs.Wpf.dll" />
         </Component>
         <Component Id="LicensesComponent" Guid="9C268F52-1375-490C-8126-BB0B39DADBD5" KeyPath="yes">
-          <File Id="NewtonsoftJsonLic" Source="$(var.SolutionDir)\ThirdPartyLibraries\Newtonsoft.Json-license.txt" />
-          <File Id="MsiExtLic" Source="$(var.SolutionDir)\ThirdPartyLibraries\msiext-license.txt" />
-          <File Id="MahAppsLic" Source="$(var.SolutionDir)\ThirdPartyLibraries\mahapps-license.txt" />
-          <File Id="OokiiLic" Source="$(var.SolutionDir)\ThirdPartyLibraries\ookiidialogs-license.txt" />
-          <File Id="FontAwesomeWPFLic" Source="$(var.SolutionDir)\ThirdPartyLibraries\FontAwesome-WPF.txt" />
+          <File Id="NewtonsoftJsonLic" Source="$(var.PlexServiceTray.ProjectDir)\..\ThirdPartyLibraries\Newtonsoft.Json-license.txt" />
+          <File Id="MsiExtLic" Source="$(var.PlexServiceTray.ProjectDir)\..\ThirdPartyLibraries\msiext-license.txt" />
+          <File Id="MahAppsLic" Source="$(var.PlexServiceTray.ProjectDir)\..\ThirdPartyLibraries\mahapps-license.txt" />
+          <File Id="OokiiLic" Source="$(var.PlexServiceTray.ProjectDir)\..\ThirdPartyLibraries\ookiidialogs-license.txt" />
+          <File Id="FontAwesomeWPFLic" Source="$(var.PlexServiceTray.ProjectDir)\..\ThirdPartyLibraries\FontAwesome-WPF.txt" />
           <File Id="PlexServiceLic" Source="$(var.PlexServiceTray.TargetDir)LICENSE" />
         </Component>
         <Component Id="PlexServiceTrayStartMenu">

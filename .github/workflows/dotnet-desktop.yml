@@ -110,7 +110,10 @@ jobs:
         run: dotnet restore
 
       - name: Build
-        run: dotnet build --no-restore --configuration ${{ matrix.configuration }}
+        run: dotnet build --no-restore --configuration ${{ matrix.configuration }} PlexService/
+
+      - name: Build
+        run: dotnet build --no-restore --configuration ${{ matrix.configuration }} PlexServiceInstaller/
 
       - name: Test
         run: dotnet test --no-build --verbosity normal
