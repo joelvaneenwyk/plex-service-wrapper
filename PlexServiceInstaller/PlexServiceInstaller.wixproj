@@ -81,7 +81,10 @@
   </PropertyGroup>
 
   <Target Name="BeforeBuild">
-    <GetAssemblyIdentity AssemblyFiles="$(ProjectDir)\..\PlexService\$(OutputPath)\net481\PlexService.exe">
+    <GetAssemblyIdentity AssemblyFiles="$(ProjectDir)\..\PlexService\$(OutputPath)\net481\PlexService.exe" Condition="Exists('$(ProjectDir)\..\PlexService\$(OutputPath)\net481\PlexService.exe')">
+      <Output TaskParameter="Assemblies" ItemName="AssemblyVersions" />
+    </GetAssemblyIdentity>
+    <GetAssemblyIdentity AssemblyFiles="$(ProjectDir)\..\PlexService\bin\$(Configuration)\net481\win-x64\PlexService.exe" Condition="Exists('$(ProjectDir)\..\PlexService\bin\$(Configuration)\net481\win-x64\PlexService.exe')">
       <Output TaskParameter="Assemblies" ItemName="AssemblyVersions" />
     </GetAssemblyIdentity>
     <CreateProperty Value="$(OutputName)_%(AssemblyVersions.Version)">
