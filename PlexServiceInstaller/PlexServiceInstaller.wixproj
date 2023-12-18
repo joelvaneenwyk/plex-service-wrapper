@@ -1,4 +1,4 @@
-<Project>
+﻿<Project>
   <Import Project="Sdk.props" Sdk="WixToolset.Sdk" Version="4.0.3" />
   <PropertyGroup>
     <Platform Condition=" '$(Platform)' == '' ">x64</Platform>
@@ -8,12 +8,18 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' ">
     <DefineConstants>Debug</DefineConstants>
+    <SuppressAllWarnings>false</SuppressAllWarnings>
+    <Pedantic>true</Pedantic>
+    <BindFiles>true</BindFiles>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <VerboseOutput>true</VerboseOutput>
+    <SuppressSpecificWarnings>1105</SuppressSpecificWarnings>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' ">
     <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
     <SuppressAllWarnings>False</SuppressAllWarnings>
     <Pedantic>True</Pedantic>
-    <SuppressValidation>True</SuppressValidation>
+    <SuppressValidation>false</SuppressValidation>
     <VerboseOutput>True</VerboseOutput>
     <BindFiles>true</BindFiles>
   </PropertyGroup>
