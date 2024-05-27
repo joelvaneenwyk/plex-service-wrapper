@@ -1,21 +1,23 @@
-<Project>
-  <Import Project="Sdk.props" Sdk="WixToolset.Sdk" Version="4.0.3" />
+<Project Sdk="WixToolset.Sdk/5.0.0">
+  <Import Project="Sdk.props" Sdk="WixToolset.Sdk" Version="5.0.0" />
   <PropertyGroup>
     <ProductVersion>3.9</ProductVersion>
     <OutputName>PlexService</OutputName>
     <Name>PlexServiceInstaller</Name>
+    <Platforms>x64</Platforms>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <DefineConstants>Debug</DefineConstants>
+    <VerboseOutput>true</VerboseOutput>
   </PropertyGroup>
   <ItemGroup>
     <WixExtension Include="WixCommonUiExtension">
       <HintPath>WixCommonUiExtension.dll</HintPath>
       <Name>WixCommonUiExtension</Name>
     </WixExtension>
-    <PackageReference Include="WixToolset.NetFx.wixext" Version="4.0.3" />
-    <PackageReference Include="WixToolset.UI.wixext" Version="4.0.3" />
-    <PackageReference Include="WixToolset.Util.wixext" Version="4.0.3" />
+    <PackageReference Include="WixToolset.NetFx.wixext" Version="5.0.0" />
+    <PackageReference Include="WixToolset.UI.wixext" Version="5.0.0" />
+    <PackageReference Include="WixToolset.Util.wixext" Version="5.0.0" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PlexServiceCommon\PlexServiceCommon.csproj">
@@ -61,11 +63,7 @@
     <Content Include="UserPrivileges.dll" />
     <Content Include="WixCommonUiExtension.dll" />
   </ItemGroup>
-  <Import Project="Sdk.targets" Sdk="WixToolset.Sdk" Version="4.0.3" />
-  <PropertyGroup>
-    <PostBuildEvent>if not exist "$(ProjectDir)msi" mkdir  "$(ProjectDir)msi"
-      copy "!(TargetPath)" "$(ProjectDir)msi" /Y /V</PostBuildEvent>
-  </PropertyGroup>
+  <Import Project="Sdk.targets" Sdk="WixToolset.Sdk" Version="5.0.0" />
   <Target Name="BeforeBuild">
     <GetAssemblyIdentity AssemblyFiles="$(SolutionDir)PlexService\bin\$(Configuration)\PlexService.exe">
       <Output TaskParameter="Assemblies" ItemName="AssemblyVersions" />

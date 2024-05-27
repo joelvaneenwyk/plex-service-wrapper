@@ -1,13 +1,15 @@
-﻿using PlexServiceCommon.Interface;
+﻿using System.Diagnostics.CodeAnalysis;
+using PlexServiceCommon.Interface;
 using System.ServiceModel;
 using System.ServiceModel.Channels;
 
 namespace PlexServiceCommon
 {
-    public class TrayInteractionClient:DuplexClientBase<ITrayInteraction>
+    public class TrayInteractionClient : DuplexClientBase<ITrayInteraction>
     {
-        public TrayInteractionClient(object callbackInstance, Binding binding, EndpointAddress remoteAddress)
-            : base(callbackInstance, binding, remoteAddress) {
+        [SuppressMessage("ReSharper", "SuspiciousTypeConversion.Global")]
+        public TrayInteractionClient(TrayCallback callbackInstance, Binding binding, EndpointAddress remoteAddress)
+            : base((object)callbackInstance as InstanceContext, binding, remoteAddress) {
         }
     }
 }

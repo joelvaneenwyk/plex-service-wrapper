@@ -1,13 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.ServiceModel;
 using System.Threading.Tasks;
+using CoreWCF;
 using PlexServiceCommon;
 using PlexServiceCommon.Interface;
 using Serilog;
 using Serilog.Events;
 using static System.Net.WebRequestMethods;
+using CommunicationState = System.ServiceModel.CommunicationState;
+using OperationContext = System.ServiceModel.OperationContext;
 
 namespace PlexServiceWCF
 {
