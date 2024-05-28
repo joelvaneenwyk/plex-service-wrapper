@@ -78,7 +78,7 @@
 	</Package>
 
 	<Fragment>
-		<StandardDirectory Id="ProgramFiles64Folder">
+		<StandardDirectory Id="ProgramFiles6432Folder">
 			<Directory Id="INSTALLDIR" Name="Plex Service">
 				<Component Id="PlexServiceComponent">
 					<File Id="PlexServiceExe" Source="$(var.PlexService.TargetPath)" />
@@ -141,7 +141,7 @@
 					<File Id="MahAppsLic" Source="$(var.SolutionDir)\ThirdPartyLibraries\mahapps-license.txt" />
 					<File Id="OokiiLic" Source="$(var.SolutionDir)\ThirdPartyLibraries\ookiidialogs-license.txt" />
 					<File Id="FontAwesomeWPFLic" Source="$(var.SolutionDir)\ThirdPartyLibraries\FontAwesome-WPF.txt" />
-					<File Id="PlexServiceLic" Source="$(var.SolutionDir)LICENSE" />
+					<File Id="PlexServiceLic" Source="$(var.SolutionDir)\LICENSE" />
 				</Component>
 				<Component Id="PlexServiceTrayStartMenu">
 					<RegistryKey Id="StartMenuPlexServiceTrayHKCU" Root="HKCU" Key="Software\[ProductName]" ForceCreateOnInstall="yes" ForceDeleteOnUninstall="yes">

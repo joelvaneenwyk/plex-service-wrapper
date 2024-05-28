@@ -3,10 +3,11 @@
   "isRoot": true,
   "tools": {
     "wix": {
-      "version": "4.0.3",
+      "version": "5.0.0",
       "commands": [
         "wix"
-      ]
+      ],
+      "rollForward": false
     }
   }
 }

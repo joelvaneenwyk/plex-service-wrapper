@@ -4,6 +4,7 @@
     <OutputName>PlexService</OutputName>
     <Name>PlexServiceInstaller</Name>
     <Platforms>x64</Platforms>
+    <PlatformTarget>x64</PlatformTarget>
     <NeutralLanguage>en</NeutralLanguage>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
