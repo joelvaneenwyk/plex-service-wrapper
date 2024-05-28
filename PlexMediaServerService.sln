@@ -3,6 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 17.11.34909.67
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PlexService", "PlexService\PlexService.csproj", "{502A2EAF-DABC-4D4B-B579-5953A3E03DD8}"
+	ProjectSection(ProjectDependencies) = postProject
+		{8729030F-D67D-40ED-8BB0-23CEEF6A3F82} = {8729030F-D67D-40ED-8BB0-23CEEF6A3F82}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PlexServiceTray", "PlexServiceTray\PlexServiceTray.csproj", "{8729030F-D67D-40ED-8BB0-23CEEF6A3F82}"
 	ProjectSection(ProjectDependencies) = postProject
