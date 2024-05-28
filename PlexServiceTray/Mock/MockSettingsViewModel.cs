@@ -1,9 +1,4 @@
 ﻿using PlexServiceTray.ViewModel;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PlexServiceTray.Mock
 {
@@ -32,7 +27,7 @@ namespace PlexServiceTray.Mock
             AuxiliaryApplications.Add(new AuxiliaryApplicationViewModel(new PlexServiceCommon.AuxiliaryApplication()
             {
                 Name = "Another Aux Application",
-                FilePath = @"C:\Something\dont_execute_me.exe",
+                FilePath = @"C:\Something\do_not_execute_me.exe",
                 LogOutput = true,
                 Argument = "--help",
                 KeepAlive = false,
@@ -40,8 +35,8 @@ namespace PlexServiceTray.Mock
                 Url = "https://bad.com"
             }, this));
 
-            DriveMaps.Add(new DriveMapViewModel(new PlexServiceCommon.DriveMap(@"\\myserver\media", @"M")));
-            DriveMaps.Add(new DriveMapViewModel(new PlexServiceCommon.DriveMap(@"\\myserver\photos", @"P")));
+            DriveMaps.Add(new DriveMapViewModel(new PlexServiceCommon.DriveMap(@"\\my_server\media", @"M")));
+            DriveMaps.Add(new DriveMapViewModel(new PlexServiceCommon.DriveMap(@"\\my_server\photos", @"P")));
         }
     }
 }

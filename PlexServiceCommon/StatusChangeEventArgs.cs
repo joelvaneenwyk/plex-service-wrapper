@@ -11,14 +11,17 @@ namespace PlexServiceCommon
     [DataContract]
     public class StatusChangeEventArgs: EventArgs
     {
-        [DataMember]
-        public EventLogEntryType EventType { get; private set; }
-        [DataMember]
-        public string Description { get; private set; }
+        [DataMember] public readonly EventLogEntryType? EventType;
 
-        public StatusChangeEventArgs(string description, EventLogEntryType eventType = EventLogEntryType.Information)
+        [DataMember] public readonly string Description;
+
+        public StatusChangeEventArgs(string description, EventLogEntryType? eventType = null)
         {
-            EventType = eventType;
+            if (System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(
+                    System.Runtime.InteropServices.OSPlatform.Windows))
+            {
+                EventType = eventType ?? EventLogEntryType.Information;
+            }
             Description = description;
         }
     }

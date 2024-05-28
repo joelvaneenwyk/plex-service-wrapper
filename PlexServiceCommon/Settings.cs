@@ -10,6 +10,8 @@ namespace PlexServiceCommon
     [JsonObject(MemberSerialization.OptIn)]
     public class Settings
     {
+        public const string LocalHost = "localhost";
+        
         /// <summary>
         /// User defined auxiliary applications
         /// </summary>
@@ -41,7 +43,7 @@ namespace PlexServiceCommon
         /// </summary>
         [DefaultValue(false)]
         [JsonProperty(DefaultValueHandling = DefaultValueHandling.Populate)]
-        public bool AutoRestart { get; set; }
+        public bool AutoRestart { get; set; } = false;
 
         /// <summary>
         /// Choose whether to try auto-remounting shares if failed
@@ -75,9 +77,7 @@ namespace PlexServiceCommon
         /// Allow the user to manually specify the plex executable path
         /// </summary>
         [JsonProperty]
-        public string UserDefinedInstallLocation { get; set; }
-
-        public const string LocalHost = "localhost";
+        public string? UserDefinedInstallLocation { get; set; } = null;
     }
 }
 

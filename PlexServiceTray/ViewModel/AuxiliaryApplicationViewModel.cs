@@ -4,6 +4,7 @@ using Microsoft.Win32;
 using Ookii.Dialogs.Wpf;
 using PlexServiceTray.Validation;
 using System.ComponentModel.DataAnnotations;
+using System.Runtime.Versioning;
 
 namespace PlexServiceTray.ViewModel
 {
@@ -99,7 +100,7 @@ namespace PlexServiceTray.ViewModel
             }
         }
 
-        public string Url
+        public string? Url
         {
             get => _auxApplication.Url;
             set 
@@ -143,14 +144,17 @@ namespace PlexServiceTray.ViewModel
         }
 
         #region BrowseCommand
-        RelayCommand _browseCommand;
+
+        private RelayCommand? _browseCommand;
         public RelayCommand BrowseCommand => _browseCommand ??= new RelayCommand(OnBrowse);
 
-        private void OnBrowse(object parameter)
+        private void OnBrowse(object? parameter)
         {
-            var ofd = new OpenFileDialog {
+            OpenFileDialog ofd = new()
+            {
                 FileName = FilePath
             };
+            
             if (ofd.ShowDialog() != true) {
                 return;
             }
@@ -158,19 +162,24 @@ namespace PlexServiceTray.ViewModel
             FilePath = ofd.FileName;
             if(string.IsNullOrEmpty(WorkingFolder))
             {
-                WorkingFolder = System.IO.Path.GetDirectoryName(FilePath);
+                WorkingFolder = System.IO.Path.GetDirectoryName(FilePath) ?? string.Empty;
             }
         }
 
         #endregion BrowseCommand
 
         #region BrowseFolderCommand
-        RelayCommand _browseFolderCommand;
-        public RelayCommand BrowseFolderCommand=> _browseFolderCommand ??= new RelayCommand(OnBrowseFolder);
 
-        private void OnBrowseFolder(object parameter)
+        private RelayCommand? _browseFolderCommand;
+
+        [SupportedOSPlatform("windows")]
+        public RelayCommand BrowseFolderCommand =>
+            _browseFolderCommand ??= new RelayCommand(OnBrowseFolder);
+
+        [SupportedOSPlatform("windows")]
+        private void OnBrowseFolder(object? parameter)
         {
-            var fbd = new VistaFolderBrowserDialog {
+            VistaFolderBrowserDialog fbd = new() {
                 Description = "Please select working directory",
                 UseDescriptionForTitle = true
             };
@@ -187,60 +196,66 @@ namespace PlexServiceTray.ViewModel
         #endregion BrowseFolderCommand
 
         #region StartCommand
-        RelayCommand _startCommand;
+
+        private RelayCommand? _startCommand;
         public RelayCommand StartCommand => _startCommand ??= new RelayCommand(OnStart, CanStart); 
 
-        private bool CanStart(object parameter)
+        private bool CanStart(object? parameter)
         {
             return !Running;
         }
 
-        private void OnStart(object parameter)
+        private void OnStart(object? parameter)
         {
             StartRequest?.Invoke(this, EventArgs.Empty);
         }
 
-        public event EventHandler StartRequest;
+        public event EventHandler? StartRequest;
 
         #endregion StartCommand
 
         #region StopCommand
-        RelayCommand _stopCommand;
+
+        private RelayCommand? _stopCommand;
         public RelayCommand StopCommand => _stopCommand ??= new RelayCommand(OnStop, CanStop);
 
-        private bool CanStop(object parameter)
+        private bool CanStop(object? parameter)
         {
             return Running;
         }
 
-        private void OnStop(object parameter)
+        private void OnStop(object? parameter)
         {
             StopRequest?.Invoke(this, EventArgs.Empty);
         }
 
-        public event EventHandler StopRequest;
+        public event EventHandler? StopRequest;
 
         #endregion StopCommand
 
         #region GoToUrlCommand
-        RelayCommand _goToUrlCommand;
+
+        private RelayCommand? _goToUrlCommand;
         public RelayCommand GoToUrlCommand => _goToUrlCommand ??= new RelayCommand(OnGoToUrl, CanGoToUrl);
 
-        private bool CanGoToUrl(object parameter)
+        private bool CanGoToUrl(object? parameter)
         {
             return !string.IsNullOrEmpty(Url);
         }
 
-        private void OnGoToUrl(object parameter)
+        private void OnGoToUrl(object? parameter)
         {
-            System.Diagnostics.Process.Start(Url);
+            if (!string.IsNullOrWhiteSpace(Url))
+            {
+                System.Diagnostics.Process.Start(Url);
+            }
         }
 
         #endregion GoToUrlCommand
 
         #region CheckRunningRequest
 
-        public event EventHandler CheckRunningRequest;
+        public event EventHandler? CheckRunningRequest;
 
         private void OnCheckRunningRequest()
         {

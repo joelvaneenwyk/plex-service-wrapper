@@ -1,5 +1,4 @@
-﻿using System;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
@@ -42,8 +41,7 @@ namespace PlexServiceTray.Controls
 
         private static void OnFileChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            var rtf = d as RichTextFile;
-            if (rtf == null)
+            if (d is not RichTextFile rtf)
                 return;
 
             ReadFile(rtf.File, rtf.Document);

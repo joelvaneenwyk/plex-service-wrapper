@@ -4,12 +4,14 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
+using JetBrains.Annotations;
 
 namespace PlexServiceTray.ViewModel
 {
+    [PublicAPI]
     public abstract class ObservableObject : INotifyPropertyChanged, IDataErrorInfo
     {
-        protected object ValidationContext { get; set; }
+        protected object? ValidationContext { get; init; }
 
         internal bool _isSelected;
 
@@ -38,31 +40,24 @@ namespace PlexServiceTray.ViewModel
             }
         }
 
-        #region PropertyChanged
-
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler? PropertyChanged;
         /// <summary>
         /// This is required to create on property changed events
         /// </summary>
         /// <param name="name">What property of this object has changed</param>
         protected void OnPropertyChanged(string name)
         {
-            var handler = PropertyChanged;
-            if(handler != null)
-                handler(this, new PropertyChangedEventArgs(name));
+            PropertyChangedEventHandler? handler = PropertyChanged;
+            handler?.Invoke(this, new PropertyChangedEventArgs(name));
             if (Validators.ContainsKey(name))
                 UpdateError();
         }
 
-        #endregion
-
-        #region Data Validation
-
-        private Dictionary<string, object> PropertyGetters
+        private Dictionary<string, object?> PropertyGetters
         {
             get
             {
-                return GetType().GetProperties().Where(p => GetValidations(p).Length != 0).ToDictionary(p => p.Name, p => GetValueGetter(p));
+                return GetType().GetProperties().Where(p => GetValidations(p).Length != 0).ToDictionary(p => p.Name, GetValueGetter);
             }
         }
 
@@ -70,21 +65,21 @@ namespace PlexServiceTray.ViewModel
         {
             get
             {
-                return GetType().GetProperties().Where(p => GetValidations(p).Length != 0).ToDictionary(p => p.Name, p => GetValidations(p));
+                return GetType().GetProperties().Where(p => GetValidations(p).Length != 0).ToDictionary(p => p.Name, GetValidations);
             }
         }
 
-        private ValidationAttribute[] GetValidations(PropertyInfo property)
+        private static ValidationAttribute[] GetValidations(PropertyInfo property)
         {
             return (ValidationAttribute[])property.GetCustomAttributes(typeof(ValidationAttribute), true);
         }
 
-        private object GetValueGetter(PropertyInfo property)
+        private object? GetValueGetter(PropertyInfo property)
         {
             return property.GetValue(this, null);
         }
 
-        private string _error;
+        private string _error = string.Empty;
 
         public string Error => _error;
 
@@ -102,10 +97,9 @@ namespace PlexServiceTray.ViewModel
         {
             get
             {
-                if (PropertyGetters.ContainsKey(columnName))
+                if (PropertyGetters.TryGetValue(columnName, out object? value))
                 {
-                    var value = PropertyGetters[columnName];
-                    var errors = Validators[columnName].Where(v => !Validate(v, value))
+                    string?[] errors = Validators[columnName].Where(v => !Validate(v, value))
                         .Select(v => v.ErrorMessage).ToArray();
                     OnPropertyChanged(nameof(Error));
                     return string.Join(Environment.NewLine, errors);
@@ -116,11 +110,12 @@ namespace PlexServiceTray.ViewModel
             }
         }
 
-        private bool Validate(ValidationAttribute v, object value)
+        private bool Validate(ValidationAttribute v, object? value)
         {
-            return v.GetValidationResult(value, new ValidationContext(ValidationContext, null, null)) == ValidationResult.Success;
+            ArgumentNullException.ThrowIfNull(ValidationContext, nameof(ValidationContext));
+            ValidationResult? result = v.GetValidationResult(
+                value, new ValidationContext(ValidationContext, null, null));
+            return result == ValidationResult.Success;
         }
-
-        #endregion
     }
 }

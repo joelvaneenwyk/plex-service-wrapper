@@ -1,7 +1,5 @@
 ﻿using ControlzEx.Theming;
 using PlexServiceTray.ViewModel;
-using System;
-using System.Windows.Controls;
 
 namespace PlexServiceTray.Windows
 {
@@ -18,7 +16,7 @@ namespace PlexServiceTray.Windows
             Context.PropertyChanged += (_, args) =>
             {
                 if (args.PropertyName == nameof(TrayApplicationSettingsViewModel.Theme))
-                    ChangeTheme(Context.Theme?.Replace(" ", "."));
+                    ChangeTheme(Context.Theme?.Replace(" ", ".") ?? string.Empty);
             };
             DataContext = Context;
             ChangeTheme(theme);

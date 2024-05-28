@@ -1,35 +1,37 @@
-﻿<Project>
-  <Import Project="Sdk.props" Sdk="WixToolset.Sdk" Version="4.0.3" />
+﻿<Project Sdk="WixToolset.Sdk/5.0.0">
   <PropertyGroup>
-    <Platform Condition=" '$(Platform)' == '' ">x64</Platform>
     <ProductVersion>3.9</ProductVersion>
     <OutputName>PlexService</OutputName>
     <Name>PlexServiceInstaller</Name>
+    <Platforms>x64</Platforms>
+    <PlatformTarget>x64</PlatformTarget>
+    <NeutralLanguage>en</NeutralLanguage>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' ">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <DefineConstants>Debug</DefineConstants>
-    <SuppressAllWarnings>false</SuppressAllWarnings>
-    <Pedantic>true</Pedantic>
-    <BindFiles>true</BindFiles>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <VerboseOutput>true</VerboseOutput>
-    <SuppressSpecificWarnings>1105;1076;0204</SuppressSpecificWarnings>
-    <SuppressIces>ICE57;ICE40;ICE03</SuppressIces>
+    <PlatformTarget>x64</PlatformTarget>
+    <DebugSymbols>false</DebugSymbols>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <NoWarn>ICE57;WIX1076;$(NoWarn)</NoWarn>
+    <Prefer32bit>true</Prefer32bit>
+    <SuppressIces>ICE57</SuppressIces>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' ">
-    <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
-    <SuppressAllWarnings>False</SuppressAllWarnings>
-    <Pedantic>True</Pedantic>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <VerboseOutput>true</VerboseOutput>
+    <PlatformTarget>x64</PlatformTarget>
+    <DebugSymbols>false</DebugSymbols>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <NoWarn>ICE57;WIX1076;$(NoWarn)</NoWarn>
+    <Optimize>true</Optimize>
+    <Prefer32bit>true</Prefer32bit>
     <SuppressValidation>false</SuppressValidation>
-    <VerboseOutput>True</VerboseOutput>
-    <BindFiles>true</BindFiles>
-    <SuppressSpecificWarnings>1105;1076;0204</SuppressSpecificWarnings>
-    <SuppressIces>ICE57;ICE40;ICE03</SuppressIces>
+    <SuppressIces>ICE57</SuppressIces>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="WixToolset.NetFx.wixext" Version="4.0.3" />
-    <PackageReference Include="WixToolset.UI.wixext" Version="4.0.3" />
-    <PackageReference Include="WixToolset.Util.wixext" Version="4.0.3" />
+    <PackageReference Include="WixToolset.NetFx.wixext" Version="5.0.0" />
+    <PackageReference Include="WixToolset.UI.wixext" Version="5.0.0" />
+    <PackageReference Include="WixToolset.Util.wixext" Version="5.0.0" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PlexServiceCommon\PlexServiceCommon.csproj">
@@ -56,7 +58,7 @@
       <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
       <RefTargetDir>INSTALLFOLDER</RefTargetDir>
     </ProjectReference>
-    <ProjectReference Include="..\PlexService\PlexService.csproj" Publish="true">
+    <ProjectReference Include="..\PlexService\PlexService.csproj">
       <Name>PlexService</Name>
       <Project>{502a2eaf-dabc-4d4b-b579-5953a3e03dd8}</Project>
       <Private>True</Private>
@@ -67,34 +69,11 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Binaries\ActiveDirectory.dll" />
+    <Content Include="Binaries\UserPrivileges.dll" />
     <Content Include="Images\error.bmp" />
     <Content Include="Images\PlexService.bmp" />
     <Content Include="Images\PlexServiceBack.bmp" />
-    <Content Include="ServiceCredentialsUI.wxi" />
     <Content Include="Images\success.bmp" />
-    <Content Include="Binaries\UserPrivileges.dll" />
+    <Content Include="ServiceCredentialsUI.wxi" />
   </ItemGroup>
-  <Import Project="Sdk.targets" Sdk="WixToolset.Sdk" Version="4.0.3" />
-  <PropertyGroup>
-    <PostBuildEvent>
-    </PostBuildEvent>
-  </PropertyGroup>
-
-  <Target Name="BeforeBuild">
-    <GetAssemblyIdentity AssemblyFiles="$(ProjectDir)\..\PlexService\$(OutputPath)\net481\PlexService.exe" Condition="Exists('$(ProjectDir)\..\PlexService\$(OutputPath)\net481\PlexService.exe')">
-      <Output TaskParameter="Assemblies" ItemName="AssemblyVersions" />
-    </GetAssemblyIdentity>
-    <GetAssemblyIdentity AssemblyFiles="$(ProjectDir)\..\PlexService\bin\$(Configuration)\net481\win-x64\PlexService.exe" Condition="Exists('$(ProjectDir)\..\PlexService\bin\$(Configuration)\net481\win-x64\PlexService.exe')">
-      <Output TaskParameter="Assemblies" ItemName="AssemblyVersions" />
-    </GetAssemblyIdentity>
-    <CreateProperty Value="$(OutputName)_%(AssemblyVersions.Version)">
-      <Output TaskParameter="Value" PropertyName="TargetName" />
-    </CreateProperty>
-    <CreateProperty Value="$(TargetName)$(TargetExt)">
-      <Output TaskParameter="Value" PropertyName="TargetFileName" />
-    </CreateProperty>
-    <CreateProperty Value="$(TargetDir)\$(TargetFileName)">
-      <Output TaskParameter="Value" PropertyName="TargetPath" />
-    </CreateProperty>
-  </Target>
 </Project>

@@ -2,10 +2,7 @@
 using System.Linq;
 using System.Collections.ObjectModel;
 using PlexServiceCommon;
-using PlexServiceTray.ViewModel;
-using System.ComponentModel;
 using Microsoft.Win32;
-using System.Windows;
 using System.IO;
 
 namespace PlexServiceTray.ViewModel
@@ -102,7 +99,7 @@ namespace PlexServiceTray.ViewModel
             }
         }
 
-        public string UserDefinedInstallLocation
+        public string? UserDefinedInstallLocation
         {
             get => WorkingSettings.UserDefinedInstallLocation;
             set
@@ -133,11 +130,11 @@ namespace PlexServiceTray.ViewModel
         /// <summary>
         /// Collection of Auxiliary applications to run alongside plex
         /// </summary>
-        public ObservableCollection<AuxiliaryApplicationViewModel> AuxiliaryApplications { get; } = new ObservableCollection<AuxiliaryApplicationViewModel>();
+        public ObservableCollection<AuxiliaryApplicationViewModel> AuxiliaryApplications { get; } = new();
 
-        private AuxiliaryApplicationViewModel _selectedAuxApplication;
+        private AuxiliaryApplicationViewModel? _selectedAuxApplication;
 
-        public AuxiliaryApplicationViewModel SelectedAuxApplication
+        public AuxiliaryApplicationViewModel? SelectedAuxApplication
         {
             get => _selectedAuxApplication;
             set
@@ -152,11 +149,11 @@ namespace PlexServiceTray.ViewModel
         }
 
 
-        public ObservableCollection<DriveMapViewModel> DriveMaps { get; } = new ObservableCollection<DriveMapViewModel>();
+        public ObservableCollection<DriveMapViewModel> DriveMaps { get; } = new();
 
-        private DriveMapViewModel _selectedDriveMap;
+        private DriveMapViewModel? _selectedDriveMap;
 
-        public DriveMapViewModel SelectedDriveMap
+        public DriveMapViewModel? SelectedDriveMap
         {
             get => _selectedDriveMap;
             set {
@@ -183,7 +180,7 @@ namespace PlexServiceTray.ViewModel
             }
         }
 
-        public ObservableCollection<string> Themes { get; } = new ObservableCollection<string>(TrayApplicationSettings.Themes);
+        public ObservableCollection<string> Themes { get; } = new(TrayApplicationSettings.Themes);
 
         public string RemoveToolTip
         {
@@ -208,7 +205,7 @@ namespace PlexServiceTray.ViewModel
             }
         }
 
-        public string AddToolTip
+        public string? AddToolTip
         {
             get
             {
@@ -237,16 +234,16 @@ namespace PlexServiceTray.ViewModel
         /// <summary>
         /// Use one settings instance for the life of the window.
         /// </summary>
-        public Settings WorkingSettings { get; set; }
+        public readonly Settings WorkingSettings;
 
-        public SettingsViewModel(Settings settings, string theme)
+        public SettingsViewModel(Settings? settings, string theme)
         {
-            WorkingSettings = settings;
+            WorkingSettings = settings ?? new Settings();
             _theme = theme;
 
             WorkingSettings.AuxiliaryApplications.ForEach(x =>
             {
-                var auxApp = new AuxiliaryApplicationViewModel(x, this);
+                AuxiliaryApplicationViewModel auxApp = new(x, this);
                 auxApp.StartRequest += OnAuxAppStartRequest;
                 auxApp.StopRequest += OnAuxAppStopRequest;
                 auxApp.CheckRunningRequest += OnAuxAppCheckRunRequest;
@@ -265,17 +262,20 @@ namespace PlexServiceTray.ViewModel
         /// Allow the user to add a new Auxiliary application
         /// </summary>
         #region AddCommand
-        RelayCommand _addCommand;
+
+        private RelayCommand? _addCommand;
         public RelayCommand AddCommand => _addCommand ??= new RelayCommand(OnAdd);
 
-        private void OnAdd(object parameter)
+        private void OnAdd(object? parameter)
         {
             switch (SelectedTab)
             {
                 case 0:
-                    var newAuxApp = new AuxiliaryApplication();
-                    newAuxApp.Name = "New Auxiliary Application";
-                    var newAuxAppViewModel = new AuxiliaryApplicationViewModel(newAuxApp, this);
+                    AuxiliaryApplication newAuxApp = new()
+                    {
+                        Name = "New Auxiliary Application"
+                    };
+                    AuxiliaryApplicationViewModel newAuxAppViewModel = new(newAuxApp, this);
                     newAuxAppViewModel.StartRequest += OnAuxAppStartRequest;
                     newAuxAppViewModel.StopRequest += OnAuxAppStopRequest;
                     newAuxAppViewModel.CheckRunningRequest += OnAuxAppCheckRunRequest;
@@ -283,8 +283,8 @@ namespace PlexServiceTray.ViewModel
                     AuxiliaryApplications.Add(newAuxAppViewModel);
                     break;
                 case 1:
-                    var newDriveMap = new DriveMap(@"\\computer\share", "Z");
-                    var newDriveMapViewModel = new DriveMapViewModel(newDriveMap);
+                    DriveMap newDriveMap = new(@"\\computer\share", "Z");
+                    DriveMapViewModel newDriveMapViewModel = new(newDriveMap);
                     DriveMaps.Add(newDriveMapViewModel);
                     break;
             }
@@ -297,17 +297,18 @@ namespace PlexServiceTray.ViewModel
         /// Allow the user brose to the plex executable
         /// </summary>
         #region BrowseForPlexCommand
-        RelayCommand _browseForPlexCommand;
+
+        private RelayCommand? _browseForPlexCommand;
         public RelayCommand BrowseForPlexCommand => _browseForPlexCommand ??= new RelayCommand(OnBrowseForPlex);
 
-        private void OnBrowseForPlex(object parameter)
+        private void OnBrowseForPlex(object? parameter)
         {
-            var initialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles);
+            string? initialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles);
             if (!string.IsNullOrEmpty(UserDefinedInstallLocation))
             {
                 initialDirectory = Path.GetDirectoryName(UserDefinedInstallLocation);
             }
-            var ofd = new OpenFileDialog
+            OpenFileDialog ofd = new()
             {
                 FileName = "Plex Media Server.exe",
                 Filter = "Executable Files *.exe|*.exe",
@@ -330,20 +331,21 @@ namespace PlexServiceTray.ViewModel
         /// Remove the selected auxiliary application
         /// </summary>
         #region RemoveCommand
-        RelayCommand _removeCommand;
+
+        private RelayCommand? _removeCommand;
         public RelayCommand RemoveCommand => _removeCommand ??= new RelayCommand(OnRemove, CanRemove); 
 
-        private bool CanRemove(object parameter)
+        private bool CanRemove(object? parameter)
         {
             return SelectedTab switch
             {
-                0 => parameter is not null && parameter is AuxiliaryApplicationViewModel,
-                1 => parameter is not null && parameter is DriveMapViewModel,
+                0 => parameter is AuxiliaryApplicationViewModel,
+                1 => parameter is DriveMapViewModel,
                 _ => false,
             };
         }
 
-        private void OnRemove(object parameter)
+        private void OnRemove(object? parameter)
         {
             switch (SelectedTab)
             {
@@ -369,23 +371,24 @@ namespace PlexServiceTray.ViewModel
         /// Save the settings file
         /// </summary>
         #region SaveCommand
-        RelayCommand _saveCommand;
+
+        private RelayCommand? _saveCommand;
         public RelayCommand SaveCommand => _saveCommand ??= new RelayCommand(OnSave, CanSave);
 
-        private bool CanSave(object parameter)
+        private bool CanSave(object? parameter)
         {
             return ServerPort > 0 && string.IsNullOrEmpty(Error) && !AuxiliaryApplications.Any(a => !string.IsNullOrEmpty(a.Error) || string.IsNullOrEmpty(a.Name)) && !DriveMaps.Any(dm => !string.IsNullOrEmpty(dm.Error) || string.IsNullOrEmpty(dm.ShareName) || string.IsNullOrEmpty(dm.DriveLetter));
         }
 
-        private void OnSave(object parameter)
+        private void OnSave(object? parameter)
         {
             WorkingSettings.AuxiliaryApplications.Clear();
-            foreach (var aux in AuxiliaryApplications)
+            foreach (AuxiliaryApplicationViewModel aux in AuxiliaryApplications)
             {
                 WorkingSettings.AuxiliaryApplications.Add(aux.GetAuxiliaryApplication());
             }
             WorkingSettings.DriveMaps.Clear();
-            foreach(var dMap in DriveMaps)
+            foreach(DriveMapViewModel dMap in DriveMaps)
             {
                 WorkingSettings.DriveMaps.Add(dMap.GetDriveMap());
             }
@@ -398,10 +401,11 @@ namespace PlexServiceTray.ViewModel
         /// Close the dialogue without saving changes
         /// </summary>
         #region CancelCommand
-        RelayCommand _cancelCommand;
+
+        private RelayCommand? _cancelCommand;
         public RelayCommand CancelCommand => _cancelCommand ??= new RelayCommand(OnCancel);
 
-        private void OnCancel(object parameter)
+        private void OnCancel(object? parameter)
         {
             DialogResult = false;
         }
@@ -410,26 +414,26 @@ namespace PlexServiceTray.ViewModel
 
         #region Aux app start/stop request handling
 
-        private void OnAuxAppStopRequest(object sender, EventArgs e)
+        private void OnAuxAppStopRequest(object? sender, EventArgs e)
         {
             AuxAppStopRequest?.Invoke(sender, e);
         }
 
-        public event EventHandler AuxAppStopRequest;
+        public event EventHandler? AuxAppStopRequest;
 
-        private void OnAuxAppStartRequest(object sender, EventArgs e)
+        private void OnAuxAppStartRequest(object? sender, EventArgs e)
         {
             AuxAppStartRequest?.Invoke(sender, e);
         }
 
-        public event EventHandler AuxAppStartRequest;
+        public event EventHandler? AuxAppStartRequest;
 
-        private void OnAuxAppCheckRunRequest(object sender, EventArgs e)
+        private void OnAuxAppCheckRunRequest(object? sender, EventArgs e)
         {
             AuxAppCheckRunRequest?.Invoke(sender, e);
         }
 
-        public event EventHandler AuxAppCheckRunRequest;
+        public event EventHandler? AuxAppCheckRunRequest;
 
         #endregion
     }

@@ -1,14 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
-using System.ServiceModel;
+using System.Runtime.Versioning;
+using System.Threading;
 using System.Threading.Tasks;
+using CoreWCF;
+using CoreWCF.Description;
+using JetBrains.Annotations;
 using PlexServiceCommon;
 using PlexServiceCommon.Interface;
 using Serilog;
 using Serilog.Events;
-using static System.Net.WebRequestMethods;
-using File = System.IO.File;
+using CommunicationState = System.ServiceModel.CommunicationState;
+using OperationContext = System.ServiceModel.OperationContext;
 
 namespace PlexServiceWCF
 {
@@ -16,7 +21,7 @@ namespace PlexServiceWCF
     /// WCF service implementation
     /// </summary>
     [ServiceBehavior(ConfigurationName = "PlexServiceWCF:PlexServiceWCF.TrayInteraction", InstanceContextMode = InstanceContextMode.Single)]
-    public class TrayInteraction : ITrayInteraction
+    public class TrayInteraction : ServiceHostBase, ITrayInteraction
     {
         public static readonly string AppDataPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), @"Plex Service\");
 
@@ -25,14 +30,22 @@ namespace PlexServiceWCF
         private static readonly List<ITrayCallback> CallbackChannels = [];
         private readonly ITrayInteraction _trayInteractionImplementation;
 
-        public TrayInteraction() {
+        [UsedImplicitly]
+        private readonly Uri[] _uris;
+
+        [SupportedOSPlatform("windows")]
+        public TrayInteraction(Uri[] uris)
+        {
+            _uris = uris;
             _trayInteractionImplementation = this;
-            _pms = new PmsMonitor();
+            _pms = new();
             _pms.StateChange += PlexStateChange;
             _pms.PlexStop += PlexStopped;
+            //Start plex
+            Start();
         }
 
-        private void PlexStopped(object sender, EventArgs e)
+        private void PlexStopped(object? sender, EventArgs e)
         {
             if (_pms != null)
             {
@@ -51,7 +64,7 @@ namespace PlexServiceWCF
             }
         }
 
-        private void PlexStateChange(object sender, EventArgs e)
+        private void PlexStateChange(object? sender, EventArgs e)
         {
             if (_pms != null)
             {
@@ -73,10 +86,11 @@ namespace PlexServiceWCF
         /// <summary>
         /// Start Plex
         /// </summary>
-        public async Task Start()
+        [SupportedOSPlatform("windows")]
+        public Task Start()
         {
-            //do this in another thread to return immediately so we don't hold up the service starting
-            await _pms.Start();
+            // do this in another thread to return immediately, so we don't hold up the service starting
+            return Task.Factory.StartNew(() => _pms.Start());
         }
 
         /// <summary>
@@ -103,7 +117,7 @@ namespace PlexServiceWCF
         /// Write the settings to the server
         /// </summary>
         /// <param name="settings">Json serialised Settings instance</param>
-        public void SetSettings(Settings settings)
+        public void SetSettings(Settings? settings)
         {
             SettingsHandler.Save(settings);
         }
@@ -118,7 +132,7 @@ namespace PlexServiceWCF
         /// <returns></returns>
         public string GetLog()
         {
-            var res = LogWriter.Read().Result;
+            string res = LogWriter.Read().Result;
             Log.Debug("Res is " + res.Length);
             return res;
         }
@@ -127,6 +141,7 @@ namespace PlexServiceWCF
             return LogWriter.GetLatestLog();
         }
 
+        [SupportedOSPlatform("windows")]
         public string GetPmsDataPath() {
             return PlexDirHelper.GetPlexDataDir();
         }
@@ -135,23 +150,16 @@ namespace PlexServiceWCF
         /// Returns the settings file from the server as a json string
         /// </summary>
         /// <returns></returns>
-        public Settings GetSettings()
-        {
-            return SettingsHandler.Load();
-        }
+        public Settings GetSettings() =>
+            SettingsHandler.Load();
 
         /// <summary>
         /// Returns Running or Stopped
         /// </summary>
         /// <returns></returns>
         public PlexState GetStatus()
-        {
-            if (_pms != null)
-                return _pms.State;
-            return PlexState.Stopped;
-        }
-
-
+            => _pms != null ? _pms.State : PlexState.Stopped;
+        
         /// <summary>
         /// A request from the client for the running status of a specific auxiliary application
         /// </summary>
@@ -162,9 +170,9 @@ namespace PlexServiceWCF
             return _pms.IsAuxAppRunning(name);
         }
 
-        public async void StartAuxApp(string name)
+        public void StartAuxApp(string name)
         {
-            await _pms.StartAuxApp(name);
+            _pms.StartAuxApp(name);
         }
 
         public void StopAuxApp(string name)
@@ -172,26 +180,27 @@ namespace PlexServiceWCF
             _pms.StopAuxApp(name);
         }
 
+        [SupportedOSPlatform("windows")]
         public string GetWebLink()
         {
             Log.Write(LogEventLevel.Information, "WebLink requested, plex version is: " + _pms.PlexVersion);
-            var address = $"http://{PlexServiceCommon.Settings.LocalHost}:32400/web";
+            string address = "http://localhost:32400/web";
 
             if (_pms.PlexVersion > new Version("1.32.0.0"))
             {
                 Log.Write(LogEventLevel.Information, "Plex version is greater than 1.32, checking for token and server claim status");
                 //try to read the token
-                var token = PlexRegistryHelper.ReadUserRegistryValue("PlexOnlineToken");
+                string? token = PlexRegistryHelper.ReadUserRegistryValue("PlexOnlineToken");
                 if (string.IsNullOrEmpty(token))
                 {
                     Log.Write(LogEventLevel.Information, "Plex online token is empty or cannot be read, checking for claim url...");
                     //empty token means the server is unclaimed and we should try and hit the claim url
-                    var dataDir = PlexDirHelper.GetPlexDataDir();
-                    var claimUrlFile = Path.Combine(dataDir, ".claimURL");
-                    var setupPlex = Path.Combine(dataDir, "Setup Plex.html");
-                    if (File.Exists(claimUrlFile))
+                    string? dataDir = PlexDirHelper.GetPlexDataDir();
+                    string claimUrlFile = Path.Combine(dataDir, ".claimURL");
+                    string setupPlex = Path.Combine(dataDir, "Setup Plex.html");
+                    if (System.IO.File.Exists(claimUrlFile))
                     {
-                        var claimUrl = File.ReadAllText(claimUrlFile);
+                        string claimUrl = System.IO.File.ReadAllText(claimUrlFile);
                         //return the claim url or if for some reason its empty, return the setup plex html
                         if (string.IsNullOrEmpty(claimUrl))
                         {
@@ -217,7 +226,7 @@ namespace PlexServiceWCF
 
         public void Subscribe()
         {
-            var channel = OperationContext.Current.GetCallbackChannel<ITrayCallback>();
+            ITrayCallback? channel = OperationContext.Current.GetCallbackChannel<ITrayCallback>();
             if (!CallbackChannels.Contains(channel)) //if CallbackChannels not contain current one.
             {
                 CallbackChannels.Add(channel);
@@ -226,15 +235,30 @@ namespace PlexServiceWCF
 
         public void UnSubscribe()
         {
-            var channel = OperationContext.Current.GetCallbackChannel<ITrayCallback>();
+            ITrayCallback? channel = OperationContext.Current.GetCallbackChannel<ITrayCallback>();
             if (CallbackChannels.Contains(channel)) //if CallbackChannels not contain current one.
             {
                 CallbackChannels.Remove(channel);
             }
         }
 
-        public void Abort() {
+        public new void Abort() {
             _trayInteractionImplementation.Abort();
+        }
+
+        protected override void OnAbort()
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override Task OnCloseAsync(CancellationToken token)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override Task OnOpenAsync(CancellationToken token)
+        {
+            throw new NotImplementedException();
         }
 
         public void Close() {
@@ -277,31 +301,36 @@ namespace PlexServiceWCF
             _trayInteractionImplementation.EndOpen(result);
         }
 
-        public CommunicationState State => _trayInteractionImplementation.State;
+        public new CommunicationState State => _trayInteractionImplementation.State;
 
-        public event EventHandler Closed {
+        public new event EventHandler Closed {
             add => _trayInteractionImplementation.Closed += value;
             remove => _trayInteractionImplementation.Closed -= value;
         }
 
-        public event EventHandler Closing {
+        public new event EventHandler Closing {
             add => _trayInteractionImplementation.Closing += value;
             remove => _trayInteractionImplementation.Closing -= value;
         }
 
-        public event EventHandler Faulted {
+        public new event EventHandler Faulted {
             add => _trayInteractionImplementation.Faulted += value;
             remove => _trayInteractionImplementation.Faulted -= value;
         }
 
-        public event EventHandler Opened {
+        public new event EventHandler Opened {
             add => _trayInteractionImplementation.Opened += value;
             remove => _trayInteractionImplementation.Opened -= value;
         }
 
-        public event EventHandler Opening {
+        public new event EventHandler Opening {
             add => _trayInteractionImplementation.Opening += value;
             remove => _trayInteractionImplementation.Opening -= value;
+        }
+
+        protected override ServiceDescription CreateDescription([UnscopedRef] out IDictionary<string, ContractDescription> implementedContracts)
+        {
+            throw new NotImplementedException();
         }
     }
 }

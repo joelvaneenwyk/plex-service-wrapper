@@ -8,7 +8,7 @@ namespace PlexServiceCommon
     [JsonObject(MemberSerialization=MemberSerialization.OptIn)]
     public class DriveMap
     {
-        [DllImport("mpr.dll")] private static extern int WNetAddConnection2A(ref NetworkResource netRes, string password, string username, int flags);
+        [DllImport("mpr.dll")] private static extern int WNetAddConnection2A(ref NetworkResource netRes, string? password, string? username, int flags);
         [DllImport("mpr.dll")] private static extern int WNetCancelConnection2A(string name, int flags, int force);
 
         [StructLayout(LayoutKind.Sequential)]
@@ -51,10 +51,10 @@ namespace PlexServiceCommon
         {
             if (DriveLetter.Length > 0)
             {
-                var drive = DriveLetter.Substring(0,1) + ":";
+                string drive = DriveLetter.Substring(0,1) + ":";
                 
                 //create struct data
-                var netRes = new NetworkResource {
+                NetworkResource netRes = new NetworkResource {
                     Scope = 2,
                     Type = 0x1,
                     DisplayType = 3,
@@ -73,7 +73,7 @@ namespace PlexServiceCommon
                     }
                 }
                 //call and return
-                var i = WNetAddConnection2A(ref netRes, null, null, 0);
+                int i = WNetAddConnection2A(ref netRes, null, null, 0);
 
                 if (i > 0)
                     throw new System.ComponentModel.Win32Exception(i);
@@ -92,10 +92,10 @@ namespace PlexServiceCommon
         {
             if (DriveLetter.Length > 0)
             {
-                var drive = DriveLetter.Substring(0, 1) + ":";
+                string drive = DriveLetter.Substring(0, 1) + ":";
 
                 //call unmap and return
-                var i = WNetCancelConnection2A(drive, 0, Convert.ToInt32(force));
+                int i = WNetCancelConnection2A(drive, 0, Convert.ToInt32(force));
 
                 if (i > 0)
                     throw new System.ComponentModel.Win32Exception(i);

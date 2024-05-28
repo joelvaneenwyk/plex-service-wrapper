@@ -97,39 +97,30 @@ namespace PlexServiceTray.Windows
             catch { }
         }
 
-        private void Title_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        private void Title_MouseLeftButtonDown(object? sender, MouseButtonEventArgs e)
         {
             DragMove();
         }
 
         #region OkCommand
-        RelayCommand _okCommand;
-        public RelayCommand OkCommand
-        {
-            get
-            {
-                if (_okCommand == null)
-                {
-                    _okCommand = new RelayCommand(p => OnOk(p), p => CanOk(p));
-                }
 
-                return _okCommand;
-            }
-        }
+        private RelayCommand? _okCommand;
+        public RelayCommand? OkCommand =>
+            _okCommand ??= new RelayCommand(OnOk, CanOk);
 
-        private bool CanOk(object parameter)
+        private bool CanOk(object? parameter)
         {
             return true;
         }
 
-        private void OnOk(object parameter)
+        private void OnOk(object? parameter)
         {
             DialogResult = true;
         }
 
         #endregion OkCommand
 
-        private void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)
+        private void Hyperlink_RequestNavigate(object? sender, RequestNavigateEventArgs e)
         {
             System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo(e.Uri.AbsoluteUri));
             e.Handled = true;

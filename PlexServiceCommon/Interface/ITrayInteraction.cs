@@ -1,5 +1,6 @@
 ﻿using System.ServiceModel;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 using Serilog.Events;
 
 namespace PlexServiceCommon.Interface
@@ -7,6 +8,7 @@ namespace PlexServiceCommon.Interface
     /// <summary>
     /// WCF service contract
     /// </summary>
+    [PublicAPI]
     [ServiceContract(SessionMode = SessionMode.Required, CallbackContract = typeof(ITrayCallback))]
     public interface ITrayInteraction : ICommunicationObject
     {

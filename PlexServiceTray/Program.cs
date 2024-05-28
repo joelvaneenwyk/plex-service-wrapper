@@ -2,6 +2,7 @@
 using System.Windows.Forms;
 using System.IO;
 using System.Diagnostics;
+using System.Runtime.Versioning;
 
 namespace PlexServiceTray
 {
@@ -11,9 +12,10 @@ namespace PlexServiceTray
         /// The main entry point for the application.
         /// </summary>
         [STAThread]
-        static void Main()
+        [SupportedOSPlatform("windows")]
+        private static void Main()
         {
-            var appProcessName = Path.GetFileNameWithoutExtension(Application.ExecutablePath);
+            string appProcessName = Path.GetFileNameWithoutExtension(Application.ExecutablePath);
             var runningProcesses = Process.GetProcessesByName(appProcessName);
             if (runningProcesses.Length > 1) {
                 return;
@@ -22,7 +24,7 @@ namespace PlexServiceTray
             Application.SetCompatibleTextRenderingDefault(false);
             try
             {
-                var applicationContext = new NotifyIconApplicationContext();
+                NotifyIconApplicationContext applicationContext = new NotifyIconApplicationContext();
                 Application.Run(applicationContext);
             }
             catch (Exception ex)
