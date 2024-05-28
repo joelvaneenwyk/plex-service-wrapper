@@ -1,5 +1,4 @@
-<Project Sdk="WixToolset.Sdk/5.0.0">
-  <Import Project="Sdk.props" Sdk="WixToolset.Sdk" Version="5.0.0" />
+﻿<Project Sdk="WixToolset.Sdk/5.0.0">
   <PropertyGroup>
     <ProductVersion>3.9</ProductVersion>
     <OutputName>PlexService</OutputName>

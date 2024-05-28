@@ -11,7 +11,6 @@
 		<CustomAction Id="GetUserInfo" DllEntry="GetUserInfo" Execute="immediate" Return="check" BinaryRef="UserPrivileges" />
 		<CustomAction Id="GetUserNameFormatted" DllEntry="GetUserNameFormat" Execute="immediate" Return="ignore" BinaryRef="UserPrivileges" />
 		<Property Id="ARPPRODUCTICON" Value="PlexServiceTray.exe" />
-		<Property Id="REINSTALLMODE" Value="amus" />
 		<Property Id="ARPURLINFOABOUT" Value="https://github.com/cjmurph/PmsService" />
 		<Property Id="ARPHELPLINK" Value="https://forums.plex.tv/index.php/topic/93994-pms-as-a-service/" />
 		<Property Id="ASSISTANCE_START_VIA_REGISTRY" Value="1" />

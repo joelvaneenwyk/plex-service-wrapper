@@ -9,7 +9,7 @@ namespace PlexServiceCommon
     {
         [SuppressMessage("ReSharper", "SuspiciousTypeConversion.Global")]
         public TrayInteractionClient(TrayCallback callbackInstance, Binding binding, EndpointAddress remoteAddress)
-            : base((object)callbackInstance as InstanceContext, binding, remoteAddress) {
+            : base(new(callbackInstance), binding, remoteAddress) {
         }
     }
 }
