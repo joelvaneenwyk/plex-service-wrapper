@@ -1,11 +1,14 @@
 ﻿using System;
-using System.ServiceModel;
 using System.ServiceModel.Description;
 using System.ServiceProcess;
 using PlexServiceCommon;
 using PlexServiceWCF;
 using System.Threading;
+using CoreWCF;
+using CoreWCF.Description;
 using Serilog;
+using EndpointAddress = System.ServiceModel.EndpointAddress;
+using NetTcpBinding = System.ServiceModel.NetTcpBinding;
 
 namespace PlexService
 {
@@ -23,7 +26,7 @@ namespace PlexService
 
         private static readonly TimeSpan _timeOut = TimeSpan.FromSeconds(2);
 
-        private ServiceHost _host;
+        private TrayInteraction _host;
 
         private PlexServiceCommon.Interface.ITrayInteraction _plexService;
 
@@ -49,11 +52,11 @@ namespace PlexService
         /// Fires when the service is started
         /// </summary>
         /// <param name="args"></param>
-        protected override void OnStart(string[] args)
+        protected override async void OnStart(string[] args)
         {
             try
             {
-                if (_host != null) _host.Close();
+                if (_host != null) await _host.CloseAsync();
 
                 var port = SettingsHandler.Load().ServerPort;
                 //sanity check the port setting
@@ -63,7 +66,7 @@ namespace PlexService
                 _address = string.Format(_baseAddress, port);
 
                 Uri[] addressBase = { new(_address) };
-                _host = new ServiceHost(typeof(TrayInteraction), addressBase);
+                _host = new TrayInteraction(addressBase);
 
                 var behave = new ServiceMetadataBehavior();
                 _host.Description.Behaviors.Add(behave);
@@ -79,9 +82,9 @@ namespace PlexService
                         InactivityTimeout = TimeSpan.FromMinutes(5)
                     }
                 };
-                _host.AddServiceEndpoint(typeof(PlexServiceCommon.Interface.ITrayInteraction), netTcpB, _address);
-                _host.AddServiceEndpoint(typeof(IMetadataExchange),
-                MetadataExchangeBindings.CreateMexTcpBinding(), "mex");
+                //_host.AddServiceEndpoint(typeof(PlexServiceCommon.Interface.ITrayInteraction), netTcpB, _address);
+                //_host.AddServiceEndpoint(typeof(IMetadataExchange),
+                //MetadataExchangeBindings.CreateMexTcpBinding(), "mex");
                 
                 //once the host is opened, start plex
                 //_host.Opened += (s, e) => System.Threading.Tasks.Task.Factory.StartNew(() => startPlex());

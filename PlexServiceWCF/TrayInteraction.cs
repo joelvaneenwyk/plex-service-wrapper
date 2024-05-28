@@ -1,8 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
+using System.Threading;
 using System.Threading.Tasks;
 using CoreWCF;
+using CoreWCF.Description;
+using JetBrains.Annotations;
 using PlexServiceCommon;
 using PlexServiceCommon.Interface;
 using Serilog;
@@ -17,7 +21,7 @@ namespace PlexServiceWCF
     /// WCF service implementation
     /// </summary>
     [ServiceBehavior(ConfigurationName = "PlexServiceWCF:PlexServiceWCF.TrayInteraction", InstanceContextMode = InstanceContextMode.Single)]
-    public class TrayInteraction : ITrayInteraction
+    public class TrayInteraction : ServiceHostBase, ITrayInteraction
     {
         public static readonly string AppDataPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), @"Plex Service\");
 
@@ -26,7 +30,12 @@ namespace PlexServiceWCF
         private static readonly List<ITrayCallback> CallbackChannels = new();
         private readonly ITrayInteraction _trayInteractionImplementation;
 
-        public TrayInteraction() {
+        [UsedImplicitly]
+        private readonly Uri[] _uris;
+
+        public TrayInteraction(Uri[] uris) : base()
+        {
+            _uris = uris;
             _trayInteractionImplementation = this;
             _pms = new PmsMonitor();
             _pms.StateChange += PlexStateChange;
@@ -240,6 +249,21 @@ namespace PlexServiceWCF
             _trayInteractionImplementation.Abort();
         }
 
+        protected override void OnAbort()
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override Task OnCloseAsync(CancellationToken token)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override Task OnOpenAsync(CancellationToken token)
+        {
+            throw new NotImplementedException();
+        }
+
         public void Close() {
             _trayInteractionImplementation.Close();
         }
@@ -305,6 +329,11 @@ namespace PlexServiceWCF
         public event EventHandler Opening {
             add => _trayInteractionImplementation.Opening += value;
             remove => _trayInteractionImplementation.Opening -= value;
+        }
+
+        protected override ServiceDescription CreateDescription([UnscopedRef] out IDictionary<string, ContractDescription> implementedContracts)
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -63,11 +63,6 @@
     <LangVersion>latestmajor</LangVersion>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="System.Configuration.Install" />
-    <Reference Include="System.ServiceModel" />
-    <Reference Include="System.ServiceProcess" />
-  </ItemGroup>
-  <ItemGroup>
     <Compile Update="PlexMediaServerService.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -105,9 +100,12 @@
     <ProjectReference Include="..\PlexServiceWCF\PlexServiceWCF.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="CoreWCF.ConfigurationManager" Version="1.5.2" />
+    <PackageReference Include="CoreWCF.Primitives" Version="1.5.2" />
     <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
     <PackageReference Include="System.Diagnostics.DiagnosticSource" Version="8.0.1" />
     <PackageReference Include="System.Management" Version="8.0.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="System.ServiceProcess.ServiceController" Version="8.0.0" />
   </ItemGroup>
 </Project>

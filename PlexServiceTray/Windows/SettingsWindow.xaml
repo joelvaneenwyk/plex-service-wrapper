@@ -7,6 +7,7 @@
             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
             xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+            xmlns:fa5="http://schemas.fontawesome.com/icons/"
             mc:Ignorable="d"
             MinHeight="670" Height="670" MinWidth="500" Width="500"
             WindowStartupLocation="CenterScreen" ResizeMode="CanResizeWithGrip" AllowsTransparency="True" 
@@ -104,14 +105,14 @@
                                                 </Grid.ColumnDefinitions>
                                                 <TextBlock Text="{Binding Name}" VerticalAlignment="Center" Margin="5"/>
                                                 <Button Grid.Column="1" Command="{Binding StartCommand}" Margin="0,5" ToolTip="Start Application">
-                                                    <fa:FontAwesome Icon="Play" FontSize="14"/>
+                                                    <fa5:FontAwesome Icon="Solid_Play" FontSize="14"/>
                                                 </Button>
                                                 <Button Grid.Column="2" Command="{Binding StopCommand}" Margin="5" ToolTip="Stop Application">
-                                                    <fa:FontAwesome Icon="Stop" FontSize="14"/>
+                                                    <fa5:FontAwesome Icon="Solid_Stop" FontSize="14"/>
                                                 </Button>
                                                 <Button Grid.Column="3" Command="{Binding DataContext.RemoveCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListBox}}}" CommandParameter="{Binding}" Margin="0,5,5,5"
                                                         ToolTip="Remove Application">
-                                                    <fa:FontAwesome Icon="Close" FontSize="14"/>
+                                                    <fa5:FontAwesome Icon="Regular_WindowClose" FontSize="14"/>
                                                 </Button>
                                             </Grid>
                                         </Expander.Header>
@@ -180,7 +181,7 @@
                                         <TextBox Grid.Column="1" VerticalAlignment="Center" Text="{Binding DriveLetter, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, NotifyOnValidationError=True}" Margin="0,5,5,5" 
                                                  mah:TextBoxHelper.Watermark="Drive Letter" mah:TextBoxHelper.UseFloatingWatermark="True" VerticalContentAlignment="Center"/>
                                         <Button Grid.Column="2" Style="{DynamicResource MahApps.Styles.Button.ToolBar}" Command="{Binding DataContext.RemoveCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListBox}}}" CommandParameter="{Binding}">
-                                            <fa:FontAwesome Icon="Close" FontSize="16"/>
+                                            <fa5:FontAwesome Icon="Regular_WindowClose" FontSize="16"/>
                                         </Button>
                                     </Grid>
                                 </DataTemplate>
@@ -200,7 +201,7 @@
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
                 <Button Grid.Column="0" Command="{Binding AddCommand}" Width="40" Height="40" Margin="5" ToolTip="{Binding AddToolTip}" Style="{DynamicResource MahApps.Styles.Button.Circle}">
-                    <fa:FontAwesome Icon="Plus" FontSize="20"/>
+                    <fa5:FontAwesome Icon="Plus" FontSize="20"/>
                 </Button>
                 <Button Grid.Column="4" Content="Save" Command="{Binding SaveCommand}" Width="70" Margin="5"/>
                 <Button Grid.Column="5" Content="Cancel" Command="{Binding CancelCommand}" Width="70" Margin="5"/>

@@ -10,11 +10,10 @@
     <DefineConstants>Debug</DefineConstants>
     <VerboseOutput>true</VerboseOutput>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+	  <VerboseOutput>true</VerboseOutput>
+  </PropertyGroup>
   <ItemGroup>
-    <WixExtension Include="WixCommonUiExtension">
-      <HintPath>WixCommonUiExtension.dll</HintPath>
-      <Name>WixCommonUiExtension</Name>
-    </WixExtension>
     <PackageReference Include="WixToolset.NetFx.wixext" Version="5.0.0" />
     <PackageReference Include="WixToolset.UI.wixext" Version="5.0.0" />
     <PackageReference Include="WixToolset.Util.wixext" Version="5.0.0" />
@@ -54,28 +53,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="ActiveDirectory.dll" />
     <Content Include="error.bmp" />
     <Content Include="PlexService.bmp" />
     <Content Include="PlexServiceBack.bmp" />
     <Content Include="ServiceCredentialsUI.wxi" />
     <Content Include="success.bmp" />
-    <Content Include="UserPrivileges.dll" />
-    <Content Include="WixCommonUiExtension.dll" />
   </ItemGroup>
-  <Import Project="Sdk.targets" Sdk="WixToolset.Sdk" Version="5.0.0" />
-  <Target Name="BeforeBuild">
-    <GetAssemblyIdentity AssemblyFiles="$(SolutionDir)PlexService\bin\$(Configuration)\PlexService.exe">
-      <Output TaskParameter="Assemblies" ItemName="AssemblyVersions" />
-    </GetAssemblyIdentity>
-    <CreateProperty Value="$(OutputName)_%(AssemblyVersions.Version)">
-      <Output TaskParameter="Value" PropertyName="TargetName" />
-    </CreateProperty>
-    <CreateProperty Value="$(TargetName)$(TargetExt)">
-      <Output TaskParameter="Value" PropertyName="TargetFileName" />
-    </CreateProperty>
-    <CreateProperty Value="$(TargetDir)\$(TargetFileName)">
-      <Output TaskParameter="Value" PropertyName="TargetPath" />
-    </CreateProperty>
-  </Target>
 </Project>
