@@ -416,6 +416,7 @@ namespace PlexServiceTray
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
+        [SupportedOSPlatform("windows")]
         private void TraySettingsCommand(object? sender, EventArgs e)
         {
             _traySettingsWindow = new(GetTheme());

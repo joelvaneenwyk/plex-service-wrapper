@@ -171,7 +171,10 @@ namespace PlexServiceTray.ViewModel
         #region BrowseFolderCommand
 
         private RelayCommand? _browseFolderCommand;
-        public RelayCommand BrowseFolderCommand=> _browseFolderCommand ??= new RelayCommand(OnBrowseFolder);
+
+        [SupportedOSPlatform("windows")]
+        public RelayCommand BrowseFolderCommand =>
+            _browseFolderCommand ??= new RelayCommand(OnBrowseFolder);
 
         [SupportedOSPlatform("windows")]
         private void OnBrowseFolder(object? parameter)

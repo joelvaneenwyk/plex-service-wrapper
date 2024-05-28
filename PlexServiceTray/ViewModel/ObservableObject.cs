@@ -79,7 +79,7 @@ namespace PlexServiceTray.ViewModel
             return property.GetValue(this, null);
         }
 
-        private string _error;
+        private string _error = string.Empty;
 
         public string Error => _error;
 
@@ -110,7 +110,12 @@ namespace PlexServiceTray.ViewModel
             }
         }
 
-        private bool Validate(ValidationAttribute v, object? value) =>
-            v.GetValidationResult(value, new ValidationContext(ValidationContext, null, null)) == ValidationResult.Success;
+        private bool Validate(ValidationAttribute v, object? value)
+        {
+            ArgumentNullException.ThrowIfNull(ValidationContext, nameof(ValidationContext));
+            ValidationResult? result = v.GetValidationResult(
+                value, new ValidationContext(ValidationContext, null, null));
+            return result == ValidationResult.Success;
+        }
     }
 }

@@ -304,7 +304,7 @@ namespace PlexServiceTray.ViewModel
         private RelayCommand? _browseForPlexCommand;
         public RelayCommand BrowseForPlexCommand => _browseForPlexCommand ??= new RelayCommand(OnBrowseForPlex);
 
-        private void OnBrowseForPlex(object parameter)
+        private void OnBrowseForPlex(object? parameter)
         {
             string? initialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles);
             if (!string.IsNullOrEmpty(UserDefinedInstallLocation))
