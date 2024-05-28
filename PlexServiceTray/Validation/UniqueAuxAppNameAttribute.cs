@@ -4,11 +4,11 @@ using System.Linq;
 
 namespace PlexServiceTray.Validation
 {
-    class UniqueAuxAppNameAttribute:ValidationAttribute
+    internal class UniqueAuxAppNameAttribute:ValidationAttribute
     {
         private new const string ErrorMessage = "There's already an Auxilliary Application called {0}.";
 
-        private SettingsViewModel _context;
+        private SettingsViewModel? _context;
 
         public override string FormatErrorMessage(string name)
         {
@@ -20,17 +20,19 @@ namespace PlexServiceTray.Validation
             return IsValid(value, null) == ValidationResult.Success;
         }
 
-        protected override ValidationResult IsValid(object value, ValidationContext validationContext)
+        protected override ValidationResult? IsValid(object value, ValidationContext validationContext)
         {
             if (validationContext != null)
                 _context = validationContext.ObjectInstance as SettingsViewModel;
-            var name = value as string;
+            string? name = value as string;
             base.ErrorMessage = FormatErrorMessage(name);
             if (string.IsNullOrEmpty(name) || _context?.AuxiliaryApplications == null) {
                 return ValidationResult.Success;
             }
 
-            return _context.AuxiliaryApplications.Count(a => a.Name == name) > 1 ? new ValidationResult(base.ErrorMessage) : ValidationResult.Success;
+            return (_context?.AuxiliaryApplications.Count(a => a.Name == name) ?? 0) > 1
+                ? new ValidationResult(base.ErrorMessage)
+                : ValidationResult.Success;
         }
     }
 }

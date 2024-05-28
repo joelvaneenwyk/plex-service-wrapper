@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Runtime.Versioning;
 using Microsoft.Win32;
 
 namespace PlexServiceCommon {
@@ -8,6 +9,7 @@ namespace PlexServiceCommon {
 		/// Returns the full path and filename of the plex media server executable
 		/// </summary>
 		/// <returns></returns>
+		[SupportedOSPlatform("windows")]
 		public static string GetPlexDataDir()
 		{
 			//set appDataFolder to the default user local app data folder

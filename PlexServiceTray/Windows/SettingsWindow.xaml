@@ -3,7 +3,6 @@
             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
             xmlns:attached="clr-namespace:PlexServiceTray.Attached"
             xmlns:mock="clr-namespace:PlexServiceTray.Mock"
-            xmlns:fa="http://schemas.fontawesome.io/icons/"
             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
             xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
@@ -49,7 +48,7 @@
                 <ComboBox Grid.Row="0" Grid.Column="1" ItemsSource="{Binding Themes}" SelectedItem="{Binding Theme, UpdateSourceTrigger=PropertyChanged}" Margin="5" ToolTip="The tray application theme" 
                           mah:TextBoxHelper.Watermark="Theme" mah:TextBoxHelper.UseFloatingWatermark="True" VerticalContentAlignment="Center"/>
 
-                <Grid Grid.Row="1" Grid.ColumnSpan="2" Margin="5">
+                <Grid Grid.Row="1" Grid.ColumnSpan="2" Grid.Column="0" Margin="5">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
                         <ColumnDefinition Width="Auto"/>
@@ -144,14 +143,25 @@
                                                      mah:TextBoxHelper.Watermark="Working Directory" mah:TextBoxHelper.UseFloatingWatermark="True" VerticalContentAlignment="Center"/>
                                             <Button Grid.Row="2" Grid.Column="1" Content="..." Width="30" Command="{Binding BrowseFolderCommand}" Margin="0,5,5,5"/>
 
-
-                                            <TextBox Grid.Row="4" Grid.Column="0" Text="{Binding Url, UpdateSourceTrigger=PropertyChanged}" Margin="5,5,0,5" ToolTip="Enter a url if the application has a web interface. A link will be added to the tray icon context menu."
+                                            <TextBox Grid.Row="4" Grid.Column="0"
+                                                     Text="{Binding Url, UpdateSourceTrigger=PropertyChanged}"
+                                                     Margin="5,5,0,5"
+                                                     ToolTip="Enter a url if the application has a web interface. A link will be added to the tray icon context menu."
                                                      mah:TextBoxHelper.Watermark="URL" mah:TextBoxHelper.UseFloatingWatermark="True" VerticalContentAlignment="Center"/>
-                                            <Button Grid.Row="4" Grid.Column="1" Content="è" Width="30" Command="{Binding GoToUrlCommand}" Margin="0,5,5,5" FontFamily="Wingdings" FontSize="9" ToolTip="Open link in browser"/>
+                                            <Button Grid.Row="4" Grid.Column="1" Content="è" Width="30"
+                                                    Command="{Binding GoToUrlCommand}" Margin="0,5,5,5"
+                                                    FontFamily="Wingdings" FontSize="9" ToolTip="Open link in browser" />
 
-                                            <StackPanel Grid.Row="5" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Center">
-                                                <CheckBox Grid.Row="5" Grid.Column="0" Content="Keep alive" FlowDirection="RightToLeft" HorizontalAlignment="Left" IsChecked="{Binding KeepAlive}" Margin="30,10" ToolTip="If selected, The service will attempt to keep this application running while plex is running. Otherwise when it stops it will not be restarted."/>
-                                                <CheckBox Grid.Row="5" Grid.Column="1" Content="Log Output" FlowDirection="RightToLeft" HorizontalAlignment="Left" IsChecked="{Binding LogOutput}" Margin="5" ToolTip="If selected, all output from the application will be written to the Plex Service log."/>
+                                            <StackPanel Grid.Row="5" Grid.ColumnSpan="2" Grid.Column="0"
+                                                        Orientation="Horizontal" HorizontalAlignment="Center">
+                                                <CheckBox Content="Keep alive" FlowDirection="RightToLeft"
+                                                          HorizontalAlignment="Left" IsChecked="{Binding KeepAlive}"
+                                                          Margin="30,10"
+                                                          ToolTip="If selected, The service will attempt to keep this application running while plex is running. Otherwise when it stops it will not be restarted." />
+                                                <CheckBox Content="Log Output" FlowDirection="RightToLeft"
+                                                          HorizontalAlignment="Left" IsChecked="{Binding LogOutput}"
+                                                          Margin="5"
+                                                          ToolTip="If selected, all output from the application will be written to the Plex Service log." />
                                             </StackPanel>
 
 
@@ -201,7 +211,7 @@
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
                 <Button Grid.Column="0" Command="{Binding AddCommand}" Width="40" Height="40" Margin="5" ToolTip="{Binding AddToolTip}" Style="{DynamicResource MahApps.Styles.Button.Circle}">
-                    <fa5:FontAwesome Icon="Plus" FontSize="20"/>
+                    <fa5:FontAwesome Icon="Regular_PlusSquare" FontSize="20"/>
                 </Button>
                 <Button Grid.Column="4" Content="Save" Command="{Binding SaveCommand}" Width="70" Margin="5"/>
                 <Button Grid.Column="5" Content="Cancel" Command="{Binding CancelCommand}" Width="70" Margin="5"/>

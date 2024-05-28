@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
+using System.Runtime.Versioning;
 using System.Threading;
 using System.Threading.Tasks;
 using CoreWCF;
@@ -115,7 +116,7 @@ namespace PlexServiceWCF
         /// Write the settings to the server
         /// </summary>
         /// <param name="settings">Json serialised Settings instance</param>
-        public void SetSettings(Settings settings)
+        public void SetSettings(Settings? settings)
         {
             SettingsHandler.Save(settings);
         }
@@ -130,7 +131,7 @@ namespace PlexServiceWCF
         /// <returns></returns>
         public string GetLog()
         {
-            var res = LogWriter.Read().Result;
+            string res = LogWriter.Read().Result;
             Log.Debug("Res is " + res.Length);
             return res;
         }
@@ -147,7 +148,7 @@ namespace PlexServiceWCF
         /// Returns the settings file from the server as a json string
         /// </summary>
         /// <returns></returns>
-        public Settings GetSettings()
+        public Settings? GetSettings()
         {
             return SettingsHandler.Load();
         }
@@ -184,26 +185,27 @@ namespace PlexServiceWCF
             _pms.StopAuxApp(name);
         }
 
+        [SupportedOSPlatform("windows")]
         public string GetWebLink()
         {
             Log.Write(LogEventLevel.Information, "WebLink requested, plex version is: " + _pms.PlexVersion.ToString());
-            var address = "http://localhost:32400/web";
+            string address = "http://localhost:32400/web";
 
             if (_pms.PlexVersion > new Version("1.32.0.0"))
             {
                 Log.Write(LogEventLevel.Information, "Plex version is greater than 1.32, checking for token and server claim status");
                 //try to read the token
-                var token = PlexRegistryHelper.ReadUserRegistryValue("PlexOnlineToken");
+                string? token = PlexRegistryHelper.ReadUserRegistryValue("PlexOnlineToken");
                 if (string.IsNullOrEmpty(token))
                 {
                     Log.Write(LogEventLevel.Information, "Plex online token is empty or cannot be read, checking for claim url...");
                     //empty token means the server is unclaimed and we should try and hit the claim url
-                    var dataDir = PlexDirHelper.GetPlexDataDir();
-                    var claimUrlFile = Path.Combine(dataDir, ".claimURL");
-                    var setupPlex = Path.Combine(dataDir, "Setup Plex.html");
+                    string? dataDir = PlexDirHelper.GetPlexDataDir();
+                    string claimUrlFile = Path.Combine(dataDir, ".claimURL");
+                    string setupPlex = Path.Combine(dataDir, "Setup Plex.html");
                     if (System.IO.File.Exists(claimUrlFile))
                     {
-                        var claimUrl = System.IO.File.ReadAllText(claimUrlFile);
+                        string claimUrl = System.IO.File.ReadAllText(claimUrlFile);
                         //return the claim url or if for some reason its empty, return the setup plex html
                         if (string.IsNullOrEmpty(claimUrl))
                         {
@@ -229,7 +231,7 @@ namespace PlexServiceWCF
 
         public void Subscribe()
         {
-            var channel = OperationContext.Current.GetCallbackChannel<ITrayCallback>();
+            ITrayCallback? channel = OperationContext.Current.GetCallbackChannel<ITrayCallback>();
             if (!CallbackChannels.Contains(channel)) //if CallbackChannels not contain current one.
             {
                 CallbackChannels.Add(channel);
@@ -238,7 +240,7 @@ namespace PlexServiceWCF
 
         public void UnSubscribe()
         {
-            var channel = OperationContext.Current.GetCallbackChannel<ITrayCallback>();
+            ITrayCallback? channel = OperationContext.Current.GetCallbackChannel<ITrayCallback>();
             if (CallbackChannels.Contains(channel)) //if CallbackChannels not contain current one.
             {
                 CallbackChannels.Remove(channel);

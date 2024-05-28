@@ -118,10 +118,10 @@ namespace PlexServiceTray
         /// </summary>
         internal void Save()
         {
-            var filePath = GetSettingsFile();
+            string filePath = GetSettingsFile();
 
             if (!Directory.Exists(Path.GetDirectoryName(filePath))) {
-                var dir = Path.GetDirectoryName(filePath);
+                string? dir = Path.GetDirectoryName(filePath);
                 if (!string.IsNullOrEmpty(dir)) {
                     Directory.CreateDirectory(dir);    
                 } else {
@@ -129,8 +129,8 @@ namespace PlexServiceTray
                 }
             }
 
-            using var sw = new StreamWriter(filePath, false);
-            var rawSettings = JsonConvert.SerializeObject(this);
+            using StreamWriter sw = new(filePath, false);
+            string rawSettings = JsonConvert.SerializeObject(this);
             sw.Write(rawSettings);
         }
 
@@ -141,16 +141,19 @@ namespace PlexServiceTray
         /// <returns></returns>
         internal static TrayApplicationSettings Load()
         {
-            var filePath = GetSettingsFile();
-            TrayApplicationSettings settings;
-            if (File.Exists(filePath)) {
-                using var sr = new StreamReader(filePath);
-                var rawSettings = sr.ReadToEnd();
-                settings = JsonConvert.DeserializeObject<TrayApplicationSettings>(rawSettings);
-            }
-            else
+            string filePath = GetSettingsFile();
+            TrayApplicationSettings? settings = null;
+            try
             {
-                settings = new TrayApplicationSettings();
+                if (File.Exists(filePath)) {
+                    using StreamReader sr = new(filePath);
+                    string rawSettings = sr.ReadToEnd();
+                    settings = JsonConvert.DeserializeObject<TrayApplicationSettings>(rawSettings);
+                }
+            }
+            finally
+            {
+                settings ??= new TrayApplicationSettings();
                 settings.Save();
             }
             return settings;

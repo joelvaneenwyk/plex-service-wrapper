@@ -3,33 +3,14 @@ using System.Windows.Input;
 
 namespace PlexServiceTray.ViewModel
 {
-    public class RelayCommand : ICommand
+    public class RelayCommand(Action<object?> execute, Predicate<object?>? canExecute = null)
+        : ICommand
     {
-        #region Fields
+        private readonly Action<object?>? _execute = execute ?? throw new ArgumentNullException(nameof(execute));
 
-        readonly Action<object> _execute;
-        readonly Predicate<object> _canExecute;
-
-        #endregion // Fields
-
-        #region Constructors
-
-        public RelayCommand(Action<object> execute)
-            : this(execute, null) { }
-
-        public RelayCommand(Action<object> execute, Predicate<object> canExecute)
+        public bool CanExecute(object? parameter)
         {
-            _execute = execute ?? throw new ArgumentNullException(nameof(execute));
-            _canExecute = canExecute;
-        }
-
-        #endregion // Constructors
-
-        #region ICommand Members
-
-        public bool CanExecute(object parameter)
-        {
-            return _canExecute == null || _canExecute(parameter);
+            return canExecute == null || canExecute(parameter);
         }
 
         public event EventHandler CanExecuteChanged
@@ -40,9 +21,7 @@ namespace PlexServiceTray.ViewModel
 
         public void Execute(object parameter)
         {
-            _execute(parameter);
+            _execute?.Invoke(parameter);
         }
-
-        #endregion // RelayCommand Members
     }
 }

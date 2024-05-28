@@ -6,6 +6,7 @@ using System.Windows.Forms;
 using System.Drawing;
 using System.Diagnostics;
 using System.IO;
+using System.Runtime.Versioning;
 using PlexServiceCommon;
 using System.ServiceModel;
 using System.Windows;
@@ -50,6 +51,7 @@ namespace PlexServiceTray
             base.Dispose(disposing);
         }
 
+        [SupportedOSPlatform("windows")]
         public NotifyIconApplicationContext()
         {
             // Moved directly to constructor to suppress nullable warnings.
@@ -119,6 +121,7 @@ namespace PlexServiceTray
             }
         }
 
+        [SupportedOSPlatform("windows")]
         private void Callback_StateChange(object? sender, StatusChangeEventArgs e)
         {
             _notifyIcon.ShowBalloonTip(2000, "Plex Service", e.Description, ToolTipIcon.Info);
@@ -156,11 +159,12 @@ namespace PlexServiceTray
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
+        [SupportedOSPlatform("windows")]
         private void NotifyIcon_Click(object? sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Right)
             {
-                _notifyIcon.ContextMenuStrip.Show();
+                _notifyIcon.ContextMenuStrip?.Show();
             }
         }
 
@@ -182,6 +186,7 @@ namespace PlexServiceTray
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
+        [SupportedOSPlatform("windows")]
         private void ContextMenuStrip_Opening(object? sender, System.ComponentModel.CancelEventArgs e)
         {
             e.Cancel = false;
@@ -199,29 +204,29 @@ namespace PlexServiceTray
             {
                 try
                 {
-                    var state = _plexService.GetStatus();
+                    PlexState state = _plexService.GetStatus();
                     switch (state)
                     {
                         case PlexState.Running:
-                            _notifyIcon.ContextMenuStrip.Items.Add("Stop Plex", null, StopPlex_Click);
-                            _notifyIcon.ContextMenuStrip.Items.Add("Restart Plex", null, RestartPlex_Click);
-                            _notifyIcon.ContextMenuStrip.Items.Add(new ToolStripSeparator());
-                            _notifyIcon.ContextMenuStrip.Items.Add("Open Plex...", null, OpenManager_Click);
+                            _notifyIcon.ContextMenuStrip?.Items.Add("Stop Plex", null, StopPlex_Click);
+                            _notifyIcon.ContextMenuStrip?.Items.Add("Restart Plex", null, RestartPlex_Click);
+                            _notifyIcon.ContextMenuStrip?.Items.Add(new ToolStripSeparator());
+                            _notifyIcon.ContextMenuStrip?.Items.Add("Open Plex...", null, OpenManager_Click);
                             break;
                         case PlexState.Stopped:
-                            _notifyIcon.ContextMenuStrip.Items.Add("Start Plex", null, StartPlex_Click);
+                            _notifyIcon.ContextMenuStrip?.Items.Add("Start Plex", null, StartPlex_Click);
                             break;
                         case PlexState.Pending:
-                            _notifyIcon.ContextMenuStrip.Items.Add("Restart Pending");
+                            _notifyIcon.ContextMenuStrip?.Items.Add("Restart Pending");
                             break;
                         case PlexState.Updating:
-                            _notifyIcon.ContextMenuStrip.Items.Add("Plex updating");
+                            _notifyIcon.ContextMenuStrip?.Items.Add("Plex updating");
                             break;
                         case PlexState.Stopping:
-                            _notifyIcon.ContextMenuStrip.Items.Add("Stopping");
+                            _notifyIcon.ContextMenuStrip?.Items.Add("Stopping");
                             break;
                         default:
-                            _notifyIcon.ContextMenuStrip.Items.Add("Plex state unknown");
+                            _notifyIcon.ContextMenuStrip?.Items.Add("Plex state unknown");
                             break;
                     }
                 }
@@ -229,12 +234,12 @@ namespace PlexServiceTray
                 {
                     Log.Warning("Exception with strip: " + ex.Message, LogEventLevel.Warning);
                     Disconnect();
-                    _notifyIcon.ContextMenuStrip.Items.Add("Unable to connect to service. Check settings");
+                    _notifyIcon.ContextMenuStrip?.Items.Add("Unable to connect to service. Check settings");
                 }
-                if (!string.IsNullOrEmpty(GetDataDir())) _notifyIcon.ContextMenuStrip.Items.Add("PMS Data Folder", null, PMSData_Click);
+                if (!string.IsNullOrEmpty(GetDataDir())) _notifyIcon.ContextMenuStrip?.Items.Add("PMS Data Folder", null, PMSData_Click);
                 if (_settings != null)
                 {
-                    _notifyIcon.ContextMenuStrip.Items.Add(new ToolStripSeparator());
+                    _notifyIcon.ContextMenuStrip?.Items.Add(new ToolStripSeparator());
                     List<AuxiliaryApplication> auxAppsToLink = _settings.AuxiliaryApplications.Where(aux => !string.IsNullOrEmpty(aux.Url)).ToList();
                     if (auxAppsToLink.Count > 0)
                     {
@@ -258,12 +263,12 @@ namespace PlexServiceTray
                                 }
                             });
                         });
-                        _notifyIcon.ContextMenuStrip.Items.Add(auxAppsItem);
-                        _notifyIcon.ContextMenuStrip.Items.Add(new ToolStripSeparator());
+                        _notifyIcon.ContextMenuStrip?.Items.Add(auxAppsItem);
+                        _notifyIcon.ContextMenuStrip?.Items.Add(new ToolStripSeparator());
                     }
 
-                    var settingsItem = _notifyIcon.ContextMenuStrip.Items.Add("Service Settings", null, SettingsCommand);
-                    if (_settingsWindow != null)
+                    ToolStripItem? settingsItem = _notifyIcon.ContextMenuStrip?.Items.Add("Service Settings", null, SettingsCommand);
+                    if (settingsItem != null && _settingsWindow != null)
                     {
                         settingsItem.Enabled = false;
                     }
@@ -272,24 +277,24 @@ namespace PlexServiceTray
             else
             {
                 Disconnect();
-                _notifyIcon.ContextMenuStrip.Items.Add("Unable to connect to service. Check settings");
-                _notifyIcon.ContextMenuStrip.Items.Add(new ToolStripSeparator());
-                if (!string.IsNullOrEmpty(GetDataDir())) _notifyIcon.ContextMenuStrip.Items.Add("PMS Data Folder", null, PMSData_Click);
+                _notifyIcon.ContextMenuStrip?.Items.Add("Unable to connect to service. Check settings");
+                _notifyIcon.ContextMenuStrip?.Items.Add(new ToolStripSeparator());
+                if (!string.IsNullOrEmpty(GetDataDir())) _notifyIcon.ContextMenuStrip?.Items.Add("PMS Data Folder", null, PMSData_Click);
             }
-            var connectionSettingsItem = _notifyIcon.ContextMenuStrip.Items.Add("Tray Settings", null, TraySettingsCommand);
-            if (_traySettingsWindow != null)
+            ToolStripItem? connectionSettingsItem = _notifyIcon.ContextMenuStrip?.Items.Add("Tray Settings", null, TraySettingsCommand);
+            if (_traySettingsWindow != null && connectionSettingsItem != null)
                 connectionSettingsItem.Enabled = false;
 
-            _notifyIcon.ContextMenuStrip.Items.Add(new ToolStripSeparator());
+            _notifyIcon.ContextMenuStrip?.Items.Add(new ToolStripSeparator());
 
             if (_plexService is { State: CommunicationState.Opened })
-                _notifyIcon.ContextMenuStrip.Items.Add("View Log", null, ViewLogs_Click);
+                _notifyIcon.ContextMenuStrip?.Items.Add("View Log", null, ViewLogs_Click);
 
-            var aboutItem = _notifyIcon.ContextMenuStrip.Items.Add("About", null, AboutCommand);
+            ToolStripItem? aboutItem = _notifyIcon.ContextMenuStrip?.Items.Add("About", null, AboutCommand);
             if (_aboutWindow != null)
                 aboutItem.Enabled = false;
-            _notifyIcon.ContextMenuStrip.Items.Add(new ToolStripSeparator());
-            _notifyIcon.ContextMenuStrip.Items.Add("Exit", null, ExitCommand);
+            _notifyIcon.ContextMenuStrip?.Items.Add(new ToolStripSeparator());
+            _notifyIcon.ContextMenuStrip?.Items.Add("Exit", null, ExitCommand);
         }
 
         /// <summary>

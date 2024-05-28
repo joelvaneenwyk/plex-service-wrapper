@@ -21,33 +21,32 @@ namespace PlexServiceWCF
         /// <summary>
         /// Save the settings file
         /// </summary>
-        internal static void Save(Settings settings)
+        internal static void Save(Settings? settings)
         {
-            var filePath = GetSettingsFile();
+            string filePath = GetSettingsFile();
 
             if (!Directory.Exists(Path.GetDirectoryName(filePath))) {
-                var dir = Path.GetDirectoryName(filePath);
+                string? dir = Path.GetDirectoryName(filePath);
                 if (!string.IsNullOrEmpty(dir)) Directory.CreateDirectory(dir);
             }
 
-            using var sw = new StreamWriter(filePath, false);
+            using StreamWriter sw = new(filePath, false);
             sw.Write(JsonConvert.SerializeObject(settings, Formatting.Indented));
-            var tc = new TrayCallback();
+            TrayCallback tc = new();
             tc.OnSettingChange(settings);
-        }
-
+        }     
 
         /// <summary>
         /// Load the settings from disk
         /// </summary>
         /// <returns></returns>
-        public static Settings Load()
+        public static Settings? Load()
         {
-            var filePath = GetSettingsFile();
-            Settings settings;
+            string filePath = GetSettingsFile();
+            Settings? settings;
             if (File.Exists(filePath)) {
-                using var sr = new StreamReader(filePath);
-                var rawSettings = sr.ReadToEnd();
+                using StreamReader sr = new(filePath);
+                string rawSettings = sr.ReadToEnd();
                 settings = JsonConvert.DeserializeObject<Settings>(rawSettings);
             }
             else

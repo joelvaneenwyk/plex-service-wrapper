@@ -4,6 +4,7 @@ using Microsoft.Win32;
 using Ookii.Dialogs.Wpf;
 using PlexServiceTray.Validation;
 using System.ComponentModel.DataAnnotations;
+using System.Runtime.Versioning;
 
 namespace PlexServiceTray.ViewModel
 {
@@ -143,7 +144,7 @@ namespace PlexServiceTray.ViewModel
         }
 
         #region BrowseCommand
-        RelayCommand _browseCommand;
+        RelayCommand? _browseCommand;
         public RelayCommand BrowseCommand => _browseCommand ??= new RelayCommand(OnBrowse);
 
         private void OnBrowse(object parameter)
@@ -165,12 +166,14 @@ namespace PlexServiceTray.ViewModel
         #endregion BrowseCommand
 
         #region BrowseFolderCommand
-        RelayCommand _browseFolderCommand;
+
+        private RelayCommand? _browseFolderCommand;
         public RelayCommand BrowseFolderCommand=> _browseFolderCommand ??= new RelayCommand(OnBrowseFolder);
 
+        [SupportedOSPlatform("windows")]
         private void OnBrowseFolder(object parameter)
         {
-            var fbd = new VistaFolderBrowserDialog {
+            VistaFolderBrowserDialog fbd = new() {
                 Description = "Please select working directory",
                 UseDescriptionForTitle = true
             };
@@ -187,7 +190,7 @@ namespace PlexServiceTray.ViewModel
         #endregion BrowseFolderCommand
 
         #region StartCommand
-        RelayCommand _startCommand;
+        RelayCommand? _startCommand;
         public RelayCommand StartCommand => _startCommand ??= new RelayCommand(OnStart, CanStart); 
 
         private bool CanStart(object parameter)
@@ -200,12 +203,12 @@ namespace PlexServiceTray.ViewModel
             StartRequest?.Invoke(this, EventArgs.Empty);
         }
 
-        public event EventHandler StartRequest;
+        public event EventHandler? StartRequest;
 
         #endregion StartCommand
 
         #region StopCommand
-        RelayCommand _stopCommand;
+        RelayCommand? _stopCommand;
         public RelayCommand StopCommand => _stopCommand ??= new RelayCommand(OnStop, CanStop);
 
         private bool CanStop(object parameter)
@@ -218,12 +221,12 @@ namespace PlexServiceTray.ViewModel
             StopRequest?.Invoke(this, EventArgs.Empty);
         }
 
-        public event EventHandler StopRequest;
+        public event EventHandler? StopRequest;
 
         #endregion StopCommand
 
         #region GoToUrlCommand
-        RelayCommand _goToUrlCommand;
+        RelayCommand? _goToUrlCommand;
         public RelayCommand GoToUrlCommand => _goToUrlCommand ??= new RelayCommand(OnGoToUrl, CanGoToUrl);
 
         private bool CanGoToUrl(object parameter)
@@ -240,7 +243,7 @@ namespace PlexServiceTray.ViewModel
 
         #region CheckRunningRequest
 
-        public event EventHandler CheckRunningRequest;
+        public event EventHandler? CheckRunningRequest;
 
         private void OnCheckRunningRequest()
         {

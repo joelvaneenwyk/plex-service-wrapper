@@ -60,21 +60,17 @@ namespace PlexServiceTray.ViewModel
             }
         }
 
-        readonly TrayApplicationSettings _settings;
+        private readonly TrayApplicationSettings _settings;
 
         internal TrayApplicationSettingsViewModel()
         {
             _settings = TrayApplicationSettings.Load();
         }
 
-        #region CancelCommand
-        RelayCommand _cancelCommand;
+        private RelayCommand _cancelCommand;
         public RelayCommand CancelCommand => _cancelCommand ??= new RelayCommand((p) => DialogResult = true);
 
-        #endregion CancelCommand
-
-        #region SaveCommand
-        RelayCommand _saveCommand;
+        private RelayCommand _saveCommand;
         public RelayCommand SaveCommand => _saveCommand ??= new RelayCommand(OnSave, CanSave);
 
         private bool CanSave(object parameter)
@@ -87,7 +83,5 @@ namespace PlexServiceTray.ViewModel
             _settings.Save();
             DialogResult = true;
         }
-
-        #endregion SaveCommand
     }
 }

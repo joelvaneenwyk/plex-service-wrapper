@@ -79,7 +79,7 @@ namespace PlexServiceTray.ViewModel
             return (ValidationAttribute[])property.GetCustomAttributes(typeof(ValidationAttribute), true);
         }
 
-        private object GetValueGetter(PropertyInfo property)
+        private object? GetValueGetter(PropertyInfo property)
         {
             return property.GetValue(this, null);
         }
