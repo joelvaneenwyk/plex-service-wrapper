@@ -20,13 +20,28 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PlexServiceCommon", "PlexSe
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "{root}", "{root}", "{7FE26795-9F2A-41BD-B5A6-9A7933332C2C}"
 	ProjectSection(SolutionItems) = preProject
+		.config\dotnet-tools.json = .config\dotnet-tools.json
+		.editorconfig = .editorconfig
 		.gitattributes = .gitattributes
 		.gitignore = .gitignore
 		LICENSE = LICENSE
 		README.md = README.md
+		setup.bat = setup.bat
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "licenses", "licenses", "{FCE89B4A-E9FF-4A57-B5B3-BD0747EB9757}"
+	ProjectSection(SolutionItems) = preProject
+		ThirdPartyLibraries\FontAwesome-WPF.txt = ThirdPartyLibraries\FontAwesome-WPF.txt
+		ThirdPartyLibraries\mahapps-license.txt = ThirdPartyLibraries\mahapps-license.txt
+		ThirdPartyLibraries\msiext-license.txt = ThirdPartyLibraries\msiext-license.txt
+		ThirdPartyLibraries\Newtonsoft.Json-license.txt = ThirdPartyLibraries\Newtonsoft.Json-license.txt
+		ThirdPartyLibraries\ookiidialogs-license.txt = ThirdPartyLibraries\ookiidialogs-license.txt
 	EndProjectSection
 EndProject
 Global
+	GlobalSection(NestedProjects) = preSolution
+		{FCE89B4A-E9FF-4A57-B5B3-BD0747EB9757} = {7FE26795-9F2A-41BD-B5A6-9A7933332C2C}
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
 		Release|x64 = Release|x64
@@ -37,6 +52,10 @@ Global
 		{5CACEAFA-5C9F-4A66-8FB9-DD35FB95B5CD}.Release|x64.ActiveCfg = Release|x64
 		{5CACEAFA-5C9F-4A66-8FB9-DD35FB95B5CD}.Release|x64.Build.0 = Release|x64
 		{5CACEAFA-5C9F-4A66-8FB9-DD35FB95B5CD}.Release|x64.Deploy.0 = Release|x64
+		{502A2EAF-DABC-4D4B-B579-5953A3E03DD8}.Debug|x64.ActiveCfg = Debug|x64
+		{502A2EAF-DABC-4D4B-B579-5953A3E03DD8}.Debug|x64.Build.0 = Debug|x64
+		{502A2EAF-DABC-4D4B-B579-5953A3E03DD8}.Release|x64.ActiveCfg = Release|x64
+		{502A2EAF-DABC-4D4B-B579-5953A3E03DD8}.Release|x64.Build.0 = Release|x64
 		{8729030F-D67D-40ED-8BB0-23CEEF6A3F82}.Debug|x64.ActiveCfg = Debug|x64
 		{8729030F-D67D-40ED-8BB0-23CEEF6A3F82}.Debug|x64.Build.0 = Debug|x64
 		{8729030F-D67D-40ED-8BB0-23CEEF6A3F82}.Release|x64.ActiveCfg = Release|x64
@@ -49,10 +68,6 @@ Global
 		{C5E8CEE5-EAE6-4337-9CDF-55C907FF93C7}.Debug|x64.Build.0 = Debug|x64
 		{C5E8CEE5-EAE6-4337-9CDF-55C907FF93C7}.Release|x64.ActiveCfg = Release|x64
 		{C5E8CEE5-EAE6-4337-9CDF-55C907FF93C7}.Release|x64.Build.0 = Release|x64
-		{502A2EAF-DABC-4D4B-B579-5953A3E03DD8}.Debug|x64.ActiveCfg = Debug|x64
-		{502A2EAF-DABC-4D4B-B579-5953A3E03DD8}.Debug|x64.Build.0 = Debug|x64
-		{502A2EAF-DABC-4D4B-B579-5953A3E03DD8}.Release|x64.ActiveCfg = Release|x64
-		{502A2EAF-DABC-4D4B-B579-5953A3E03DD8}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -39,7 +39,7 @@ namespace PlexServiceWCF
         {
             _uris = uris;
             _trayInteractionImplementation = this;
-            _pms = new PmsMonitor();
+            _pms = new();
             _pms.StateChange += PlexStateChange;
             _pms.PlexStop += PlexStopped;
             //Start plex
@@ -88,10 +88,10 @@ namespace PlexServiceWCF
         /// Start Plex
         /// </summary>
         [SupportedOSPlatform("windows")]
-        public void Start()
+        public Task Start()
         {
-            //do this in another thread to return immediately so we don't hold up the service starting
-            Task.Factory.StartNew(() => _pms.Start());
+            // do this in another thread to return immediately, so we don't hold up the service starting
+            return Task.Factory.StartNew(() => _pms.Start());
         }
 
         /// <summary>

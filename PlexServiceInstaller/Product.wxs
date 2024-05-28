@@ -1,11 +1,11 @@
 ﻿<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs" xmlns:util="http://wixtoolset.org/schemas/v4/wxs/util">
 	<Package Name="Plex Service" Language="1033" Version="1.2.2" Manufacturer="cjmurph" UpgradeCode="daa483bb-c7e1-4c79-a4d6-3c2c4c3d9daf" InstallerVersion="200">
 
-		<Binary Id="success_bmp" SourceFile="$(sys.SOURCEFILEDIR)success.bmp" />
-		<Binary Id="error_bmp" SourceFile="$(sys.SOURCEFILEDIR)error.bmp" />
-		<Binary Id="ActiveDirectory" SourceFile="$(sys.SOURCEFILEDIR)\ActiveDirectory.dll" />
+		<Binary Id="success_bmp" SourceFile="$(sys.SOURCEFILEDIR)Images\success.bmp" />
+		<Binary Id="error_bmp" SourceFile="$(sys.SOURCEFILEDIR)Images\error.bmp" />
+		<Binary Id="ActiveDirectory" SourceFile="$(sys.SOURCEFILEDIR)\Binaries\ActiveDirectory.dll" />
 		<CustomAction Id="DirectoryObjectPicker" DllEntry="DirectoryObjectPicker" Execute="immediate" Return="check" BinaryRef="ActiveDirectory" />
-		<Binary Id="UserPrivileges" SourceFile="$(sys.SOURCEFILEDIR)\UserPrivileges.dll" />
+		<Binary Id="UserPrivileges" SourceFile="$(sys.SOURCEFILEDIR)\Binaries\UserPrivileges.dll" />
 		<CustomAction Id="CheckCredentials" DllEntry="CheckCredentials" Execute="immediate" Return="check" BinaryRef="UserPrivileges" />
 		<CustomAction Id="CheckPrivilege" DllEntry="CheckPrivilege" Execute="immediate" Return="check" BinaryRef="UserPrivileges" />
 		<CustomAction Id="GetUserInfo" DllEntry="GetUserInfo" Execute="immediate" Return="check" BinaryRef="UserPrivileges" />
@@ -169,8 +169,8 @@
 	</Fragment>
 
 	<Fragment>
-		<WixVariable Id="WixUIBannerBmp" Value="$(sys.SOURCEFILEDIR)\PlexService.bmp" />
-		<WixVariable Id="WixUIDialogBmp" Value="$(sys.SOURCEFILEDIR)\PlexServiceBack.bmp" />
+		<WixVariable Id="WixUIBannerBmp" Value="$(sys.SOURCEFILEDIR)\Images\PlexService.bmp" />
+		<WixVariable Id="WixUIDialogBmp" Value="$(sys.SOURCEFILEDIR)\Images\PlexServiceBack.bmp" />
 		<Icon SourceFile="$(var.PlexServiceTray.TargetPath)" Id="PlexServiceTray.exe" />
 	</Fragment>
 

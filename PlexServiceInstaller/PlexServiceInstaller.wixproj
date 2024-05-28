@@ -67,10 +67,12 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="error.bmp" />
-    <Content Include="PlexService.bmp" />
-    <Content Include="PlexServiceBack.bmp" />
+    <Content Include="Binaries\ActiveDirectory.dll" />
+    <Content Include="Binaries\UserPrivileges.dll" />
+    <Content Include="Images\error.bmp" />
+    <Content Include="Images\PlexService.bmp" />
+    <Content Include="Images\PlexServiceBack.bmp" />
+    <Content Include="Images\success.bmp" />
     <Content Include="ServiceCredentialsUI.wxi" />
-    <Content Include="success.bmp" />
   </ItemGroup>
 </Project>

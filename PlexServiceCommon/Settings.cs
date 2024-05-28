@@ -10,6 +10,8 @@ namespace PlexServiceCommon
     [JsonObject(MemberSerialization.OptIn)]
     public class Settings
     {
+        public const string LocalHost = "localhost";
+        
         /// <summary>
         /// User defined auxiliary applications
         /// </summary>
