@@ -1,7 +1,5 @@
 ﻿using ControlzEx.Theming;
 using PlexServiceTray.ViewModel;
-using System;
-using System.Windows.Controls;
 
 namespace PlexServiceTray.Windows
 {

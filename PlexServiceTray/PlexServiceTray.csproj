@@ -37,9 +37,6 @@
     <ApplicationManifest>PlexServiceTray.exe.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
-    <None Update="LICENSE">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Update="PlexServiceTray.exe.manifest">
       <SubType>Designer</SubType>
     </None>

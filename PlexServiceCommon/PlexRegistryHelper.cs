@@ -1,17 +1,11 @@
 ﻿using Microsoft.Win32;
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
 using System.Runtime.Versioning;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PlexServiceCommon
 {
     public static class PlexRegistryHelper
     {
-
         [SupportedOSPlatform("windows")]
         public static string ReadUserRegistryValue(string name)
         {

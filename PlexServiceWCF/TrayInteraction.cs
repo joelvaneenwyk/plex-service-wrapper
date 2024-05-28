@@ -12,7 +12,6 @@ using PlexServiceCommon;
 using PlexServiceCommon.Interface;
 using Serilog;
 using Serilog.Events;
-using static System.Net.WebRequestMethods;
 using CommunicationState = System.ServiceModel.CommunicationState;
 using OperationContext = System.ServiceModel.OperationContext;
 
@@ -28,7 +27,7 @@ namespace PlexServiceWCF
 
         private readonly PmsMonitor _pms;
 
-        private static readonly List<ITrayCallback> CallbackChannels = new();
+        private static readonly List<ITrayCallback> CallbackChannels = [];
         private readonly ITrayInteraction _trayInteractionImplementation;
 
         [UsedImplicitly]

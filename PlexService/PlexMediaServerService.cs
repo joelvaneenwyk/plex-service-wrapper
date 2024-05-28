@@ -1,10 +1,8 @@
 ﻿using System;
-using System.ServiceModel.Description;
 using System.ServiceProcess;
 using PlexServiceCommon;
 using PlexServiceWCF;
 using System.Threading;
-using CoreWCF;
 using CoreWCF.Description;
 using Serilog;
 using EndpointAddress = System.ServiceModel.EndpointAddress;
@@ -35,7 +33,7 @@ namespace PlexService
 
         private readonly AutoResetEvent _stopped = new(false);
 
-        public PlexMediaServerService()
+        private PlexMediaServerService()
         {
             InitializeComponent();
 
@@ -85,7 +83,8 @@ namespace PlexService
                 if (_host != null) await _host.CloseAsync();
 
                 int port = SettingsHandler.Load().ServerPort;
-                //sanity check the port setting
+
+                // sanity check the port setting
                 if (port == 0)
                     port = 8787;
 
@@ -94,12 +93,12 @@ namespace PlexService
                 Uri[] addressBase = [new(_address)];
                 _host = new(addressBase);
 
-                var behave = new ServiceMetadataBehavior();
+                ServiceMetadataBehavior behave = new();
                 _host.Description.Behaviors.Add(behave);
 
                 //Set up a TCP binding with appropriate timeouts.
                 //use a reliable connection so the clients can be notified when the "receive" timeout has elapsed and the connection is torn down.
-                var netTcpB = new NetTcpBinding
+                NetTcpBinding netTcpB = new()
                 {
                     OpenTimeout = TimeOut,
                     CloseTimeout = TimeOut,
@@ -193,7 +192,7 @@ namespace PlexService
         {
             //Create a NetTcp binding to the service and set some appropriate timeouts.
             //Use reliable connection so we know when we have been disconnected
-            var plexServiceBinding = new NetTcpBinding
+            NetTcpBinding plexServiceBinding = new()
             {
                 OpenTimeout = TimeOut,
                 CloseTimeout = TimeOut,
@@ -204,11 +203,11 @@ namespace PlexService
                 }
             };
             //Generate the endpoint from the local settings
-            var plexServiceEndpoint = new EndpointAddress(_address);
+            EndpointAddress plexServiceEndpoint = new(_address);
 
-            var callback = new TrayCallback();
+            TrayCallback callback = new();
             callback.Stopped += (_, _) => _stopped.Set();
-            var client = new TrayInteractionClient(callback, plexServiceBinding, plexServiceEndpoint);
+            TrayInteractionClient client = new(callback, plexServiceBinding, plexServiceEndpoint);
 
             //Make a channel factory, so we can create the link to the service
             //var plexServiceChannelFactory = new ChannelFactory<PlexServiceCommon.Interface.ITrayInteraction>(plexServiceBinding, plexServiceEndpoint);

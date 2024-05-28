@@ -2,10 +2,7 @@
 using System.Linq;
 using System.Collections.ObjectModel;
 using PlexServiceCommon;
-using PlexServiceTray.ViewModel;
-using System.ComponentModel;
 using Microsoft.Win32;
-using System.Windows;
 using System.IO;
 
 namespace PlexServiceTray.ViewModel
