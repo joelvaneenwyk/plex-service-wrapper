@@ -51,8 +51,7 @@ jobs:
       matrix:
         configuration: [Debug, Release]
 
-    runs-on:
-      windows-latest
+    runs-on: windows-latest
 
     steps:
       - name: Checkout
@@ -63,16 +62,16 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
         with:
-            dotnet-version: 6.0.x
+          dotnet-version: 8.x
 
       - name: Restore tool dependencies
         run: dotnet tool restore
 
       - name: Build Service
-        run: dotnet build --configuration ${{ matrix.configuration }} PlexService/
+        run: dotnet build --configuration "${{ matrix.configuration }}" PlexService/
 
       - name: Build Installer
-        run: dotnet build --configuration ${{ matrix.configuration }} PlexServiceInstaller/
+        run: dotnet build --configuration "${{ matrix.configuration }}" PlexServiceInstaller/
 
       - name: Test
         run: dotnet test --no-build --verbosity normal
