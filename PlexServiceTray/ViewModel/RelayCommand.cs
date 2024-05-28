@@ -19,7 +19,7 @@ namespace PlexServiceTray.ViewModel
             remove => CommandManager.RequerySuggested -= value;
         }
 
-        public void Execute(object parameter)
+        public void Execute(object? parameter)
         {
             _execute?.Invoke(parameter);
         }

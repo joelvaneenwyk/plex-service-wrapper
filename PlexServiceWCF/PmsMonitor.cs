@@ -163,7 +163,7 @@ namespace PlexServiceWCF
             try {
                 pmsDataKey = RegistryKey.OpenBaseKey(RegistryHive.CurrentUser, architecture).OpenSubKey(keyName, true);
                 if (pmsDataKey != null) {
-                    int firstRun = (int) pmsDataKey.GetValue("FirstRun");
+                    int firstRun = (int) (pmsDataKey.GetValue("FirstRun") ?? 99);
                     Log.Debug("First run is: " + firstRun);
                     if (firstRun == 0) return;
                 }
@@ -249,7 +249,7 @@ namespace PlexServiceWCF
 
         private static bool TryMap(DriveMap map, Settings? settings)
         {
-            int count = settings.AutoRemount ? settings.AutoRemountCount : 1;
+            int count = settings is { AutoRemount: true } ? settings.AutoRemountCount : 1;
 
             while (count > 0)
             {
@@ -264,7 +264,7 @@ namespace PlexServiceWCF
                     Log.Information($"Unable to map share {map.ShareName} to letter '{map.DriveLetter}': {ex.Message}, {count - 1} more attempts remaining.");
                 }
                 // Wait 5s
-                Thread.Sleep(settings.AutoRemountDelay * 1000);
+                Thread.Sleep((settings?.AutoRemountDelay ?? 0) * 1000);
                 count--;
             }
 
@@ -309,7 +309,8 @@ namespace PlexServiceWCF
 
         #region Exit events
 
-        private async void Updater_Exited(object? sender, EventArgs e)
+        [SupportedOSPlatform("windows")]
+        private void Updater_Exited(object? sender, EventArgs e)
         {
 
             if (_plexUpdater != null)
@@ -328,6 +329,7 @@ namespace PlexServiceWCF
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
+        [SupportedOSPlatform("windows")]
         private async void Plex_Exited(object? sender, EventArgs e)
         {
             Log.Information("Plex Media Server has stopped!");
@@ -369,10 +371,10 @@ namespace PlexServiceWCF
                 
                 Log.Information($"Waiting {_settings.RestartDelay} seconds before re-starting the Plex process.");
                 State = PlexState.Pending;
-                AutoResetEvent autoEvent = new AutoResetEvent(false);
-                Timer t = new Timer(_ => { Start(); autoEvent.Set(); }, null, _settings.RestartDelay * 1000, Timeout.Infinite);
+                AutoResetEvent autoEvent = new(false);
+                Timer t = new(_ => { Start(); autoEvent.Set(); }, null, _settings.RestartDelay * 1000, Timeout.Infinite);
                 autoEvent.WaitOne();
-                t.Dispose();
+                await t.DisposeAsync();
             }
             else
             {
@@ -409,20 +411,19 @@ namespace PlexServiceWCF
                     _plex = null;
                 }
                 
-                if (_plex == null)
+                if (_plex == null && !string.IsNullOrWhiteSpace(_executableFileName))
                 {
                     Log.Information("Attempting to start Plex.");
-                    //plex process
                     _plex = new Process();
-                    ProcessStartInfo plexStartInfo = new ProcessStartInfo(_executableFileName) {
+                    ProcessStartInfo plexStartInfo = new(_executableFileName) {
                         WorkingDirectory = Path.GetDirectoryName(_executableFileName) ?? string.Empty,
                         UseShellExecute = false
                     };
                     //check version to see if we can use the startup argument
                     string? plexVersion = FileVersionInfo.GetVersionInfo(_executableFileName).FileVersion;
-                    Version v = new(plexVersion);
+                    Version v = new(plexVersion ?? string.Empty);
                     PlexVersion = v;
-                    Version minimumVersion = new Version("0.9.8.12");
+                    Version minimumVersion = new("0.9.8.12");
                     if (v.CompareTo(minimumVersion) == -1)
                     {
                         Log.Information($"Plex Media Server version is {plexVersion}. Cannot use startup argument.");
@@ -564,7 +565,7 @@ namespace PlexServiceWCF
             string? result = string.Empty;
             //first see if its defined in the settings
 
-            if(!string.IsNullOrEmpty(_settings.UserDefinedInstallLocation) && File.Exists(_settings.UserDefinedInstallLocation))
+            if(!string.IsNullOrEmpty(_settings?.UserDefinedInstallLocation) && File.Exists(_settings.UserDefinedInstallLocation))
             {
                 result = _settings.UserDefinedInstallLocation;
                 Log.Information($"Plex executable using user specified value in settings");
@@ -578,7 +579,7 @@ namespace PlexServiceWCF
                 if (File.Exists(location))
                 {
                     string userSpecified;
-                    using (StreamReader sr = new StreamReader(location))
+                    using (StreamReader sr = new(location))
                     {
                         userSpecified = sr.ReadLine() ?? string.Empty;
                     }

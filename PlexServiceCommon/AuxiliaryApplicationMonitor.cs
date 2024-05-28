@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using System.Threading;
 using Serilog;
 
 namespace PlexServiceCommon
@@ -8,7 +9,7 @@ namespace PlexServiceCommon
     /// <summary>
     /// Class that runs up and monitors the life of auxiliary applications
     /// </summary>
-    public class AuxiliaryApplicationMonitor
+    public class AuxiliaryApplicationMonitor(AuxiliaryApplication aux)
     {
         public string Name => _aux.Name;
 
@@ -17,7 +18,7 @@ namespace PlexServiceCommon
         /// <summary>
         /// Auxiliary process
         /// </summary>
-        private Process _auxProcess;
+        private Process? _auxProcess;
         
         /// <summary>
         /// Flag for actual stop rather than crash we should attempt to restart from
@@ -27,12 +28,7 @@ namespace PlexServiceCommon
         /// <summary>
         /// Auxiliary Application to monitor
         /// </summary>
-        private readonly AuxiliaryApplication _aux;
-
-        public AuxiliaryApplicationMonitor(AuxiliaryApplication aux)
-        {
-            _aux = aux;
-        }
+        private readonly AuxiliaryApplication _aux = aux;
 
         #region Start
 
@@ -78,15 +74,15 @@ namespace PlexServiceCommon
             if (_aux.KeepAlive) {
                 Log.Information(_aux.Name + " has stopped!");
                 //unsubscribe
-                _auxProcess.Exited -= AuxProcess_Exited;
+                if (_auxProcess != null) _auxProcess.Exited -= AuxProcess_Exited;
                 End();
                 //restart as required
                 if (!_stopping)
                 {
                     Log.Information("Re-starting " + _aux.Name);
                     //wait some seconds first
-                    var autoEvent = new System.Threading.AutoResetEvent(false);
-                    var t = new System.Threading.Timer(_ => { ProcStart(); autoEvent.Set(); }, null, 5000, System.Threading.Timeout.Infinite);
+                    AutoResetEvent autoEvent = new(false);
+                    Timer t = new(_ => { ProcStart(); autoEvent.Set(); }, null, 5000, System.Threading.Timeout.Infinite);
                     autoEvent.WaitOne();
                     t.Dispose();
                 }
@@ -99,9 +95,14 @@ namespace PlexServiceCommon
             else
             {
                 Log.Information(_aux.Name + " has completed");
+
                 //unsubscribe
-                _auxProcess.Exited -= AuxProcess_Exited;
-                _auxProcess.Dispose();
+                if (_auxProcess != null)
+                {
+                    _auxProcess.Exited -= AuxProcess_Exited;
+                    _auxProcess.Dispose();
+                }
+
                 Running = false;
             }
         }

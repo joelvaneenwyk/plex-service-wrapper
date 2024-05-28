@@ -40,6 +40,7 @@ namespace PlexServiceTray
         /// Clean up any resources being used.
         /// </summary>
         /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        [SupportedOSPlatform("windows")]
         protected override void Dispose(bool disposing)
         {
             if (disposing)
@@ -81,6 +82,7 @@ namespace PlexServiceTray
         /// <summary>
         /// Connect to WCF service
         /// </summary>
+        [SupportedOSPlatform("windows")]
         internal void Connect()
         {
             //Create a NetTcp binding to the service and set some appropriate timeouts.
@@ -173,6 +175,7 @@ namespace PlexServiceTray
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
+        [SupportedOSPlatform("windows")]
         private void NotifyIcon_DoubleClick(object? sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)
@@ -253,6 +256,11 @@ namespace PlexServiceTray
                             {
                                 try
                                 {
+                                    if (aux.Url == null)
+                                    {
+                                        throw new ArgumentNullException(nameof(aux.Url));
+                                    }
+
                                     Process.Start(aux.Url);
                                 }
                                 catch (Exception ex)
@@ -291,7 +299,7 @@ namespace PlexServiceTray
                 _notifyIcon.ContextMenuStrip?.Items.Add("View Log", null, ViewLogs_Click);
 
             ToolStripItem? aboutItem = _notifyIcon.ContextMenuStrip?.Items.Add("About", null, AboutCommand);
-            if (_aboutWindow != null)
+            if (_aboutWindow != null && aboutItem != null)
                 aboutItem.Enabled = false;
             _notifyIcon.ContextMenuStrip?.Items.Add(new ToolStripSeparator());
             _notifyIcon.ContextMenuStrip?.Items.Add("Exit", null, ExitCommand);
@@ -455,6 +463,7 @@ namespace PlexServiceTray
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
+        [SupportedOSPlatform("windows")]
         private void ExitCommand(object? sender, EventArgs e)
         {
             Disconnect();
@@ -535,6 +544,7 @@ namespace PlexServiceTray
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
+        [SupportedOSPlatform("windows")]
         private void OpenManager_Click(object? sender, EventArgs e)
         {
             //this is pretty old school, we should probably go to app.plex.tv...

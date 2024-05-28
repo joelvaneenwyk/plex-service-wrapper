@@ -24,12 +24,14 @@ namespace PlexServiceCommon
                 case PlexState.Stopping:
                     OnStateChange($"Plex {state.ToString()}");
                     break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(state), state, null);
             }
         }
 
         #region StateChange
 
-        public event EventHandler<StatusChangeEventArgs> StateChange;
+        public event EventHandler<StatusChangeEventArgs>? StateChange;
 
         private void OnStateChange(string message)
         {
@@ -40,9 +42,9 @@ namespace PlexServiceCommon
         
         #region SettingChange
 
-        public event EventHandler<SettingChangeEventArgs> SettingChange;
+        public event EventHandler<SettingChangeEventArgs>? SettingChange;
 
-        public void OnSettingChange(Settings settings) {
+        public void OnSettingChange(Settings? settings) {
             Log.Debug("Setting change...");
             SettingChange?.Invoke(this, new SettingChangeEventArgs(settings));
         }
@@ -56,7 +58,7 @@ namespace PlexServiceCommon
 
         #region StateChange
 
-        public event EventHandler<EventArgs> Stopped;
+        public event EventHandler<EventArgs>? Stopped;
 
         private void OnStopped()
         {
@@ -68,8 +70,8 @@ namespace PlexServiceCommon
     }
 
     public class SettingChangeEventArgs {
-        public Settings Settings;
-        public SettingChangeEventArgs(Settings settings) {
+        public Settings? Settings;
+        public SettingChangeEventArgs(Settings? settings) {
             Settings = settings;
         }
     }

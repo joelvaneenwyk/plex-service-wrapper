@@ -40,18 +40,21 @@ namespace PlexServiceWCF
         /// Load the settings from disk
         /// </summary>
         /// <returns></returns>
-        public static Settings? Load()
+        public static Settings Load()
         {
             string filePath = GetSettingsFile();
-            Settings? settings;
-            if (File.Exists(filePath)) {
-                using StreamReader sr = new(filePath);
-                string rawSettings = sr.ReadToEnd();
-                settings = JsonConvert.DeserializeObject<Settings>(rawSettings);
-            }
-            else
+            Settings? settings = null;
+            try
             {
-                settings = new Settings();
+                if (File.Exists(filePath)) {
+                    using StreamReader sr = new(filePath);
+                    string rawSettings = sr.ReadToEnd();
+                    settings = JsonConvert.DeserializeObject<Settings>(rawSettings);
+                }     
+            }
+            finally
+            {
+                settings ??= new Settings();
                 Save(settings);
             }
             return settings;

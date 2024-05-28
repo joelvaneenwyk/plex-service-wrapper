@@ -18,7 +18,7 @@ namespace PlexServiceTray.Windows
             Context.PropertyChanged += (_, args) =>
             {
                 if (args.PropertyName == nameof(TrayApplicationSettingsViewModel.Theme))
-                    ChangeTheme(Context.Theme?.Replace(" ", "."));
+                    ChangeTheme(Context.Theme?.Replace(" ", ".") ?? string.Empty);
             };
             DataContext = Context;
             ChangeTheme(theme);

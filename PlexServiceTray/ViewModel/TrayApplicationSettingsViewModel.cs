@@ -67,18 +67,18 @@ namespace PlexServiceTray.ViewModel
             _settings = TrayApplicationSettings.Load();
         }
 
-        private RelayCommand _cancelCommand;
-        public RelayCommand CancelCommand => _cancelCommand ??= new RelayCommand((p) => DialogResult = true);
+        private RelayCommand? _cancelCommand;
+        public RelayCommand CancelCommand => _cancelCommand ??= new RelayCommand(_ => DialogResult = true);
 
-        private RelayCommand _saveCommand;
+        private RelayCommand? _saveCommand;
         public RelayCommand SaveCommand => _saveCommand ??= new RelayCommand(OnSave, CanSave);
 
-        private bool CanSave(object parameter)
+        private bool CanSave(object? parameter)
         {
             return !string.IsNullOrEmpty(ServerAddress) && ServerPort > 0;
         }
 
-        private void OnSave(object parameter)
+        private void OnSave(object? parameter)
         {
             _settings.Save();
             DialogResult = true;

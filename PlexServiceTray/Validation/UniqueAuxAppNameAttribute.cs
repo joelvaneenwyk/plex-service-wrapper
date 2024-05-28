@@ -6,21 +6,21 @@ namespace PlexServiceTray.Validation
 {
     internal class UniqueAuxAppNameAttribute:ValidationAttribute
     {
-        private new const string ErrorMessage = "There's already an Auxilliary Application called {0}.";
+        private new const string ErrorMessage = "There's already an Auxilliary Application called `{0}`.";
 
         private SettingsViewModel? _context;
 
-        public override string FormatErrorMessage(string name)
+        public override string FormatErrorMessage(string? name)
         {
-            return string.Format(ErrorMessage, name);
+            return string.Format(ErrorMessage, name ?? string.Empty);
         }
 
-        public override bool IsValid(object value)
+        public override bool IsValid(object? value)
         {
             return IsValid(value, null) == ValidationResult.Success;
         }
 
-        protected override ValidationResult? IsValid(object value, ValidationContext validationContext)
+        protected override ValidationResult? IsValid(object? value, ValidationContext? validationContext)
         {
             if (validationContext != null)
                 _context = validationContext.ObjectInstance as SettingsViewModel;

@@ -46,6 +46,7 @@ namespace PlexService
         }
 
         [Conditional("RELEASE")]
+        [SupportedOSPlatform("windows")]
         public static void Create(string[] args)
         {
             PlexMediaServerService serviceCall = new();
@@ -61,6 +62,7 @@ namespace PlexService
         }
 
         [Conditional("DEBUG")]
+        [SupportedOSPlatform("windows")]
         private void OnDebug(string[] args)
         {
             OnStart(args);
@@ -74,6 +76,7 @@ namespace PlexService
         /// Fires when the service is started
         /// </summary>
         /// <param name="args"></param>
+        [SupportedOSPlatform("windows")]
         protected override async void OnStart(string[] args)
         {
             try
@@ -95,7 +98,8 @@ namespace PlexService
 
                 //Set up a TCP binding with appropriate timeouts.
                 //use a reliable connection so the clients can be notified when the "receive" timeout has elapsed and the connection is torn down.
-                var netTcpB = new NetTcpBinding {
+                var netTcpB = new NetTcpBinding
+                {
                     OpenTimeout = _timeOut,
                     CloseTimeout = _timeOut,
                     ReceiveTimeout = TimeSpan.FromMinutes(10),
@@ -107,10 +111,10 @@ namespace PlexService
                 //_host.AddServiceEndpoint(typeof(PlexServiceCommon.Interface.ITrayInteraction), netTcpB, _address);
                 //_host.AddServiceEndpoint(typeof(IMetadataExchange),
                 //MetadataExchangeBindings.CreateMexTcpBinding(), "mex");
-                
+
                 //once the host is opened, start plex
                 //_host.Opened += (s, e) => System.Threading.Tasks.Task.Factory.StartNew(() => startPlex());
-                // Open the ServiceHostBase to create listeners and start 
+                // Open the ServiceHostBase to create listeners and start
                 // listening for messages.
                 _host.Open();
             }
@@ -135,8 +139,10 @@ namespace PlexService
             if (_host != null)
             {
                 //Try and connect to the WCF service and call its stop method
-                try {
-                    if (_plexService == null) {
+                try
+                {
+                    if (_plexService == null)
+                    {
                         Log.Information("Connecting to plex service.");
                         Connect();
                     }
@@ -146,19 +152,24 @@ namespace PlexService
                         Log.Information("Stopping plex service.");
                         _plexService.Stop();
                         //wait for plex to stop for 10 seconds
-                        if(!_stopped.WaitOne(10000))
+                        if (!_stopped.WaitOne(10000))
                         {
                             Log.Warning("Timed out waiting for plex service to stop.");
                         }
                         Disconnect();
                     }
-                } catch (Exception ex) {
+                }
+                catch (Exception ex)
+                {
                     Log.Warning("Exception in OnStop: " + ex.Message);
                 }
 
-                try {
+                try
+                {
                     _host.Close();
-                } catch (Exception ex) {
+                }
+                catch (Exception ex)
+                {
                     Log.Warning("Exception closing host: " + ex.Message);
                 }
                 finally
@@ -181,7 +192,8 @@ namespace PlexService
         {
             //Create a NetTcp binding to the service and set some appropriate timeouts.
             //Use reliable connection so we know when we have been disconnected
-            var plexServiceBinding = new NetTcpBinding {
+            var plexServiceBinding = new NetTcpBinding
+            {
                 OpenTimeout = _timeOut,
                 CloseTimeout = _timeOut,
                 SendTimeout = _timeOut,
@@ -194,7 +206,7 @@ namespace PlexService
             var plexServiceEndpoint = new EndpointAddress(_address);
 
             var callback = new TrayCallback();
-            callback.Stopped += (_,_) => _stopped.Set();
+            callback.Stopped += (_, _) => _stopped.Set();
             var client = new TrayInteractionClient(callback, plexServiceBinding, plexServiceEndpoint);
 
             //Make a channel factory so we can create the link to the service
@@ -205,7 +217,7 @@ namespace PlexService
             try
             {
                 _plexService = client.ChannelFactory.CreateChannel();
-                
+
                 _plexService.Subscribe();
                 //If we lose connection to the service, set the object to null so we will know to reconnect the next time the tray icon is clicked
                 _plexService.Faulted += (_, _) => _plexService = null;
@@ -229,7 +241,9 @@ namespace PlexService
                 try
                 {
                     _plexService.Close();
-                } catch (Exception ex) {
+                }
+                catch (Exception ex)
+                {
                     Log.Warning("Exception disconnecting PMS/WCF: " + ex.Message);
                 }
             }

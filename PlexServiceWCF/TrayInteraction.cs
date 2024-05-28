@@ -34,7 +34,8 @@ namespace PlexServiceWCF
         [UsedImplicitly]
         private readonly Uri[] _uris;
 
-        public TrayInteraction(Uri[] uris) : base()
+        [SupportedOSPlatform("windows")]
+        public TrayInteraction(Uri[] uris)
         {
             _uris = uris;
             _trayInteractionImplementation = this;
@@ -86,6 +87,7 @@ namespace PlexServiceWCF
         /// <summary>
         /// Start Plex
         /// </summary>
+        [SupportedOSPlatform("windows")]
         public void Start()
         {
             //do this in another thread to return immediately so we don't hold up the service starting
@@ -140,6 +142,7 @@ namespace PlexServiceWCF
             return LogWriter.GetLatestLog();
         }
 
+        [SupportedOSPlatform("windows")]
         public string GetPmsDataPath() {
             return PlexDirHelper.GetPlexDataDir();
         }
@@ -148,22 +151,15 @@ namespace PlexServiceWCF
         /// Returns the settings file from the server as a json string
         /// </summary>
         /// <returns></returns>
-        public Settings? GetSettings()
-        {
-            return SettingsHandler.Load();
-        }
+        public Settings GetSettings() =>
+            SettingsHandler.Load();
 
         /// <summary>
         /// Returns Running or Stopped
         /// </summary>
         /// <returns></returns>
         public PlexState GetStatus()
-        {
-            if (_pms != null)
-                return _pms.State;
-            return PlexState.Stopped;
-        }
-
+            => _pms != null ? _pms.State : PlexState.Stopped;
         
         /// <summary>
         /// A request from the client for the running status of a specific auxiliary application
@@ -188,7 +184,7 @@ namespace PlexServiceWCF
         [SupportedOSPlatform("windows")]
         public string GetWebLink()
         {
-            Log.Write(LogEventLevel.Information, "WebLink requested, plex version is: " + _pms.PlexVersion.ToString());
+            Log.Write(LogEventLevel.Information, "WebLink requested, plex version is: " + _pms.PlexVersion);
             string address = "http://localhost:32400/web";
 
             if (_pms.PlexVersion > new Version("1.32.0.0"))

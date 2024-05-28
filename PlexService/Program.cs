@@ -1,4 +1,4 @@
-﻿using System.ServiceProcess;
+﻿using System.Runtime.Versioning;
 using PlexServiceCommon;
 
 namespace PlexService
@@ -8,7 +8,9 @@ namespace PlexService
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
-        private static void Main(string[] args) {
+        [SupportedOSPlatform("windows")]
+        private static void Main(string[] args)
+        {
             LogWriter.Init();
             PlexMediaServerService.Create(args);
 
