@@ -73,7 +73,7 @@ namespace PlexServiceCommon
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        void AuxProcess_Exited(object sender, EventArgs e)
+        private void AuxProcess_Exited(object? sender, EventArgs e)
         {
             if (_aux.KeepAlive) {
                 Log.Information(_aux.Name + " has stopped!");

@@ -9,6 +9,8 @@ using CoreWCF.Description;
 using Serilog;
 using EndpointAddress = System.ServiceModel.EndpointAddress;
 using NetTcpBinding = System.ServiceModel.NetTcpBinding;
+using System.Diagnostics;
+using System.Runtime.Versioning;
 
 namespace PlexService
 {
@@ -35,11 +37,31 @@ namespace PlexService
         public PlexMediaServerService()
         {
             InitializeComponent();
+
             //This is a simple start stop service, no pause and resume.
-            CanPauseAndContinue = false;
+            if (System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(System.Runtime.InteropServices.OSPlatform.Windows))
+            {
+                CanPauseAndContinue = false;
+            }
         }
 
-        public void OnDebug(string[] args)
+        [Conditional("RELEASE")]
+        public static void Create(string[] args)
+        {
+            PlexMediaServerService serviceCall = new();
+            ServiceBase[] servicesToRun = [serviceCall];
+
+            if (System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(
+                    System.Runtime.InteropServices.OSPlatform.Windows))
+            {
+                Run(servicesToRun);
+            }
+
+            serviceCall.OnDebug(args);
+        }
+
+        [Conditional("DEBUG")]
+        private void OnDebug(string[] args)
         {
             OnStart(args);
             Console.WriteLine("Press any key to exit...");
@@ -58,21 +80,21 @@ namespace PlexService
             {
                 if (_host != null) await _host.CloseAsync();
 
-                var port = SettingsHandler.Load().ServerPort;
+                int port = SettingsHandler.Load().ServerPort;
                 //sanity check the port setting
                 if (port == 0)
                     port = 8787;
 
                 _address = string.Format(_baseAddress, port);
 
-                Uri[] addressBase = { new(_address) };
-                _host = new TrayInteraction(addressBase);
+                Uri[] addressBase = [new(_address)];
+                _host = new(addressBase);
 
                 var behave = new ServiceMetadataBehavior();
                 _host.Description.Behaviors.Add(behave);
 
-                //Setup a TCP binding with appropriate timeouts.
-                //use a reliable connection so the clients can be notified when the receive timeout has elapsed and the connection is torn down.
+                //Set up a TCP binding with appropriate timeouts.
+                //use a reliable connection so the clients can be notified when the "receive" timeout has elapsed and the connection is torn down.
                 var netTcpB = new NetTcpBinding {
                     OpenTimeout = _timeOut,
                     CloseTimeout = _timeOut,
@@ -98,7 +120,11 @@ namespace PlexService
             }
             Log.Information("Plex Service Started.");
 
-            base.OnStart(args);
+            if (System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(
+                    System.Runtime.InteropServices.OSPlatform.Windows))
+            {
+                base.OnStart(args);
+            }
         }
 
         /// <summary>
@@ -141,7 +167,11 @@ namespace PlexService
                 }
             }
             Log.Information("Plex Service Stopped.");
-            base.OnStop();
+            if (System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(
+                    System.Runtime.InteropServices.OSPlatform.Windows))
+            {
+                base.OnStop();
+            }
         }
 
         /// <summary>

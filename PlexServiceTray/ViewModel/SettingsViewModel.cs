@@ -410,21 +410,21 @@ namespace PlexServiceTray.ViewModel
 
         #region Aux app start/stop request handling
 
-        private void OnAuxAppStopRequest(object sender, EventArgs e)
+        private void OnAuxAppStopRequest(object? sender, EventArgs e)
         {
             AuxAppStopRequest?.Invoke(sender, e);
         }
 
         public event EventHandler AuxAppStopRequest;
 
-        private void OnAuxAppStartRequest(object sender, EventArgs e)
+        private void OnAuxAppStartRequest(object? sender, EventArgs e)
         {
             AuxAppStartRequest?.Invoke(sender, e);
         }
 
         public event EventHandler AuxAppStartRequest;
 
-        private void OnAuxAppCheckRunRequest(object sender, EventArgs e)
+        private void OnAuxAppCheckRunRequest(object? sender, EventArgs e)
         {
             AuxAppCheckRunRequest?.Invoke(sender, e);
         }

@@ -1,5 +1,6 @@
 ﻿#nullable enable
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using System.Drawing;
@@ -40,7 +41,7 @@ namespace PlexServiceTray
         /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
         protected override void Dispose(bool disposing)
         {
-            if (disposing && _components != null)
+            if (disposing)
             {
                 Disconnect();
                 _components.Dispose();
@@ -53,15 +54,15 @@ namespace PlexServiceTray
         {
             // Moved directly to constructor to suppress nullable warnings.
             _components = new System.ComponentModel.Container();
-            _notifyIcon = new NotifyIcon(_components)
+            _notifyIcon = new(_components)
             {
-                ContextMenuStrip = new ContextMenuStrip
+                ContextMenuStrip = new()
                 {
                     ForeColor = Color.FromArgb(232, 234, 237),
                     BackColor = Color.FromArgb(41, 42, 45),
                     RenderMode = ToolStripRenderMode.System
                 },
-                Icon = new Icon(Properties.Resources.PlexService, SystemInformation.SmallIconSize),
+                Icon = new(Properties.Resources.PlexService, SystemInformation.SmallIconSize),
                 Text = "Manage Plex Media Server Service",
                 Visible = true
             };
@@ -78,10 +79,10 @@ namespace PlexServiceTray
         /// <summary>
         /// Connect to WCF service
         /// </summary>
-        public void Connect()
+        internal void Connect()
         {
             //Create a NetTcp binding to the service and set some appropriate timeouts.
-            //Use reliable connection so we know when we have been disconnected
+            //Use reliable connection, so we know when we have been disconnected
             var plexServiceBinding = new NetTcpBinding
             {
                 OpenTimeout = TimeSpan.FromMilliseconds(500),
@@ -118,12 +119,12 @@ namespace PlexServiceTray
             }
         }
 
-        private void Callback_StateChange(object sender, StatusChangeEventArgs e)
+        private void Callback_StateChange(object? sender, StatusChangeEventArgs e)
         {
             _notifyIcon.ShowBalloonTip(2000, "Plex Service", e.Description, ToolTipIcon.Info);
         }
 
-        private void Callback_SettingChange(object sender, SettingChangeEventArgs e)
+        private void Callback_SettingChange(object? sender, SettingChangeEventArgs e)
         {
             Logger("Settings updated...");
             _settings = e.Settings;
@@ -155,7 +156,7 @@ namespace PlexServiceTray
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void NotifyIcon_Click(object sender, MouseEventArgs e)
+        private void NotifyIcon_Click(object? sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Right)
             {
@@ -168,7 +169,7 @@ namespace PlexServiceTray
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void NotifyIcon_DoubleClick(object sender, MouseEventArgs e)
+        private void NotifyIcon_DoubleClick(object? sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)
             {
@@ -181,10 +182,10 @@ namespace PlexServiceTray
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void ContextMenuStrip_Opening(object sender, System.ComponentModel.CancelEventArgs e)
+        private void ContextMenuStrip_Opening(object? sender, System.ComponentModel.CancelEventArgs e)
         {
             e.Cancel = false;
-            _notifyIcon.ContextMenuStrip.Items.Clear();
+            _notifyIcon.ContextMenuStrip?.Items.Clear();
 
             //see if we are still connected.
             if (_plexService == null)
@@ -234,7 +235,7 @@ namespace PlexServiceTray
                 if (_settings != null)
                 {
                     _notifyIcon.ContextMenuStrip.Items.Add(new ToolStripSeparator());
-                    var auxAppsToLink = _settings.AuxiliaryApplications.Where(aux => !string.IsNullOrEmpty(aux.Url)).ToList();
+                    List<AuxiliaryApplication> auxAppsToLink = _settings.AuxiliaryApplications.Where(aux => !string.IsNullOrEmpty(aux.Url)).ToList();
                     if (auxAppsToLink.Count > 0)
                     {
                         var auxAppsItem = new ToolStripMenuItem
@@ -296,7 +297,7 @@ namespace PlexServiceTray
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void SettingsCommand(object sender, EventArgs e)
+        private void SettingsCommand(object? sender, EventArgs e)
         {
             //Don't continue if teh service or settings are null
             if (_plexService is null || _settings is null) return;
@@ -331,10 +332,10 @@ namespace PlexServiceTray
                 }
             };
 
-            _settingsWindow = new SettingsWindow(viewModel, GetTheme());
+            _settingsWindow = new(viewModel, GetTheme());
             if (_settingsWindow.ShowDialog() == true)
             {
-                var theme = viewModel.Theme.Replace(" ", ".");
+                string theme = viewModel.Theme.Replace(" ", ".");
                 if (theme != GetTheme())
                 {
                     //theme change, push it around and update settings
@@ -362,7 +363,7 @@ namespace PlexServiceTray
                     Disconnect();
                     System.Windows.MessageBox.Show("Unable to save settings" + Environment.NewLine + ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Exclamation);
                 }
-                var oldPort = viewModel.WorkingSettings.ServerPort;
+                int oldPort = viewModel.WorkingSettings.ServerPort;
 
                 //The only setting that would require a restart of the service is the listening port.
                 //If that gets changed notify the user to restart the service from the service snap in
@@ -402,9 +403,9 @@ namespace PlexServiceTray
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void TraySettingsCommand(object sender, EventArgs e)
+        private void TraySettingsCommand(object? sender, EventArgs e)
         {
-            _traySettingsWindow = new TrayApplicationSettingsWindow(GetTheme());
+            _traySettingsWindow = new(GetTheme());
             if (_traySettingsWindow.ShowDialog() == true)
             {
                 _traySettings = TrayApplicationSettings.Load();
@@ -436,9 +437,9 @@ namespace PlexServiceTray
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void AboutCommand(object sender, EventArgs e)
+        private void AboutCommand(object? sender, EventArgs e)
         {
-            _aboutWindow = new AboutWindow(GetTheme());
+            _aboutWindow = new(GetTheme());
             _ = _aboutWindow.ShowDialog();
             _aboutWindow = null;
             //AboutWindow.ShowAboutDialog(GetTheme());
@@ -449,7 +450,7 @@ namespace PlexServiceTray
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void ExitCommand(object sender, EventArgs e)
+        private void ExitCommand(object? sender, EventArgs e)
         {
             Disconnect();
             ExitThread();
@@ -460,7 +461,7 @@ namespace PlexServiceTray
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void StartPlex_Click(object sender, EventArgs e)
+        private void StartPlex_Click(object? sender, EventArgs e)
         {
             //start it
             if (_plexService is null) return;
@@ -481,7 +482,7 @@ namespace PlexServiceTray
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void StopPlex_Click(object sender, EventArgs e)
+        private void StopPlex_Click(object? sender, EventArgs e)
         {
             //stop it
             if (_plexService == null)
@@ -505,7 +506,7 @@ namespace PlexServiceTray
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void RestartPlex_Click(object sender, EventArgs e)
+        private void RestartPlex_Click(object? sender, EventArgs e)
         {
             //stop it
             if (_plexService == null)
@@ -529,11 +530,11 @@ namespace PlexServiceTray
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void OpenManager_Click(object sender, EventArgs e)
+        private void OpenManager_Click(object? sender, EventArgs e)
         {
             //this is pretty old school, we should probably go to app.plex.tv...
             //The web manager should be located at the server address in the connection settings
-            var address = _plexService?.GetWebLink();
+            string? address = _plexService?.GetWebLink();
             Logger("Weblink received from server: " + address, LogEventLevel.Information);
             address = string.IsNullOrEmpty(address) ? "http://" + _traySettings.ServerAddress + ":32400/web" : address.Replace("localhost", _traySettings.ServerAddress);
             Logger("Address to open: " + address, LogEventLevel.Information);
@@ -552,11 +553,11 @@ namespace PlexServiceTray
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void ViewLogs_Click(object sender, EventArgs e)
+        private void ViewLogs_Click(object? sender, EventArgs e)
         {
-            var sa = _traySettings.ServerAddress;
+            string? sa = _traySettings.ServerAddress;
             // Use windows shell to open log file in whatever app the user uses...
-            var fileToOpen = string.Empty;
+            string? fileToOpen = string.Empty;
             try
             {
                 // If we're local to the service, just open the file.
@@ -568,15 +569,15 @@ namespace PlexServiceTray
                 {
                     Logger("Requesting log.");
                     // Otherwise, request the log data from the server, save it to a temp file, and open that.
-                    var logData = _plexService?.GetLog();
+                    string? logData = _plexService?.GetLog();
                     if (logData == null)
                     {
                         Logger("No log data received.", LogEventLevel.Warning);
                         return;
                     }
                     Logger("Data received: " + logData);
-                    var tmpPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
-                    var tmpFile = Path.Combine(tmpPath, "pmss.log");
+                    string tmpPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+                    string tmpFile = Path.Combine(tmpPath, "pmss.log");
                     Logger("Writing to " + tmpFile);
                     File.WriteAllText(tmpFile, logData);
                     if (File.Exists(tmpFile)) fileToOpen = tmpFile;
@@ -585,7 +586,7 @@ namespace PlexServiceTray
                 if (string.IsNullOrEmpty(fileToOpen)) return;
 
                 var process = new Process();
-                process.StartInfo = new ProcessStartInfo
+                process.StartInfo = new()
                 {
                     UseShellExecute = true,
                     FileName = fileToOpen
@@ -599,10 +600,10 @@ namespace PlexServiceTray
             }
         }
 
-        private void PMSData_Click(object sender, EventArgs e)
+        private void PMSData_Click(object? sender, EventArgs e)
         {
             //Open a windows explorer window to PMS data
-            var dir = GetDataDir();
+            string dir = GetDataDir();
             try
             {
                 if (!string.IsNullOrEmpty(dir)) Process.Start($@"{dir}");
@@ -616,15 +617,15 @@ namespace PlexServiceTray
 
         private string GetDataDir()
         {
-            var dir = string.Empty;
-            var path = _plexService?.GetPmsDataPath() ?? string.Empty;
+            string dir = string.Empty;
+            string path = _plexService?.GetPmsDataPath() ?? string.Empty;
             if (string.IsNullOrEmpty(path)) return dir;
             // If we're not local, see if we can access PMS data dir over UNC
             if (!_traySettings.IsLocal)
             {
-                var drive = path.Substring(0, 1);
-                var ext = path.Substring(3);
-                var unc = Path.Combine("\\\\" + _traySettings.ServerAddress, drive + "$", ext);
+                string drive = path[..1];
+                string ext = path[3..];
+                string unc = Path.Combine("\\\\" + _traySettings.ServerAddress, drive + "$", ext);
                 if (Directory.Exists(unc)) dir = unc;
             }
             else

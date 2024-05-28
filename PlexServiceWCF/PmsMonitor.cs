@@ -49,7 +49,7 @@ namespace PlexServiceWCF
         /// <summary>
         /// The name of the plex media server executable
         /// </summary>
-        private string _executableFileName = string.Empty;
+        private string? _executableFileName = string.Empty;
 
         /// <summary>
         /// Plex process
@@ -153,14 +153,14 @@ namespace PlexServiceWCF
         private void DisableFirstRun() {
             RegistryKey? pmsDataKey = null;
             const string keyName = @"Software\Plex, Inc.\Plex Media Server";
-            var is64Bit = !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("PROCESSOR_ARCHITEW6432"));
+            bool is64Bit = !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("PROCESSOR_ARCHITEW6432"));
 
             var architecture = is64Bit ? RegistryView.Registry64 : RegistryView.Registry32;
 
             try {
                 pmsDataKey = RegistryKey.OpenBaseKey(RegistryHive.CurrentUser, architecture).OpenSubKey(keyName, true);
                 if (pmsDataKey != null) {
-                    var firstRun = (int) pmsDataKey.GetValue("FirstRun");
+                    int firstRun = (int) pmsDataKey.GetValue("FirstRun");
                     Log.Debug("First run is: " + firstRun);
                     if (firstRun == 0) return;
                 }
@@ -218,7 +218,7 @@ namespace PlexServiceWCF
                 Log.Information("Plex executable found at " + _executableFileName);
                 
                 //map network drives
-                var drivesMapped = true;
+                bool drivesMapped = true;
                 if (_settings.DriveMaps.Count > 0) {
                     Log.Information("Mapping Network Drives");
 
@@ -245,7 +245,7 @@ namespace PlexServiceWCF
 
         private static bool TryMap(DriveMap map, Settings settings)
         {
-            var count = settings.AutoRemount ? settings.AutoRemountCount : 1;
+            int count = settings.AutoRemount ? settings.AutoRemountCount : 1;
 
             while (count > 0)
             {
@@ -305,7 +305,7 @@ namespace PlexServiceWCF
 
         #region Exit events
 
-        private async void Updater_Exited(object sender, EventArgs e)
+        private async void Updater_Exited(object? sender, EventArgs e)
         {
 
             if (_plexUpdater != null)
@@ -324,7 +324,7 @@ namespace PlexServiceWCF
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private async void Plex_Exited(object sender, EventArgs e)
+        private async void Plex_Exited(object? sender, EventArgs e)
         {
             Log.Information("Plex Media Server has stopped!");
             //unsubscribe
@@ -414,7 +414,7 @@ namespace PlexServiceWCF
                         UseShellExecute = false
                     };
                     //check version to see if we can use the startup argument
-                    var plexVersion = FileVersionInfo.GetVersionInfo(_executableFileName).FileVersion;
+                    string? plexVersion = FileVersionInfo.GetVersionInfo(_executableFileName).FileVersion;
                     var v = new Version(plexVersion);
                     PlexVersion = v;
                     var minimumVersion = new Version("0.9.8.12");
@@ -482,7 +482,7 @@ namespace PlexServiceWCF
         private static void KillSupportingProcesses()
         {
             Log.Information("Killing supporting processes.");
-            foreach (var name in SupportingProcesses)
+            foreach (string name in SupportingProcesses)
             {
                 KillSupportingProcess(name);
             }
@@ -496,7 +496,7 @@ namespace PlexServiceWCF
         {
             //see if its running
             Log.Information("Looking for process: " + name);
-            var supportProcesses = Process.GetProcessesByName(name);
+            Process[] supportProcesses = Process.GetProcessesByName(name);
             Log.Information(supportProcesses.Length + " instances of " + name + " found.");
             if (supportProcesses.Length <= 0) {
                 return;
@@ -553,9 +553,9 @@ namespace PlexServiceWCF
         /// Returns the full path and filename of the plex media server executable
         /// </summary>
         /// <returns></returns>
-        private string GetPlexExecutable()
+        private string? GetPlexExecutable()
         {
-            var result = string.Empty;
+            string? result = string.Empty;
             //first see if its defined in the settings
 
             if(!string.IsNullOrEmpty(_settings.UserDefinedInstallLocation) && File.Exists(_settings.UserDefinedInstallLocation))
@@ -568,7 +568,7 @@ namespace PlexServiceWCF
             //this is here to help anyone having issues and let them specify it manually themselves.
             if(string.IsNullOrEmpty(result) && !string.IsNullOrEmpty(TrayInteraction.AppDataPath))
             {
-                var location = Path.Combine(TrayInteraction.AppDataPath, "location.txt");
+                string location = Path.Combine(TrayInteraction.AppDataPath, "location.txt");
                 if (File.Exists(location))
                 {
                     string userSpecified;
@@ -584,22 +584,22 @@ namespace PlexServiceWCF
                 }
             }
 
-            //if theres nothing there go for the easy defaults
+            //if there's nothing there go for the easy defaults
             if (string.IsNullOrEmpty(result)) {
-                //plex doesn't put this nice stuff in the registry so we need to go hunting for it ourselves
-                //this method is crap. I dont like having to iterate through directories looking to see if a file exists or not.
+                //plex doesn't put this nice stuff in the registry, so we need to go hunting for it ourselves
+                //this method is crap. I don't like having to iterate through directories looking to see if a file exists or not.
                 //start by looking in the program files directory, even if we are on 64bit windows, plex may be 64bit one day... maybe
 
-                var possibleLocations = new List<string> {
-                    //some hard coded attempts, this is nice and fast and should hit 90% of the time... even if it is ugly
+                List<string> possibleLocations =
+                [
                     @"C:\Program Files\Plex\Plex Media Server\Plex Media Server.exe",
                     @"C:\Program Files (x86)\Plex\Plex Media Server\Plex Media Server.exe",
                     //special folder
-                    Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), @"Plex\Plex Media Server\Plex Media Server.exe")
-                };
+                    Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles),
+                        @"Plex\Plex Media Server\Plex Media Server.exe")
+                ];
 
-
-                foreach (var location in possibleLocations.Where(File.Exists)) 
+                foreach (string location in possibleLocations.Where(File.Exists)) 
                 {
                     result = location;
                     Log.Information($"Plex executable found using hard coded lookup");
@@ -608,7 +608,7 @@ namespace PlexServiceWCF
             }
 
             //work out the os type (32 or 64) and set the registry view to suit. this is only a reliable check when this project is compiled to x86.
-            var is64Bit = !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("PROCESSOR_ARCHITEW6432"));
+            bool is64Bit = !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("PROCESSOR_ARCHITEW6432"));
 
             //the plex registry key in software holds a key called installFolder, check for that in both 32 and 64 bit registry views
             if (string.IsNullOrEmpty(result))
@@ -616,17 +616,14 @@ namespace PlexServiceWCF
                 using var softwareKey = RegistryKey.OpenBaseKey(RegistryHive.CurrentUser, is64Bit ? RegistryView.Registry64 : RegistryView.Registry32).OpenSubKey(@"SOFTWARE\Plex, Inc.\Plex Media Server");
                 if (softwareKey != null)
                 {
-                    if (softwareKey != null)
+                    string[] names = softwareKey.GetValueNames();
+                    if (names.Contains("InstallFolder"))
                     {
-                        var names = softwareKey.GetValueNames();
-                        if (names.Contains("InstallFolder"))
+                        string? possible = softwareKey.GetValue("InstallFolder")?.ToString();
+                        if (File.Exists(possible))
                         {
-                            var possible = softwareKey.GetValue("InstallFolder").ToString();
-                            if (File.Exists(possible))
-                            {
-                                result = possible;
-                                Log.Information($"Plex executable found in plex registry key");
-                            }
+                            result = possible;
+                            Log.Information($"Plex executable found in plex registry key");
                         }
                     }
                 }
@@ -637,24 +634,24 @@ namespace PlexServiceWCF
             if (string.IsNullOrEmpty(result))
             {
                 //let's have a flag to break out of the loops below for faster execution, because this is nasty.
-                var resultFound = false;
+                bool resultFound = false;
 
                 using var userDataKey = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, is64Bit ? RegistryView.Registry64 : RegistryView.Registry32).OpenSubKey(@"Software\Microsoft\Windows\CurrentVersion\Installer\UserData");
                 if(userDataKey != null)
                 {
-                    foreach (var userKeyName in userDataKey.GetSubKeyNames())
+                    foreach (string userKeyName in userDataKey.GetSubKeyNames())
                     {
                         using (var userKey = userDataKey.OpenSubKey(userKeyName)) 
                         {
                             using var componentsKey = userKey?.OpenSubKey("Components");
                             if (componentsKey != null) // Make sure there are Assemblies
                             {
-                                foreach (var guidKeyName in componentsKey.GetSubKeyNames()) {
+                                foreach (string guidKeyName in componentsKey.GetSubKeyNames()) {
                                     using (var guidKey = componentsKey.OpenSubKey(guidKeyName)) {
                                         if (guidKey != null) {
-                                            foreach (var valueName in guidKey.GetValueNames()) {
-                                                var value = guidKey.GetValue(valueName).ToString();
-                                                if (!value.ToLower().Contains("plex media server.exe")) {
+                                            foreach (string valueName in guidKey.GetValueNames()) {
+                                                string? value = guidKey.GetValue(valueName)?.ToString();
+                                                if (value != null && !value.ToLower().Contains("plex media server.exe")) {
                                                     continue;
                                                 }
 

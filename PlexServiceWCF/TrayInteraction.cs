@@ -44,7 +44,7 @@ namespace PlexServiceWCF
             Start();
         }
 
-        private void PlexStopped(object sender, EventArgs e)
+        private void PlexStopped(object? sender, EventArgs e)
         {
             if (_pms != null)
             {
@@ -63,7 +63,7 @@ namespace PlexServiceWCF
             }
         }
 
-        private void PlexStateChange(object sender, EventArgs e)
+        private void PlexStateChange(object? sender, EventArgs e)
         {
             if (_pms != null)
             {
@@ -245,7 +245,7 @@ namespace PlexServiceWCF
             }
         }
 
-        public void Abort() {
+        public new void Abort() {
             _trayInteractionImplementation.Abort();
         }
 
@@ -304,29 +304,29 @@ namespace PlexServiceWCF
             _trayInteractionImplementation.EndOpen(result);
         }
 
-        public CommunicationState State => _trayInteractionImplementation.State;
+        public new CommunicationState State => _trayInteractionImplementation.State;
 
-        public event EventHandler Closed {
+        public new event EventHandler Closed {
             add => _trayInteractionImplementation.Closed += value;
             remove => _trayInteractionImplementation.Closed -= value;
         }
 
-        public event EventHandler Closing {
+        public new event EventHandler Closing {
             add => _trayInteractionImplementation.Closing += value;
             remove => _trayInteractionImplementation.Closing -= value;
         }
 
-        public event EventHandler Faulted {
+        public new event EventHandler Faulted {
             add => _trayInteractionImplementation.Faulted += value;
             remove => _trayInteractionImplementation.Faulted -= value;
         }
 
-        public event EventHandler Opened {
+        public new event EventHandler Opened {
             add => _trayInteractionImplementation.Opened += value;
             remove => _trayInteractionImplementation.Opened -= value;
         }
 
-        public event EventHandler Opening {
+        public new event EventHandler Opening {
             add => _trayInteractionImplementation.Opening += value;
             remove => _trayInteractionImplementation.Opening -= value;
         }

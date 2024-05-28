@@ -97,7 +97,7 @@ namespace PlexServiceTray.Windows
             catch { }
         }
 
-        private void Title_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        private void Title_MouseLeftButtonDown(object? sender, MouseButtonEventArgs e)
         {
             DragMove();
         }
@@ -129,7 +129,7 @@ namespace PlexServiceTray.Windows
 
         #endregion OkCommand
 
-        private void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)
+        private void Hyperlink_RequestNavigate(object? sender, RequestNavigateEventArgs e)
         {
             System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo(e.Uri.AbsoluteUri));
             e.Handled = true;
