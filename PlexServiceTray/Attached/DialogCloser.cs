@@ -16,8 +16,10 @@ namespace PlexServiceTray.Attached
 
         private static void DialogResultChanged(
             DependencyObject d,
-            DependencyPropertyChangedEventArgs e) {
-            if (d is not Window window) {
+            DependencyPropertyChangedEventArgs e)
+        {
+            if (d is not Window window)
+            {
                 return;
             }
 

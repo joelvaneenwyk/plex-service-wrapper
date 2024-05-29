@@ -9,7 +9,7 @@ namespace PlexServiceCommon
     /// </summary>
     [Serializable]
     [DataContract]
-    public class StatusChangeEventArgs: EventArgs
+    public class StatusChangeEventArgs : EventArgs
     {
         [DataMember] public readonly EventLogEntryType? EventType;
 

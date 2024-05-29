@@ -2,9 +2,9 @@
 
 namespace PlexServiceTray.Mock
 {
-    public class MockSettingsViewModel:SettingsViewModel
+    public class MockSettingsViewModel : SettingsViewModel
     {
-        public MockSettingsViewModel():base(new PlexServiceCommon.Settings(), "Dark Amber")
+        public MockSettingsViewModel() : base(new PlexServiceCommon.Settings(), "Dark Amber")
         {
             ServerPort = 8787;
 

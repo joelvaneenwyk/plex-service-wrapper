@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace PlexServiceTray.Validation
 {
-    internal class UniqueAuxAppNameAttribute:ValidationAttribute
+    internal class UniqueAuxAppNameAttribute : ValidationAttribute
     {
         private new const string ErrorMessage = "There's already an Auxilliary Application called `{0}`.";
 
@@ -26,7 +26,8 @@ namespace PlexServiceTray.Validation
                 _context = validationContext.ObjectInstance as SettingsViewModel;
             string? name = value as string;
             base.ErrorMessage = FormatErrorMessage(name);
-            if (string.IsNullOrEmpty(name) || _context?.AuxiliaryApplications == null) {
+            if (string.IsNullOrEmpty(name) || _context?.AuxiliaryApplications == null)
+            {
                 return ValidationResult.Success;
             }
 

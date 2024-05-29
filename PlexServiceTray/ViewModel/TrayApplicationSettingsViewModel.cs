@@ -5,7 +5,7 @@ namespace PlexServiceTray.ViewModel
     /// <summary>
     /// View model class for connection settings window
     /// </summary>
-    public class TrayApplicationSettingsViewModel:ObservableObject
+    public class TrayApplicationSettingsViewModel : ObservableObject
     {
         public string ServerAddress
         {

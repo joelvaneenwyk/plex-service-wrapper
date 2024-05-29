@@ -25,7 +25,8 @@ namespace PlexServiceWCF
         {
             string filePath = GetSettingsFile();
 
-            if (!Directory.Exists(Path.GetDirectoryName(filePath))) {
+            if (!Directory.Exists(Path.GetDirectoryName(filePath)))
+            {
                 string? dir = Path.GetDirectoryName(filePath);
                 if (!string.IsNullOrEmpty(dir)) Directory.CreateDirectory(dir);
             }
@@ -34,7 +35,7 @@ namespace PlexServiceWCF
             sw.Write(JsonConvert.SerializeObject(settings, Formatting.Indented));
             TrayCallback tc = new();
             tc.OnSettingChange(settings);
-        }     
+        }
 
         /// <summary>
         /// Load the settings from disk
@@ -46,11 +47,12 @@ namespace PlexServiceWCF
             Settings? settings = null;
             try
             {
-                if (File.Exists(filePath)) {
+                if (File.Exists(filePath))
+                {
                     using StreamReader sr = new(filePath);
                     string rawSettings = sr.ReadToEnd();
                     settings = JsonConvert.DeserializeObject<Settings>(rawSettings);
-                }     
+                }
             }
             finally
             {

@@ -18,7 +18,7 @@ namespace PlexServiceTray.ViewModel
         public virtual bool IsSelected
         {
             get => _isSelected;
-            set 
+            set
             {
                 if (_isSelected == value) return;
 
@@ -31,7 +31,7 @@ namespace PlexServiceTray.ViewModel
 
         public bool IsExpanded
         {
-            set 
+            set
             {
                 if (_isExpanded == value) return;
 

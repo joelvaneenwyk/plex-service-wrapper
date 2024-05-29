@@ -124,11 +124,15 @@ namespace PlexServiceTray
         {
             string filePath = GetSettingsFile();
 
-            if (!Directory.Exists(Path.GetDirectoryName(filePath))) {
+            if (!Directory.Exists(Path.GetDirectoryName(filePath)))
+            {
                 string? dir = Path.GetDirectoryName(filePath);
-                if (!string.IsNullOrEmpty(dir)) {
+                if (!string.IsNullOrEmpty(dir))
+                {
                     Directory.CreateDirectory(dir);
-                } else {
+                }
+                else
+                {
                     throw new DirectoryNotFoundException(dir);
                 }
             }
@@ -149,7 +153,8 @@ namespace PlexServiceTray
             TrayApplicationSettings? settings = null;
             try
             {
-                if (File.Exists(filePath)) {
+                if (File.Exists(filePath))
+                {
                     using StreamReader sr = new(filePath);
                     string rawSettings = sr.ReadToEnd();
                     settings = JsonConvert.DeserializeObject<TrayApplicationSettings>(rawSettings);

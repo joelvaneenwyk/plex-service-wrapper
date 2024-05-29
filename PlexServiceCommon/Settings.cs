@@ -11,7 +11,7 @@ namespace PlexServiceCommon
     public class Settings
     {
         public const string LocalHost = "localhost";
-        
+
         /// <summary>
         /// User defined auxiliary applications
         /// </summary>

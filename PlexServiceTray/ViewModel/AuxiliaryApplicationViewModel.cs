@@ -16,7 +16,7 @@ namespace PlexServiceTray.ViewModel
         public string Name
         {
             get => _auxApplication.Name;
-            set 
+            set
             {
                 if (_auxApplication.Name == value) return;
 
@@ -25,11 +25,11 @@ namespace PlexServiceTray.ViewModel
             }
         }
 
-        [Required(ErrorMessage ="A path to execute must be specified")]
+        [Required(ErrorMessage = "A path to execute must be specified")]
         public string FilePath
         {
             get => _auxApplication.FilePath;
-            set 
+            set
             {
                 if (_auxApplication.FilePath == value) return;
 
@@ -41,7 +41,7 @@ namespace PlexServiceTray.ViewModel
         public string WorkingFolder
         {
             get => _auxApplication.WorkingFolder;
-            set 
+            set
             {
                 if (_auxApplication.WorkingFolder == value) return;
 
@@ -53,7 +53,7 @@ namespace PlexServiceTray.ViewModel
         public string Argument
         {
             get => _auxApplication.Argument;
-            set 
+            set
             {
                 if (_auxApplication.Argument == value) return;
 
@@ -73,7 +73,7 @@ namespace PlexServiceTray.ViewModel
                 OnPropertyChanged(nameof(KeepAlive));
             }
         }
-        
+
         public bool LogOutput
         {
             get => _auxApplication.LogOutput;
@@ -91,7 +91,7 @@ namespace PlexServiceTray.ViewModel
         public bool Running
         {
             get => _running;
-            set 
+            set
             {
                 if (_running == value) return;
 
@@ -103,7 +103,7 @@ namespace PlexServiceTray.ViewModel
         public string? Url
         {
             get => _auxApplication.Url;
-            set 
+            set
             {
                 if (_auxApplication.Url == value) return;
 
@@ -154,13 +154,14 @@ namespace PlexServiceTray.ViewModel
             {
                 FileName = FilePath
             };
-            
-            if (ofd.ShowDialog() != true) {
+
+            if (ofd.ShowDialog() != true)
+            {
                 return;
             }
 
             FilePath = ofd.FileName;
-            if(string.IsNullOrEmpty(WorkingFolder))
+            if (string.IsNullOrEmpty(WorkingFolder))
             {
                 WorkingFolder = System.IO.Path.GetDirectoryName(FilePath) ?? string.Empty;
             }
@@ -179,7 +180,8 @@ namespace PlexServiceTray.ViewModel
         [SupportedOSPlatform("windows")]
         private void OnBrowseFolder(object? parameter)
         {
-            VistaFolderBrowserDialog fbd = new() {
+            VistaFolderBrowserDialog fbd = new()
+            {
                 Description = "Please select working directory",
                 UseDescriptionForTitle = true
             };
@@ -198,7 +200,7 @@ namespace PlexServiceTray.ViewModel
         #region StartCommand
 
         private RelayCommand? _startCommand;
-        public RelayCommand StartCommand => _startCommand ??= new RelayCommand(OnStart, CanStart); 
+        public RelayCommand StartCommand => _startCommand ??= new RelayCommand(OnStart, CanStart);
 
         private bool CanStart(object? parameter)
         {

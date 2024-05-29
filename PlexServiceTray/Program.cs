@@ -17,7 +17,8 @@ namespace PlexServiceTray
         {
             string appProcessName = Path.GetFileNameWithoutExtension(Application.ExecutablePath);
             var runningProcesses = Process.GetProcessesByName(appProcessName);
-            if (runningProcesses.Length > 1) {
+            if (runningProcesses.Length > 1)
+            {
                 return;
             }
             Application.EnableVisualStyles();

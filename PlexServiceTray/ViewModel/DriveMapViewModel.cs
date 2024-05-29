@@ -10,7 +10,7 @@ namespace PlexServiceTray.ViewModel
         public string ShareName
         {
             get => _driveMap.ShareName;
-            set 
+            set
             {
                 if (_driveMap.ShareName == value) return;
 
@@ -24,7 +24,7 @@ namespace PlexServiceTray.ViewModel
         public string DriveLetter
         {
             get => _driveMap.DriveLetter;
-            set 
+            set
             {
                 if (_driveMap.DriveLetter == value) return;
 

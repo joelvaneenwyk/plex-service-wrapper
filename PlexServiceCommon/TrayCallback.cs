@@ -39,12 +39,13 @@ namespace PlexServiceCommon
         }
 
         #endregion
-        
+
         #region SettingChange
 
         public event EventHandler<SettingChangeEventArgs>? SettingChange;
 
-        public void OnSettingChange(Settings? settings) {
+        public void OnSettingChange(Settings? settings)
+        {
             Log.Debug("Setting change...");
             SettingChange?.Invoke(this, new SettingChangeEventArgs(settings));
         }
@@ -69,9 +70,11 @@ namespace PlexServiceCommon
 
     }
 
-    public class SettingChangeEventArgs {
+    public class SettingChangeEventArgs
+    {
         public Settings? Settings;
-        public SettingChangeEventArgs(Settings? settings) {
+        public SettingChangeEventArgs(Settings? settings)
+        {
             Settings = settings;
         }
     }

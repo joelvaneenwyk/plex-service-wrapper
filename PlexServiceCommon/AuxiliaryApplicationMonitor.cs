@@ -19,7 +19,7 @@ namespace PlexServiceCommon
         /// Auxiliary process
         /// </summary>
         private Process? _auxProcess;
-        
+
         /// <summary>
         /// Flag for actual stop rather than crash we should attempt to restart from
         /// </summary>
@@ -39,7 +39,7 @@ namespace PlexServiceCommon
         {
             _stopping = false;
 
-            if(!string.IsNullOrEmpty(_aux.FilePath) && File.Exists(_aux.FilePath))
+            if (!string.IsNullOrEmpty(_aux.FilePath) && File.Exists(_aux.FilePath))
             {
                 ProcStart();
             }
@@ -71,7 +71,8 @@ namespace PlexServiceCommon
         /// <param name="e"></param>
         private void AuxProcess_Exited(object? sender, EventArgs e)
         {
-            if (_aux.KeepAlive) {
+            if (_aux.KeepAlive)
+            {
                 Log.Information(_aux.Name + " has stopped!");
                 //unsubscribe
                 if (_auxProcess != null) _auxProcess.Exited -= AuxProcess_Exited;
@@ -117,11 +118,12 @@ namespace PlexServiceCommon
         private void ProcStart()
         {
             Log.Information("Attempting to start " + _aux.Name);
-            if (_auxProcess != null) {
+            if (_auxProcess != null)
+            {
                 return;
             }
             //we dont care if this is already running, depending on the application, this could cause lots of issues but hey... 
-                
+
             //Auxiliary process
             _auxProcess = new Process();
             _auxProcess.StartInfo.FileName = _aux.FilePath;
@@ -132,9 +134,11 @@ namespace PlexServiceCommon
             _auxProcess.StartInfo.RedirectStandardError = true;
             _auxProcess.StartInfo.RedirectStandardOutput = true;
             _auxProcess.Exited += AuxProcess_Exited;
-            if (_aux.LogOutput) {
+            if (_aux.LogOutput)
+            {
                 Log.Information("Enabling logging for " + _aux.Name);
-                _auxProcess.OutputDataReceived += (_, e) => {
+                _auxProcess.OutputDataReceived += (_, e) =>
+                {
                     if (string.IsNullOrEmpty(e.Data)) return;
                     Log.Debug($"{_aux.Name}:{e.Data}");
                 };
@@ -161,8 +165,10 @@ namespace PlexServiceCommon
         /// <summary>
         /// Kill the plex process
         /// </summary>
-        private void End() {
-            if (_auxProcess == null) {
+        private void End()
+        {
+            if (_auxProcess == null)
+            {
                 return;
             }
 
@@ -170,9 +176,12 @@ namespace PlexServiceCommon
             try
             {
                 _auxProcess.Kill();
-            } catch (Exception ex) {
+            }
+            catch (Exception ex)
+            {
                 Log.Warning($"Exception stopping auxProc {_aux.Name}: " + ex.Message);
-            } finally
+            }
+            finally
             {
                 _auxProcess.Dispose();
                 _auxProcess = null;
@@ -184,6 +193,6 @@ namespace PlexServiceCommon
 
         #endregion
 
-        
+
     }
 }

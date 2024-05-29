@@ -49,15 +49,19 @@ namespace PlexServiceWCF
         {
             if (_pms != null)
             {
-                CallbackChannels.ForEach(callback => {
-                    if (callback == null) {
+                CallbackChannels.ForEach(callback =>
+                {
+                    if (callback == null)
+                    {
                         return;
                     }
 
                     try
                     {
                         callback.OnPlexStopped();
-                    } catch (Exception ex) {
+                    }
+                    catch (Exception ex)
+                    {
                         Log.Warning("Exception running callback: " + ex.Message);
                     }
                 });
@@ -68,15 +72,19 @@ namespace PlexServiceWCF
         {
             if (_pms != null)
             {
-                CallbackChannels.ForEach(callback => {
-                    if (callback == null) {
+                CallbackChannels.ForEach(callback =>
+                {
+                    if (callback == null)
+                    {
                         return;
                     }
 
                     try
                     {
                         callback.OnPlexStateChange(_pms.State);
-                    } catch (Exception ex) {
+                    }
+                    catch (Exception ex)
+                    {
                         Log.Warning("Exception on plex state change callback: " + ex.Message);
                     }
                 });
@@ -122,8 +130,9 @@ namespace PlexServiceWCF
             SettingsHandler.Save(settings);
         }
 
-        public void LogMessage(string message, LogEventLevel level=LogEventLevel.Debug) {
-            Log.Write(level,message);
+        public void LogMessage(string message, LogEventLevel level = LogEventLevel.Debug)
+        {
+            Log.Write(level, message);
         }
 
         /// <summary>
@@ -137,12 +146,14 @@ namespace PlexServiceWCF
             return res;
         }
 
-        public string GetLogPath() {
+        public string GetLogPath()
+        {
             return LogWriter.GetLatestLog();
         }
 
         [SupportedOSPlatform("windows")]
-        public string GetPmsDataPath() {
+        public string GetPmsDataPath()
+        {
             return PlexDirHelper.GetPlexDataDir();
         }
 
@@ -159,7 +170,7 @@ namespace PlexServiceWCF
         /// <returns></returns>
         public PlexState GetStatus()
             => _pms != null ? _pms.State : PlexState.Stopped;
-        
+
         /// <summary>
         /// A request from the client for the running status of a specific auxiliary application
         /// </summary>
@@ -242,7 +253,8 @@ namespace PlexServiceWCF
             }
         }
 
-        public new void Abort() {
+        public new void Abort()
+        {
             _trayInteractionImplementation.Abort();
         }
 
@@ -261,69 +273,84 @@ namespace PlexServiceWCF
             throw new NotImplementedException();
         }
 
-        public void Close() {
+        public void Close()
+        {
             _trayInteractionImplementation.Close();
         }
 
-        public void Close(TimeSpan timeout) {
+        public void Close(TimeSpan timeout)
+        {
             _trayInteractionImplementation.Close(timeout);
         }
 
-        public IAsyncResult BeginClose(AsyncCallback callback, object state) {
+        public IAsyncResult BeginClose(AsyncCallback callback, object state)
+        {
             return _trayInteractionImplementation.BeginClose(callback, state);
         }
 
-        public IAsyncResult BeginClose(TimeSpan timeout, AsyncCallback callback, object state) {
+        public IAsyncResult BeginClose(TimeSpan timeout, AsyncCallback callback, object state)
+        {
             return _trayInteractionImplementation.BeginClose(timeout, callback, state);
         }
 
-        public void EndClose(IAsyncResult result) {
+        public void EndClose(IAsyncResult result)
+        {
             _trayInteractionImplementation.EndClose(result);
         }
 
-        public void Open() {
+        public void Open()
+        {
             _trayInteractionImplementation.Open();
         }
 
-        public void Open(TimeSpan timeout) {
+        public void Open(TimeSpan timeout)
+        {
             _trayInteractionImplementation.Open(timeout);
         }
 
-        public IAsyncResult BeginOpen(AsyncCallback callback, object state) {
+        public IAsyncResult BeginOpen(AsyncCallback callback, object state)
+        {
             return _trayInteractionImplementation.BeginOpen(callback, state);
         }
 
-        public IAsyncResult BeginOpen(TimeSpan timeout, AsyncCallback callback, object state) {
+        public IAsyncResult BeginOpen(TimeSpan timeout, AsyncCallback callback, object state)
+        {
             return _trayInteractionImplementation.BeginOpen(timeout, callback, state);
         }
 
-        public void EndOpen(IAsyncResult result) {
+        public void EndOpen(IAsyncResult result)
+        {
             _trayInteractionImplementation.EndOpen(result);
         }
 
         public new CommunicationState State => _trayInteractionImplementation.State;
 
-        public new event EventHandler Closed {
+        public new event EventHandler Closed
+        {
             add => _trayInteractionImplementation.Closed += value;
             remove => _trayInteractionImplementation.Closed -= value;
         }
 
-        public new event EventHandler Closing {
+        public new event EventHandler Closing
+        {
             add => _trayInteractionImplementation.Closing += value;
             remove => _trayInteractionImplementation.Closing -= value;
         }
 
-        public new event EventHandler Faulted {
+        public new event EventHandler Faulted
+        {
             add => _trayInteractionImplementation.Faulted += value;
             remove => _trayInteractionImplementation.Faulted -= value;
         }
 
-        public new event EventHandler Opened {
+        public new event EventHandler Opened
+        {
             add => _trayInteractionImplementation.Opened += value;
             remove => _trayInteractionImplementation.Opened -= value;
         }
 
-        public new event EventHandler Opening {
+        public new event EventHandler Opening
+        {
             add => _trayInteractionImplementation.Opening += value;
             remove => _trayInteractionImplementation.Opening -= value;
         }

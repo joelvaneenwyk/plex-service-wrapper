@@ -5,7 +5,7 @@ using Serilog;
 
 namespace PlexServiceCommon
 {
-    [JsonObject(MemberSerialization=MemberSerialization.OptIn)]
+    [JsonObject(MemberSerialization = MemberSerialization.OptIn)]
     public class DriveMap
     {
         [DllImport("mpr.dll")] private static extern int WNetAddConnection2A(ref NetworkResource netRes, string? password, string? username, int flags);
@@ -51,10 +51,11 @@ namespace PlexServiceCommon
         {
             if (DriveLetter.Length > 0)
             {
-                string drive = DriveLetter.Substring(0,1) + ":";
-                
+                string drive = DriveLetter.Substring(0, 1) + ":";
+
                 //create struct data
-                NetworkResource netRes = new NetworkResource {
+                NetworkResource netRes = new NetworkResource
+                {
                     Scope = 2,
                     Type = 0x1,
                     DisplayType = 3,
@@ -68,7 +69,9 @@ namespace PlexServiceCommon
                     try
                     {
                         UnMapDrive(true);
-                    } catch (Exception e){
+                    }
+                    catch (Exception e)
+                    {
                         Log.Warning("Exception unmapping drive: " + e.Message);
                     }
                 }

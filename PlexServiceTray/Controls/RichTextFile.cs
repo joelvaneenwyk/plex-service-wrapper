@@ -13,12 +13,15 @@ namespace PlexServiceTray.Controls
             AddHandler(Hyperlink.RequestNavigateEvent, new RoutedEventHandler(HandleHyperlinkClick));
         }
 
-        private void HandleHyperlinkClick(object inSender, RoutedEventArgs inArgs) {
-            if (!OpenLinksInBrowser) {
+        private void HandleHyperlinkClick(object inSender, RoutedEventArgs inArgs)
+        {
+            if (!OpenLinksInBrowser)
+            {
                 return;
             }
 
-            if (inArgs.Source is not Hyperlink link) {
+            if (inArgs.Source is not Hyperlink link)
+            {
                 return;
             }
 

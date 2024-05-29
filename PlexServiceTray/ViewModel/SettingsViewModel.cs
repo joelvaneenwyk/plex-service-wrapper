@@ -7,7 +7,7 @@ using System.IO;
 
 namespace PlexServiceTray.ViewModel
 {
-    public class SettingsViewModel:ObservableObject
+    public class SettingsViewModel : ObservableObject
     {
         /// <summary>
         /// The server endpoint port
@@ -15,7 +15,7 @@ namespace PlexServiceTray.ViewModel
         public int ServerPort
         {
             get => WorkingSettings.ServerPort;
-            set 
+            set
             {
                 if (WorkingSettings.ServerPort == value) return;
 
@@ -30,7 +30,7 @@ namespace PlexServiceTray.ViewModel
         public int RestartDelay
         {
             get => WorkingSettings.RestartDelay;
-            set 
+            set
             {
                 if (WorkingSettings.RestartDelay == value) return;
 
@@ -42,7 +42,7 @@ namespace PlexServiceTray.ViewModel
         public bool AutoRestart
         {
             get => WorkingSettings.AutoRestart;
-            set 
+            set
             {
                 if (WorkingSettings.AutoRestart == value) return;
 
@@ -50,11 +50,11 @@ namespace PlexServiceTray.ViewModel
                 OnPropertyChanged(nameof(AutoRestart));
             }
         }
-        
+
         public bool AutoRemount
         {
             get => WorkingSettings.AutoRemount;
-            set 
+            set
             {
                 if (WorkingSettings.AutoRemount == value) return;
 
@@ -62,11 +62,11 @@ namespace PlexServiceTray.ViewModel
                 OnPropertyChanged(nameof(AutoRemount));
             }
         }
-        
+
         public int AutoRemountCount
         {
             get => WorkingSettings.AutoRemountCount;
-            set 
+            set
             {
                 if (WorkingSettings.AutoRemountCount == value) return;
 
@@ -74,11 +74,11 @@ namespace PlexServiceTray.ViewModel
                 OnPropertyChanged(nameof(AutoRemountCount));
             }
         }
-        
+
         public int AutoRemountDelay
         {
             get => WorkingSettings.AutoRemountDelay;
-            set 
+            set
             {
                 if (WorkingSettings.AutoRemountDelay == value) return;
 
@@ -90,7 +90,7 @@ namespace PlexServiceTray.ViewModel
         public bool StartPlexOnMountFail
         {
             get => WorkingSettings.StartPlexOnMountFail;
-            set 
+            set
             {
                 if (WorkingSettings.StartPlexOnMountFail == value) return;
 
@@ -104,7 +104,7 @@ namespace PlexServiceTray.ViewModel
             get => WorkingSettings.UserDefinedInstallLocation;
             set
             {
-                if(WorkingSettings.UserDefinedInstallLocation == value) return;
+                if (WorkingSettings.UserDefinedInstallLocation == value) return;
                 WorkingSettings.UserDefinedInstallLocation = value;
                 OnPropertyChanged(nameof(UserDefinedInstallLocation));
             }
@@ -116,7 +116,7 @@ namespace PlexServiceTray.ViewModel
         public int SelectedTab
         {
             get => _selectedTab;
-            set 
+            set
             {
                 if (_selectedTab == value) return;
 
@@ -156,8 +156,10 @@ namespace PlexServiceTray.ViewModel
         public DriveMapViewModel? SelectedDriveMap
         {
             get => _selectedDriveMap;
-            set {
-                if (_selectedDriveMap == value) {
+            set
+            {
+                if (_selectedDriveMap == value)
+                {
                     return;
                 }
 
@@ -288,7 +290,7 @@ namespace PlexServiceTray.ViewModel
                     DriveMaps.Add(newDriveMapViewModel);
                     break;
             }
-            
+
         }
 
         #endregion AddCommand
@@ -333,7 +335,7 @@ namespace PlexServiceTray.ViewModel
         #region RemoveCommand
 
         private RelayCommand? _removeCommand;
-        public RelayCommand RemoveCommand => _removeCommand ??= new RelayCommand(OnRemove, CanRemove); 
+        public RelayCommand RemoveCommand => _removeCommand ??= new RelayCommand(OnRemove, CanRemove);
 
         private bool CanRemove(object? parameter)
         {
@@ -362,7 +364,7 @@ namespace PlexServiceTray.ViewModel
                         DriveMaps.Remove(map);
                     break;
             }
-            
+
         }
 
         #endregion RemoveCommand
@@ -388,7 +390,7 @@ namespace PlexServiceTray.ViewModel
                 WorkingSettings.AuxiliaryApplications.Add(aux.GetAuxiliaryApplication());
             }
             WorkingSettings.DriveMaps.Clear();
-            foreach(DriveMapViewModel dMap in DriveMaps)
+            foreach (DriveMapViewModel dMap in DriveMaps)
             {
                 WorkingSettings.DriveMaps.Add(dMap.GetDriveMap());
             }
