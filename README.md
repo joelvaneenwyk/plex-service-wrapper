@@ -49,7 +49,7 @@ You should be able to upgrade PlexService in-place. In rare occurrences, you may
 
 If that happens, see below for steps to manually remove it for a clean installation.
 
-## Manual Uninstallation
+## Manual Uninstall
 
 To completely remove the PlexService application, do the following:
 
@@ -60,7 +60,7 @@ To completely remove the PlexService application, do the following:
     sc stop PlexService
     taskkill /IM "PlexService.exe" /F
     sc delete PlexService
-    del /S "C:\Progra~2\PlexService"
+    del /S "C:\Program Files\PlexService"
     ```
 
 3. Optionally, if you wish to delete your PlexService settings, execute the following command:

@@ -2,6 +2,11 @@
 ## Eclipse
 #################
 
+.gdn/
+*.log.txt
+
+.build/
+
 # Primarily used for C/C++ projects
 .vscode/c_cpp_properties.json
 .vscode/launch.json
