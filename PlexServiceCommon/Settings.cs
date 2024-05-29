@@ -80,4 +80,3 @@ namespace PlexServiceCommon
         public string? UserDefinedInstallLocation { get; set; } = null;
     }
 }
-

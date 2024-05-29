@@ -264,6 +264,6 @@ namespace PlexServiceTray.ViewModel
             CheckRunningRequest?.Invoke(this, EventArgs.Empty);
         }
 
-        #endregion        
+        #endregion
     }
 }

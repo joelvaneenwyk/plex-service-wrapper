@@ -122,7 +122,7 @@ namespace PlexServiceCommon
             {
                 return;
             }
-            //we dont care if this is already running, depending on the application, this could cause lots of issues but hey... 
+            //we dont care if this is already running, depending on the application, this could cause lots of issues but hey...
 
             //Auxiliary process
             _auxProcess = new Process();

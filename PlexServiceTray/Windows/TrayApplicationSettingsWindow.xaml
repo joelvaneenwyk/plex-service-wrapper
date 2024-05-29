@@ -3,7 +3,7 @@
                  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                  xmlns:attached="clr-namespace:PlexServiceTray.Attached"
                  xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
-                 MinWidth="360" Width="360" 
+                 MinWidth="360" Width="360"
                  WindowStartupLocation="CenterScreen" ResizeMode="NoResize" SizeToContent="Height"
                  WindowStyle="None" attached:DialogCloser.DialogResult="{Binding DialogResult}" Icon="/PlexServiceTray;component/PlexService_Bar.ico"
                  Title="Plex Service Tray Settings">
@@ -32,7 +32,7 @@
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                
+
                 <TextBox Text="{Binding ServerAddress, UpdateSourceTrigger=PropertyChanged}" Grid.Row="0" Grid.Column="0" Margin="5" VerticalContentAlignment="Center"
                          mah:TextBoxHelper.Watermark="Server Address" mah:TextBoxHelper.UseFloatingWatermark="True"/>
                 <TextBlock Text=":" Grid.Column="1" Grid.Row="0" VerticalAlignment="Center" FontSize="16"/>
@@ -41,7 +41,7 @@
                          mah:TextBoxHelper.Watermark="Port" mah:TextBoxHelper.UseFloatingWatermark="True"/>
                 <ComboBox Grid.Row="1" Grid.ColumnSpan="3" ItemsSource="{Binding Themes}" SelectedItem="{Binding Theme, UpdateSourceTrigger=PropertyChanged}" Margin="5" ToolTip="The tray application theme" VerticalContentAlignment="Center"
                           mah:TextBoxHelper.Watermark="Theme" mah:TextBoxHelper.UseFloatingWatermark="True"/>
-            </Grid>            
+            </Grid>
             <Grid Grid.Row="1">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>

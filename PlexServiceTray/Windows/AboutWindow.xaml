@@ -3,8 +3,8 @@
                  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                  xmlns:controls="clr-namespace:PlexServiceTray.Controls"
                  xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
-                 Height="400" Width="450" WindowStyle="None" 
-                 WindowStartupLocation="CenterScreen" AllowsTransparency="True" ResizeMode="NoResize" 
+                 Height="400" Width="450" WindowStyle="None"
+                 WindowStartupLocation="CenterScreen" AllowsTransparency="True" ResizeMode="NoResize"
                  TextOptions.TextFormattingMode="Display" UseLayoutRounding="True" Icon="/PlexServiceTray;component/PlexService_Bar.ico"
                  Title="About Plex Media Server Service">
     <Window.Resources>
@@ -47,4 +47,3 @@
         </Grid>
     </Grid>
 </mah:MetroWindow>
-

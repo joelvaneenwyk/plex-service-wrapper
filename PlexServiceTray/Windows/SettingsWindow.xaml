@@ -9,8 +9,8 @@
             xmlns:fa5="http://schemas.fontawesome.com/icons/"
             mc:Ignorable="d"
             MinHeight="670" Height="670" MinWidth="500" Width="500"
-            WindowStartupLocation="CenterScreen" ResizeMode="CanResizeWithGrip" AllowsTransparency="True" 
-            TextOptions.TextFormattingMode="Display" UseLayoutRounding="True" WindowStyle="None" 
+            WindowStartupLocation="CenterScreen" ResizeMode="CanResizeWithGrip" AllowsTransparency="True"
+            TextOptions.TextFormattingMode="Display" UseLayoutRounding="True" WindowStyle="None"
             attached:DialogCloser.DialogResult="{Binding DialogResult}" Icon="/PlexServiceTray;component/PlexService_Bar.ico"
             Title="Plex Media Server Service Settings" d:DataContext="{d:DesignInstance Type=mock:MockSettingsViewModel, IsDesignTimeCreatable=True}">
     <Window.Resources>
@@ -43,9 +43,9 @@
                 </Grid.ColumnDefinitions>
                 <TextBox Grid.Row="0" Grid.Column="0" Text="{Binding ServerPort, UpdateSourceTrigger=PropertyChanged}" Margin="5" ToolTip="The port the service listens on for communication with the tray application, use extreme caution!"
                          mah:TextBoxHelper.Watermark="Service Port" mah:TextBoxHelper.UseFloatingWatermark="True" VerticalContentAlignment="Center"/>
-                
+
                 <!--tray app setting -->
-                <ComboBox Grid.Row="0" Grid.Column="1" ItemsSource="{Binding Themes}" SelectedItem="{Binding Theme, UpdateSourceTrigger=PropertyChanged}" Margin="5" ToolTip="The tray application theme" 
+                <ComboBox Grid.Row="0" Grid.Column="1" ItemsSource="{Binding Themes}" SelectedItem="{Binding Theme, UpdateSourceTrigger=PropertyChanged}" Margin="5" ToolTip="The tray application theme"
                           mah:TextBoxHelper.Watermark="Theme" mah:TextBoxHelper.UseFloatingWatermark="True" VerticalContentAlignment="Center"/>
 
                 <Grid Grid.Row="1" Grid.ColumnSpan="2" Grid.Column="0" Margin="5">
@@ -65,11 +65,11 @@
                 <CheckBox Grid.Row="3" Grid.Column="0" Content=":Attempt to reconnect drive mappings" FlowDirection="RightToLeft" HorizontalAlignment="Stretch" Margin="5" VerticalAlignment="Center" IsChecked="{Binding AutoRemount, UpdateSourceTrigger=PropertyChanged}" ToolTip="Whether or not the service should attempt to re-connect a failed drive map."/>
                 <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding AutoRemountCount, UpdateSourceTrigger=PropertyChanged}" Margin="5" IsEnabled="{Binding AutoRemount}" ToolTip="If mounting a drive fails, this is how many times a reconnect will be attempted."
                              mah:TextBoxHelper.Watermark="Retries" mah:TextBoxHelper.UseFloatingWatermark="True" VerticalContentAlignment="Center"/>
-                
-                <CheckBox Grid.Row="4" Grid.Column="0" Content=":Start Plex if Mounting Fails" FlowDirection="RightToLeft" HorizontalAlignment="Stretch" Margin="5" VerticalAlignment="Center" IsChecked="{Binding StartPlexOnMountFail, UpdateSourceTrigger=PropertyChanged}"/>    
+
+                <CheckBox Grid.Row="4" Grid.Column="0" Content=":Start Plex if Mounting Fails" FlowDirection="RightToLeft" HorizontalAlignment="Stretch" Margin="5" VerticalAlignment="Center" IsChecked="{Binding StartPlexOnMountFail, UpdateSourceTrigger=PropertyChanged}"/>
                 <TextBox Grid.Row="4" Grid.Column="1" HorizontalAlignment="Stretch" Text="{Binding AutoRemountDelay, UpdateSourceTrigger=PropertyChanged}" Margin="5" IsEnabled="{Binding StartPlexOnMountFail}" ToolTip="Should Plex be started if drive mounting fails?"
                              mah:TextBoxHelper.Watermark="Retry Delay(s)" mah:TextBoxHelper.UseFloatingWatermark="True" VerticalContentAlignment="Center"/>
-                    
+
 
             </Grid>
             <Grid Grid.Row="1">
@@ -186,9 +186,9 @@
                                             <ColumnDefinition Width="70"/>
                                             <ColumnDefinition Width="Auto"/>
                                         </Grid.ColumnDefinitions>
-                                        <TextBox Grid.Column="0" VerticalAlignment="Center" Text="{Binding ShareName, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, NotifyOnValidationError=True}" Margin="0,5,5,5" 
+                                        <TextBox Grid.Column="0" VerticalAlignment="Center" Text="{Binding ShareName, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, NotifyOnValidationError=True}" Margin="0,5,5,5"
                                                  mah:TextBoxHelper.Watermark="Share (UNC Path)" mah:TextBoxHelper.UseFloatingWatermark="True" VerticalContentAlignment="Center"/>
-                                        <TextBox Grid.Column="1" VerticalAlignment="Center" Text="{Binding DriveLetter, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, NotifyOnValidationError=True}" Margin="0,5,5,5" 
+                                        <TextBox Grid.Column="1" VerticalAlignment="Center" Text="{Binding DriveLetter, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, NotifyOnValidationError=True}" Margin="0,5,5,5"
                                                  mah:TextBoxHelper.Watermark="Drive Letter" mah:TextBoxHelper.UseFloatingWatermark="True" VerticalContentAlignment="Center"/>
                                         <Button Grid.Column="2" Style="{DynamicResource MahApps.Styles.Button.ToolBar}" Command="{Binding DataContext.RemoveCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListBox}}}" CommandParameter="{Binding}">
                                             <fa5:FontAwesome Icon="Regular_WindowClose" FontSize="16"/>

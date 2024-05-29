@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
-// Setting ComVisible to false makes the types in this assembly not visible 
+// Setting ComVisible to false makes the types in this assembly not visible
 // to COM components.
 [assembly: ComVisible(false)]
 
