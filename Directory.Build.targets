@@ -8,6 +8,7 @@
 
   <PropertyGroup>
     <NoWarn>CS1591;$(NoWarn)</NoWarn>
+    <RuntimeIdentifiers>win-x64</RuntimeIdentifiers>
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(CopySymbolsToArtifacts)' == 'true' AND '$(TargetFramework)' != '' ">
