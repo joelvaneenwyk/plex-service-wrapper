@@ -8,6 +8,27 @@
         "wix"
       ],
       "rollForward": false
+    },
+    "dotnet-serve": {
+      "version": "1.10.175",
+      "commands": [
+        "dotnet-serve"
+      ],
+      "rollForward": false
+    },
+    "dotnet-project-licenses": {
+      "version": "3.0.0-alpha.9",
+      "commands": [
+        "dotnet-project-licenses"
+      ],
+      "rollForward": false
+    },
+    "dotnet-outdated-tool": {
+      "version": "4.6.4",
+      "commands": [
+        "dotnet-outdated"
+      ],
+      "rollForward": false
     }
   }
 }
