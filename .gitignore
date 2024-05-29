@@ -2,6 +2,10 @@
 ## Eclipse
 #################
 
+# Primarily used for C/C++ projects
+.vscode/c_cpp_properties.json
+.vscode/launch.json
+
 PlexServiceTray_*.csproj
 
 *.pydevproject
