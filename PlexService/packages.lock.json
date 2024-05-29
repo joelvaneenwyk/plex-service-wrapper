@@ -4,9 +4,18 @@
     "net8.0-windows7.0": {
       "Microsoft.NET.ILLink.Tasks": {
         "type": "Direct",
-        "requested": "[8.0.2, )",
-        "resolved": "8.0.2",
-        "contentHash": "hKTrehpfVzOhAz0mreaTAZgbz0DrMEbWq4n3hAo8Ks6WdxdqQhNPvzOqn9VygKuWf1bmxPdraqzTaXriO/sn0A=="
+        "requested": "[8.0.6, )",
+        "resolved": "8.0.6",
+        "contentHash": "E+lDylsTeP4ZiDmnEkiJ5wobnGaIJzFhOgZppznJCb69UZgbh6G3cfv1pnLDLLBx6JAgl0kAlnINDeT3uCuczQ=="
+      },
+      "System.Security.Cryptography.Pkcs": {
+        "type": "Direct",
+        "requested": "[9.0.0-preview.4.24266.19, )",
+        "resolved": "9.0.0-preview.4.24266.19",
+        "contentHash": "/IQHwIYfdYhtSaGyNR57sLTLIlzMp1Jan18tdMakleepzNHIOkgbzi5DT/orOA7tmgXdhmPosRAALB94kGj4Eg==",
+        "dependencies": {
+          "System.Formats.Asn1": "9.0.0-preview.4.24266.19"
+        }
       },
       "System.ServiceModel.NetTcp": {
         "type": "Direct",
@@ -126,8 +135,8 @@
       },
       "JetBrains.Annotations": {
         "type": "Transitive",
-        "resolved": "2023.3.0",
-        "contentHash": "PHfnvdBUdGaTVG9bR/GEfxgTwWM0Z97Y6X3710wiljELBISipSfF5okn/vz+C2gfO+ihoEyVPjaJwn8ZalVukA=="
+        "resolved": "2024.2.0-eap1",
+        "contentHash": "Lo1vPRhwSNKz8ZN4lLiLEl7oEiojvS3/q/eSLHl6Av/CVEgfbhoDE8CjHZ9W3xSrM2Dv6gY3RprrX5fVQfz1cA=="
       },
       "Microsoft.AspNetCore.Authentication": {
         "type": "Transitive",
@@ -736,8 +745,8 @@
       },
       "System.Formats.Asn1": {
         "type": "Transitive",
-        "resolved": "6.0.0",
-        "contentHash": "T6fD00dQ3NTbPDy31m4eQUwKW84s03z0N2C8HpOklyeaDgaJPa/TexP4/SkORMSOwc7WhKifnA6Ya33AkzmafA=="
+        "resolved": "9.0.0-preview.4.24266.19",
+        "contentHash": "I5Lb1iyRqNbNEkSt0L0qbwqAp1oKeS3NP9Yz6pvAR9FDMcjzelpT/dnnE+vQI0ryXgozZ555LRvzXDPZRLvKEQ=="
       },
       "System.Globalization": {
         "type": "Transitive",
@@ -904,14 +913,6 @@
         "type": "Transitive",
         "resolved": "4.5.2",
         "contentHash": "dPA4toNqKmFAAraEjmUFoieNm1mJgLrZV6WeftJM95YYsNWOwFv/B2DkoXY9yg4hOnGH1qoxN1Dtbst70XS86w=="
-      },
-      "System.Security.Cryptography.Pkcs": {
-        "type": "Transitive",
-        "resolved": "6.0.1",
-        "contentHash": "ynmbW2GjIGg9K1wXmVIRs4IlyDolf0JXNpzFQ8JCVgwM+myUC2JeUggl2PwQig2PNVMegKmN1aAx7WPQ8tI3vA==",
-        "dependencies": {
-          "System.Formats.Asn1": "6.0.0"
-        }
       },
       "System.Security.Cryptography.ProtectedData": {
         "type": "Transitive",
@@ -1101,12 +1102,13 @@
       "plexservicecommon": {
         "type": "Project",
         "dependencies": {
-          "JetBrains.Annotations": "[2023.3.0, )",
+          "JetBrains.Annotations": "[2024.2.0-eap1, )",
           "Microsoft.CSharp": "[4.7.0, )",
           "Newtonsoft.Json": "[13.0.3, )",
           "Serilog.Sinks.Async": "[1.5.0, )",
           "Serilog.Sinks.File": "[5.0.0, )",
           "System.Diagnostics.EventLog": "[8.0.0, )",
+          "System.Security.Cryptography.Pkcs": "[9.0.0-preview.4.24266.19, )",
           "System.ServiceModel.Primitives": "[8.0.0, )"
         }
       },
@@ -1114,14 +1116,24 @@
         "type": "Project",
         "dependencies": {
           "CoreWCF.ConfigurationManager": "[1.5.2, )",
-          "JetBrains.Annotations": "[2023.3.0, )",
+          "JetBrains.Annotations": "[2024.2.0-eap1, )",
           "Microsoft.CSharp": "[4.7.0, )",
           "PlexServiceCommon": "[1.0.0, )",
+          "System.Security.Cryptography.Pkcs": "[9.0.0-preview.4.24266.19, )",
           "System.ServiceModel.Federation": "[8.0.0, )"
         }
       }
     },
     "net8.0-windows7.0/win-x64": {
+      "System.Security.Cryptography.Pkcs": {
+        "type": "Direct",
+        "requested": "[9.0.0-preview.4.24266.19, )",
+        "resolved": "9.0.0-preview.4.24266.19",
+        "contentHash": "/IQHwIYfdYhtSaGyNR57sLTLIlzMp1Jan18tdMakleepzNHIOkgbzi5DT/orOA7tmgXdhmPosRAALB94kGj4Eg==",
+        "dependencies": {
+          "System.Formats.Asn1": "9.0.0-preview.4.24266.19"
+        }
+      },
       "System.ServiceProcess.ServiceController": {
         "type": "Direct",
         "requested": "[8.0.0, )",
@@ -1436,14 +1448,6 @@
         "type": "Transitive",
         "resolved": "4.5.2",
         "contentHash": "dPA4toNqKmFAAraEjmUFoieNm1mJgLrZV6WeftJM95YYsNWOwFv/B2DkoXY9yg4hOnGH1qoxN1Dtbst70XS86w=="
-      },
-      "System.Security.Cryptography.Pkcs": {
-        "type": "Transitive",
-        "resolved": "6.0.1",
-        "contentHash": "ynmbW2GjIGg9K1wXmVIRs4IlyDolf0JXNpzFQ8JCVgwM+myUC2JeUggl2PwQig2PNVMegKmN1aAx7WPQ8tI3vA==",
-        "dependencies": {
-          "System.Formats.Asn1": "6.0.0"
-        }
       },
       "System.Security.Cryptography.ProtectedData": {
         "type": "Transitive",

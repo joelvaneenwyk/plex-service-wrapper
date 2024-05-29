@@ -130,7 +130,7 @@
 					<File Id="SerilogAsyncDll" Source="$(var.PlexServiceTray.TargetDir)Serilog.Sinks.Async.dll" />
 				</Component>
 				<Component Id="BarIconComponent">
-					<File Id="BarIconIco" Source="$(var.PlexServiceTray.TargetDir)PlexService_Bar.ico" />
+					<File Id="BarIconIco" Source="$(var.PlexServiceTray.TargetDir)PlexService.ico" />
 				</Component>
 				<Component Id="OokiiComponent">
 					<File Id="OokiiDll" Source="$(var.PlexServiceTray.TargetDir)Ookii.Dialogs.Wpf.dll" />

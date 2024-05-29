@@ -69,6 +69,9 @@
     <Compile Update="PlexMediaServerService.Designer.cs">
       <DependentUpon>PlexMediaServerService.cs</DependentUpon>
     </Compile>
+    <Compile Update="Program.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Update="PlexMediaServerService.resx">
@@ -100,6 +103,7 @@
     <ProjectReference Include="..\PlexServiceWCF\PlexServiceWCF.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="System.Security.Cryptography.Pkcs" Version="9.0.0-preview.4.24266.19" />
     <PackageReference Include="System.ServiceModel.NetTcp" Version="8.0.0" />
     <PackageReference Include="System.ServiceProcess.ServiceController" Version="8.0.0" />
   </ItemGroup>
