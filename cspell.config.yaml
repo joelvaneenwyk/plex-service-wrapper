@@ -1,5 +1,4 @@
 version: "0.2"
-ignorePaths: []
 dictionaryDefinitions:
   - name: cspell-dictionary-plex
     path: ./.config/cspell-dictionary-plex.txt
@@ -9,3 +8,13 @@ dictionaries:
 words: []
 ignoreWords: []
 import: []
+files:
+  - "**/*"
+ignorePaths:
+  - "node_modules/**"
+  - ".vscode/**"
+  - ".git/**"
+  - ".vs/**"
+  - ".gdn/**"
+useGitignore: true
+enableGlobDot: true
