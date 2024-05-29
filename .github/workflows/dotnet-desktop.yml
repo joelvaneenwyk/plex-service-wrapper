@@ -15,10 +15,7 @@ jobs:
         platform: [x64]
         configuration: [Debug, Release]
 
-    runs-on:
-      windows-latest # For a list of available runner types, refer to
-      # https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions#jobsjob_idruns-on
-
+    runs-on: windows-latest
     env:
       Solution_Name: PlexMediaServerService.sln
 
@@ -75,3 +72,25 @@ jobs:
 
       - name: Test
         run: dotnet test --no-build --verbosity normal
+
+  taskfile:
+    needs: build
+
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.x
+
+      - name: Install Task
+        uses: arduino/setup-task@v2
+
+      - name: Run Taskfile
+        run: task

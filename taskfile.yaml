@@ -1,0 +1,41 @@
+# yaml-language-server: $schema=https://taskfile.dev/schema.json
+# https://taskfile.dev
+
+version: "3"
+
+vars:
+  RM: '{{if eq .OS "Windows_NT"}}powershell -NoProfile -Command Remove-Item -Recurse -Force {{else}}rm -rf{{end}}'
+  OUTPUT_DIRECTORY: "{{.TASKFILE_DIR}}/.build"
+  ENV_FILE: "{{.TASKFILE_DIR}}/.env"
+  GIT_SUBMODULE: "git submodule foreach"
+  PROTO: "{{.USERPROFILE}}/.proto/bin/proto.exe"
+  BUILD_DIR: "{{.ROOT_DIR}}/.build/task"
+  DATE: '{{if eq .OS "Windows_NT"}}cmd /d /c "powershell -noprofile get-date -format ^"{yyyy-MM-dd HH:mm:ss}^""{{else}}date{{end}}'
+
+tasks:
+  default:
+    deps: []
+    silent: false
+    cmds:
+      - task: build
+
+  setup:
+    deps: [setup-git]
+
+  setup-git:
+    cmds:
+      - cmd: git config --global submodule.recurse true
+      - cmd: git submodule update --init --recursive --checkout
+        ignore_error: true
+
+  build:
+    deps: [setup-git]
+    cmds:
+      - git add .
+      - cmd: git clean -xfd 2>&1 >nul <nul
+        silent: true
+        ignore_error: true
+      - cmd: dotnet tool restore
+      - cmd: dotnet build --configuration "Release" .
+      - cmd: dotnet build --runtime win-x64 --configuration Debug "PlexService/"
+      - cmd: dotnet build --runtime win-x64 --configuration Debug "PlexServiceInstaller/"
