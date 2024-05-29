@@ -1,17 +1,22 @@
 {
   "files.associations": {
     "LICENSE": "plaintext",
+    "Directory.Build.*": "xml",
     "*.wixproj": "xml",
     "*.wxi": "xml",
     "*.wxs": "xml"
   },
   "cSpell.words": [
+    "cmakemodules",
+    "cmds",
     "CodeQL",
     "devskim",
     "endlocal",
     "ERRORLEVEL",
     "msbuild",
     "msiexec",
+    "noprofile",
+    "PHYSX",
     "Progra",
     "Serilog",
     "setlocal",

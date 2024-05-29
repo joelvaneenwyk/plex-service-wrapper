@@ -1,0 +1,11 @@
+version: "0.2"
+ignorePaths: []
+dictionaryDefinitions:
+  - name: cspell-dictionary-plex
+    path: ./.config/cspell-dictionary-plex.txt
+    addWords: true
+dictionaries:
+  - cspell-dictionary-plex
+words: []
+ignoreWords: []
+import: []
