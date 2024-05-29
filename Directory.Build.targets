@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <NoWarn>CS1591;$(NoWarn)</NoWarn>
+    <NoWarn>CS1591;WIX1105;$(NoWarn)</NoWarn>
     <RuntimeIdentifiers>win-x64</RuntimeIdentifiers>
   </PropertyGroup>
 
