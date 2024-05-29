@@ -647,7 +647,6 @@ namespace PlexServiceWCF
                         }
                     }
                 }
-
             }
 
             //so if we still can't find it, we need to do a more exhaustive check through the installer locations in the registry
