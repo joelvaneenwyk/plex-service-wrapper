@@ -9,6 +9,7 @@
   <PropertyGroup>
     <NoWarn>CS1591;WIX1105;$(NoWarn)</NoWarn>
     <RuntimeIdentifiers>win-x64</RuntimeIdentifiers>
+    <EnableWindowsTargeting>true</EnableWindowsTargeting>
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(CopySymbolsToArtifacts)' == 'true' AND '$(TargetFramework)' != '' ">
