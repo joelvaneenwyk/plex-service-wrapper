@@ -20,7 +20,11 @@ tasks:
       - task: build
 
   setup:
-    deps: [setup-git]
+    deps: [setup-git, setup-proto, setup-dotnet]
+
+  setup-proto:
+    cmds:
+      - cmd: proto use
 
   setup-git:
     cmds:
@@ -28,18 +32,46 @@ tasks:
       - cmd: git submodule update --init --recursive --checkout
         ignore_error: true
 
-  build:
-    deps: [setup-git]
+  setup-dotnet:
     cmds:
-      - git add .
+      - cmd: dotnet tool restore
+
+  clean:
+    cmds:
+      - cmd: git add .
       - cmd: git clean -xfd 2>&1 >nul <nul
         silent: true
         ignore_error: true
-      - cmd: dotnet tool restore
-      - cmd: dotnet build --configuration "Release" .
-      - cmd: dotnet build --runtime win-x64 --configuration Debug "PlexService/"
-      - cmd: dotnet build --runtime win-x64 --configuration Debug "PlexServiceInstaller/"
+
+  build:
+    deps: [setup]
+    cmds:
+      - task: clean
+      - task: build-project
+        vars:
+          PROJECT_PATH: "PlexServiceCommon/"
+      - task: build-project
+        vars:
+          PROJECT_PATH: "PlexService/"
+      - task: build-project
+        vars:
+          PROJECT_PATH: "PlexServiceTray/"
+      - task: build-project
+        vars:
+          PROJECT_PATH: "PlexServiceWCF/"
+      - task: build-project
+        vars:
+          PROJECT_PATH: "PlexServiceInstaller/"
 
   spellcheck:
+    deps: [setup]
     cmds:
       - cmd: npx --yes cspell-cli@latest .
+
+  build-project:
+    internal: true
+    preconditions:
+      - test -d "{{.PROJECT_PATH}}/"
+    cmds:
+      - cmd: dotnet restore --locked-mode --runtime win-x64 "{{.PROJECT_PATH}}"
+      - cmd: dotnet build --no-restore --framework net8.0 --os win --arch x64 --configuration "Release" "{{.PROJECT_PATH}}"
