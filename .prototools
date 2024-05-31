@@ -1,0 +1,9 @@
+act = "0.2.62"
+actionlint = "1.7.1"
+npm = "10.8.1"
+task = "3.37.2"
+
+[plugins]
+act = "source:https://raw.githubusercontent.com/theomessin/proto-toml-plugins/master/act.toml"
+actionlint = "source:https://raw.githubusercontent.com/Phault/proto-toml-plugins/main/actionlint/plugin.toml"
+task = "source:https://raw.githubusercontent.com/Phault/proto-toml-plugins/main/task/plugin.toml"
