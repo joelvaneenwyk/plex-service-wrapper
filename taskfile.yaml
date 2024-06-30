@@ -14,8 +14,6 @@ vars:
 
 tasks:
   default:
-    deps: []
-    silent: false
     cmds:
       - task: build
 
@@ -25,12 +23,13 @@ tasks:
   setup-proto:
     cmds:
       - cmd: proto use
+        silent: true
+        ignore_error: true
 
   setup-git:
     cmds:
       - cmd: git config --global submodule.recurse true
       - cmd: git submodule update --init --recursive --checkout
-        ignore_error: true
 
   setup-dotnet:
     cmds:
@@ -39,9 +38,8 @@ tasks:
   clean:
     cmds:
       - cmd: git add .
-      - cmd: git clean -xfd 2>&1 >nul <nul
-        silent: true
-        ignore_error: true
+      # - cmd: git clean -xfd 2>&1 >nul <nul
+      - cmd: git clean -xfd
 
   build:
     deps: [setup]
@@ -74,4 +72,4 @@ tasks:
       - test -d "{{.PROJECT_PATH}}/"
     cmds:
       - cmd: dotnet restore --locked-mode --runtime win-x64 "{{.PROJECT_PATH}}"
-      - cmd: dotnet build --no-restore --framework net8.0 --os win --arch x64 --configuration "Release" "{{.PROJECT_PATH}}"
+      - cmd: dotnet build --no-restore --os win --arch x64 --configuration "Release" "{{.PROJECT_PATH}}"
