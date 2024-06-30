@@ -1,5 +1,8 @@
 {
   "files.associations": {
+    "*.sln": "msbuild-solution",
+    "*.Build.props": "msbuild",
+    "*.Build.targets": "msbuild",
     "LICENSE": "plaintext",
     "Directory.Build.*": "xml",
     "*.wixproj": "xml",

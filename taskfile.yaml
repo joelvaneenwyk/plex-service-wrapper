@@ -17,6 +17,17 @@ tasks:
     cmds:
       - task: build
 
+  update:
+    cmds:
+      - cmd: git add --renormalize .
+      - cmd: git pull --rebase --autostash
+      - cmd: git submodule update --init --recursive --checkout
+      - cmd: dotnet tool restore
+      - cmd: pre-commit run --all-files
+        ignore_error: true
+      - cmd: git add .
+      - cmd: dotnet restore --force-evaluate
+
   setup:
     deps: [setup-git, setup-proto, setup-dotnet]
 
@@ -45,6 +56,8 @@ tasks:
     deps: [setup]
     cmds:
       - task: clean
+      - cmd: dotnet build .
+
       - task: build-project
         vars:
           PROJECT_PATH: "PlexServiceCommon/"
