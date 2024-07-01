@@ -4,6 +4,7 @@ msiexec
 Trimmable
 NETSDK
 Eenwyk
+autostash
 wixproj
 mahapps
 msiext
