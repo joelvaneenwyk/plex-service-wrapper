@@ -22,7 +22,7 @@
     <ProjectReference Include="..\PlexServiceCommon\PlexServiceCommon.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="CoreWCF.ConfigurationManager" Version="1.5.2" />
+    <PackageReference Include="CoreWCF.ConfigurationManager" Version="1.6.0" />
     <PackageReference Include="JetBrains.Annotations" Version="2024.2.0" />
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
     <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3">
