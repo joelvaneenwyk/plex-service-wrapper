@@ -103,7 +103,7 @@
     <ProjectReference Include="..\PlexServiceWCF\PlexServiceWCF.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="System.ServiceModel.NetTcp" Version="8.0.0" />
+    <PackageReference Include="System.ServiceModel.NetTcp" Version="8.1.0" />
     <PackageReference Include="System.ServiceProcess.ServiceController" Version="8.0.0" />
   </ItemGroup>
 </Project>
