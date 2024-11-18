@@ -4,18 +4,18 @@
     "net8.0-windows7.0": {
       "Microsoft.NET.ILLink.Tasks": {
         "type": "Direct",
-        "requested": "[8.0.4, )",
-        "resolved": "8.0.4",
-        "contentHash": "PZb5nfQ+U19nhnmnR9T1jw+LTmozhuG2eeuzuW5A7DqxD/UXW2ucjmNJqnqOuh8rdPzM3MQXoF8AfFCedJdCUw=="
+        "requested": "[8.0.11, )",
+        "resolved": "8.0.11",
+        "contentHash": "zk5lnZrYJgtuJG8L4v17Ej8rZ3PUcR2iweNV08BaO5LbYHIi2wNaVNcJoLxvqgQdnjLlKnCCfVGLDr6QHeAarQ=="
       },
       "System.ServiceModel.NetTcp": {
         "type": "Direct",
-        "requested": "[8.0.0, )",
-        "resolved": "8.0.0",
-        "contentHash": "lb6Ok482MeIYqZTRLlGu6CVSTR5AKHK5VRbzzA8CqtKrQnByC+flssOnyvOXRLn77si5k8Ah+v7oOOsrghuCmw==",
+        "requested": "[8.1.0, )",
+        "resolved": "8.1.0",
+        "contentHash": "EEiRLuOqmGhH/V4eczh5okdX0Lul8SfaJCZ+kIteIEGDALybfUTCV9fXz35I4y0S7xnTZUBZJmPvpbECilxKlg==",
         "dependencies": {
-          "System.ServiceModel.NetFramingBase": "8.0.0",
-          "System.ServiceModel.Primitives": "8.0.0"
+          "System.ServiceModel.NetFramingBase": "8.1.0",
+          "System.ServiceModel.Primitives": "8.1.0"
         }
       },
       "System.ServiceProcess.ServiceController": {
@@ -126,8 +126,8 @@
       },
       "JetBrains.Annotations": {
         "type": "Transitive",
-        "resolved": "2023.3.0",
-        "contentHash": "PHfnvdBUdGaTVG9bR/GEfxgTwWM0Z97Y6X3710wiljELBISipSfF5okn/vz+C2gfO+ihoEyVPjaJwn8ZalVukA=="
+        "resolved": "2024.2.0",
+        "contentHash": "GNnqCFW/163p1fOehKx0CnAqjmpPrUSqrgfHM6qca+P+RN39C9rhlfZHQpJhxmQG/dkOYe/b3Z0P8b6Kv5m1qw=="
       },
       "Microsoft.AspNetCore.Authentication": {
         "type": "Transitive",
@@ -495,8 +495,8 @@
       },
       "Microsoft.Extensions.ObjectPool": {
         "type": "Transitive",
-        "resolved": "6.0.16",
-        "contentHash": "OVX5tlKg6LY+XKqlUn7i9KY+6Liut0iewWff2DNr7129i/NJ8rpUzbmxavPydZgcLREEWHklXZiPKCS895tNIQ=="
+        "resolved": "8.0.10",
+        "contentHash": "u7gAG7JgxF8VSJUGPSudAcPxOt+ymJKQCSxNRxiuKV+klCQbHljQR75SilpedCTfhPWDhtUwIJpnDVtspr9nMg=="
       },
       "Microsoft.Extensions.Options": {
         "type": "Transitive",
@@ -920,11 +920,10 @@
       },
       "System.Security.Cryptography.Xml": {
         "type": "Transitive",
-        "resolved": "6.0.1",
-        "contentHash": "5e5bI28T0x73AwTsbuFP4qSRzthmU2C0Gqgg3AZ3KTxmSyA+Uhk31puA3srdaeWaacVnHhLdJywCzqOiEpbO/w==",
+        "resolved": "8.0.2",
+        "contentHash": "aDM/wm0ZGEZ6ZYJLzgqjp2FZdHbDHh6/OmpGfb7AdZ105zYmPn/83JRU2xLIbwgoNz9U1SLUTJN0v5th3qmvjA==",
         "dependencies": {
-          "System.Security.AccessControl": "6.0.0",
-          "System.Security.Cryptography.Pkcs": "6.0.1"
+          "System.Security.Cryptography.Pkcs": "8.0.1"
         }
       },
       "System.Security.Permissions": {
@@ -961,19 +960,19 @@
       },
       "System.ServiceModel.NetFramingBase": {
         "type": "Transitive",
-        "resolved": "8.0.0",
-        "contentHash": "eJ1Dql/BTivvCiWqXVV0WbOBDzTQnMCrU4z3qFJQRJ/t7Gof4vLFSz9AmWuUxcyM0T7L++8LqHnhFYWRp0wK8Q==",
+        "resolved": "8.1.0",
+        "contentHash": "3bXnEOXIhIG6H7sDdmYLPHZHbHueDSjYUSKT/F3IWNx4U0BzyArlzw80/V57sNSHiNx90qFfl0/akLZC64xLOg==",
         "dependencies": {
-          "System.ServiceModel.Primitives": "8.0.0"
+          "System.ServiceModel.Primitives": "8.1.0"
         }
       },
       "System.ServiceModel.Primitives": {
         "type": "Transitive",
-        "resolved": "8.0.0",
-        "contentHash": "hVzK77Bl00H+1V7ho7h03tKlgxAIKssV3eUnRdH+gTCZCK4Ywnv2CR35AV9ly/tRpvsGwNL1d/jkAwB1MWw3Fw==",
+        "resolved": "8.1.0",
+        "contentHash": "/NGnzQSp2lmTlCfKzcD2PVKRnx6bQCbEqlb5sXo31TA2C7oA8g5I7Wfjk8dNRNUo1uSqZUcj3htED6tWA/mX9w==",
         "dependencies": {
-          "Microsoft.Extensions.ObjectPool": "6.0.16",
-          "System.Security.Cryptography.Xml": "6.0.1"
+          "Microsoft.Extensions.ObjectPool": "8.0.10",
+          "System.Security.Cryptography.Xml": "8.0.2"
         }
       },
       "System.Text.Encoding": {
@@ -1101,7 +1100,7 @@
       "plexservicecommon": {
         "type": "Project",
         "dependencies": {
-          "JetBrains.Annotations": "[2023.3.0, )",
+          "JetBrains.Annotations": "[2024.2.0, )",
           "Microsoft.CSharp": "[4.7.0, )",
           "Newtonsoft.Json": "[13.0.3, )",
           "Serilog.Sinks.Async": "[2.0.0, )",
@@ -1114,7 +1113,7 @@
         "type": "Project",
         "dependencies": {
           "CoreWCF.ConfigurationManager": "[1.5.2, )",
-          "JetBrains.Annotations": "[2023.3.0, )",
+          "JetBrains.Annotations": "[2024.2.0, )",
           "Microsoft.CSharp": "[4.7.0, )",
           "PlexServiceCommon": "[1.0.0, )",
           "System.Security.Cryptography.Pkcs": "[9.0.0-preview.4.24266.19, )",
